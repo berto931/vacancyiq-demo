@@ -9,24 +9,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root{
-  --bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 35%, #eef2ff 70%, #f5f3ff 100%);
-  --panel: rgba(255, 255, 255, 0.72);
-  --panel-opaque: rgba(255, 255, 255, 0.92);
-  --panel2: rgba(241, 245, 249, 0.65);
-  --panel3: rgba(226, 232, 240, 0.8);
-  --ink: #0F172A;
-  --txt: #334155;
-  --txt2: #475569;
-  --txt3: #64748B;
-  --line: rgba(226, 232, 240, 0.6);
-  --line-chrome: rgba(79, 70, 229, 0.12);
-  --line2: rgba(241, 245, 249, 0.5);
-  --blue: #4F46E5;
-  --blue-chrome: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-  --blue2: #3730A3;
-  --sky: #6366F1;
-  --bluetint: rgba(238, 242, 255, 0.7);
-  --bluetint2: rgba(250, 245, 255, 0.5);
+  --bg: linear-gradient(135deg, #ffffff 0%, #fcfcfc 50%, #f3f3f3 100%);
+  --panel: rgba(255, 255, 255, 0.85);
+  --panel-opaque: rgba(255, 255, 255, 0.95);
+  --panel2: rgba(244, 244, 245, 0.65);
+  --panel3: rgba(228, 228, 231, 0.8);
+  --ink: #000000;
+  --txt: #27272a;
+  --txt2: #52525b;
+  --txt3: #71717a;
+  --line: rgba(228, 228, 231, 0.7);
+  --line-chrome: rgba(0, 0, 0, 0.12);
+  --line2: rgba(244, 244, 245, 0.5);
+  --blue: #0a0a0a;
+  --blue-chrome: linear-gradient(135deg, #444 0%, #000 100%);
+  --blue2: #000000;
+  --sky: #3f3f46;
+  --bluetint: rgba(0, 0, 0, 0.05);
+  --bluetint2: rgba(0, 0, 0, 0.02);
   --green: #047857;
   --greenbg: rgba(209, 250, 229, 0.6);
   --amber: #B45309;
@@ -36,8 +36,8 @@
   --r: 16px;
   --rs: 10px;
   --rl: 24px;
-  --sh: 0 8px 30px rgba(31, 38, 135, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
-  --sh2: 0 16px 40px rgba(31, 38, 135, 0.08), 0 1px 2px rgba(0, 0, 0, 0.01), inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+  --sh: 0 8px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+  --sh2: 0 16px 40px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.01), inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
   --side: 248px;
   --topbar: 64px;
 }
@@ -382,9 +382,10 @@ main.page{padding:24px 24px 48px;max-width:1200px;width:100%;margin:0 auto;flex:
   border-color:rgba(79, 70, 229, 0.25);
 }
 .card-h{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.card-h h3{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-0.02em}
-.card-h .link{margin-left:auto;font-size:14px;color:var(--blue);font-weight:600;padding:6px 12px;background:rgba(79,70,229,0.06);border-radius:12px;transition:all 0.2s}
-.card-h .link:hover{background:rgba(79,70,229,0.12);text-decoration:none}
+.card-h h3{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;display:flex;align-items:center}
+.card-h h3 svg{width:18px;height:18px;fill:currentColor;margin-right:8px;vertical-align:-3px}
+.card-h .link{margin-left:auto;font-size:14px;color:var(--ink);font-weight:600;padding:6px 12px;background:rgba(0,0,0,0.06);border-radius:12px;transition:all 0.2s}
+.card-h .link:hover{background:rgba(0,0,0,0.12);text-decoration:none}
 .sect-t{font-size:11.5px;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
 
 /* buttons */
@@ -401,13 +402,13 @@ main.page{padding:24px 24px 48px;max-width:1200px;width:100%;margin:0 auto;flex:
   align-items:center;
   gap:8px;
   justify-content:center;
-  box-shadow:0 4px 14px 0 rgba(79, 70, 229, 0.22), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  box-shadow:0 4px 14px 0 rgba(0, 0, 0, 0.22), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
 }
 .btn:hover {
-  background:linear-gradient(135deg, #4338ca 0%, #2563eb 100%);
+  background:linear-gradient(135deg, #333 0%, #000 100%);
   transform:translateY(-1.5px);
-  box-shadow:0 6px 20px 0 rgba(79, 70, 229, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  box-shadow:0 6px 20px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
 }
 .btn:active {
   transform:translateY(0.5px);
@@ -1476,7 +1477,7 @@ function buyerDashboard(){
     +'<div class="glass-bg-glow glow-1" style="opacity:0.25;top:-10%;right:10%;width:300px;height:300px" aria-hidden="true"></div>'
     +'<div style="position:relative;z-index:2">'
       +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
-        +'<span class="badge p" style="background:rgba(79,70,229,0.12);color:var(--blue);border-color:rgba(79,70,229,0.2)">' + icon('gauge') + 'CONTROL CENTER</span>'
+        +'<span class="badge p" style="background:rgba(0,0,0,0.05);color:var(--ink);border-color:rgba(0,0,0,0.1)">' + icon('gauge') + 'CONTROL CENTER</span>'
         +freshnessPill()
       +'</div>'
       +'<h1 style="font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-0.03em;margin:0">Buyer dashboard</h1>'
@@ -1692,60 +1693,33 @@ function syncCrmLead(propertyId, provider) {
 }
 
 function automationTabContent() {
-  if (_autoTab === 'workflows') {
-    return '<div class="notice info" style="margin-bottom:16px"><span class="ic">' + icon('shield') + '</span><div><b>Custom Workflow Builder.</b> Toggle automation steps to configure how property leads flow. Each step operates automatically within compliance boundaries.</div></div>'
-      +'<div class="grid g1" style="gap:12px">'
-      +_workflows.map(function(w) {
-        return '<div class="card pad" style="display:flex;align-items:center;justify-content:space-between;gap:16px">'
-          +'<div style="flex:1">'
-            +'<div style="font-weight:700;font-size:14px;color:var(--ink)">' + esc(w.name) + '</div>'
-            +'<div style="font-size:12px;color:var(--txt2);margin-top:2px">' + esc(w.desc) + '</div>'
+  var crms = [
+    { id: 'hubspot', name: 'HubSpot CRM', desc: 'Sync leads to HubSpot contacts and pipelines.' },
+    { id: 'salesforce', name: 'Salesforce', desc: 'Push target property leads directly to Salesforce opportunities.' },
+    { id: 'followupboss', name: 'Follow Up Boss', desc: 'Sync skip-traced lead files to FUB database.' }
+  ];
+  return '<div class="notice info" style="margin-bottom:16px"><span class="ic">' + icon('shield') + '</span><div><b>Integrations & CRM Hub.</b> Connect your tools. Synced leads will carry owner details and offer drafts straight into your active CRM. <b>[SIMULATED]</b></div></div>'
+    +'<div class="grid g3" style="gap:16px">'
+    +crms.map(function(c) {
+      var conn = _crmConnections[c.id] && _crmConnections[c.id].connected;
+      return '<div class="card pad" style="display:flex;flex-direction:column;justify-content:space-between;height:100%">'
+        +'<div>'
+          +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+            +'<div style="font-weight:700;font-size:15px;color:var(--ink)">' + esc(c.name) + '</div>'
+            +(conn ? '<span class="badge q" style="background:var(--green);color:#fff;display:inline-flex;align-items:center;gap:4px">' + icon('check') + ' Connected</span>' : '<span class="badge p">Not Connected</span>')
           +'</div>'
-          +'<div>'
-            +'<label class="switch-lbl" style="position:relative;display:inline-block;width:44px;height:24px">'
-              +'<input type="checkbox" ' + (w.enabled ? 'checked' : '') + ' onclick="VIQ._toggleWorkflow(\'' + w.id + '\')" style="opacity:0;width:0;height:0;position:absolute">'
-              +'<span class="switch-slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:' + (w.enabled ? 'var(--blue)' : 'var(--line)') + ';transition:.3s;border-radius:24px;display:flex;align-items:center;padding:2px">'
-                +'<span style="display:block;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;transform:' + (w.enabled ? 'translateX(20px)' : 'translateX(0)') + '"></span>'
-              +'</span>'
-            +'</label>'
-          +'</div>'
-        +'</div>';
-      }).join('')
+          +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:16px">' + esc(c.desc) + '</p>'
+        +'</div>'
+        +'<div>'
+          +(conn 
+            ? '<div style="display:flex;gap:8px"><button class="btn ghost block sm" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Reconfigure</button>'
+              +'<button class="btn ghost block sm text-red" onclick="VIQ._disconnectCrm(\'' + c.id + '\')" style="color:var(--red)">Disconnect</button></div>'
+            : '<button class="btn block" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Connect Integration</button>'
+          )
+        +'</div>'
       +'</div>';
-  }
-  if (_autoTab === 'connectors') {
-    var crms = [
-      { id: 'hubspot', name: 'HubSpot CRM', desc: 'Sync leads to HubSpot contacts and pipelines.' },
-      { id: 'salesforce', name: 'Salesforce', desc: 'Push target property leads directly to Salesforce opportunities.' },
-      { id: 'followupboss', name: 'Follow Up Boss', desc: 'Sync skip-traced lead files to FUB database.' }
-    ];
-    return '<div class="notice info" style="margin-bottom:16px"><span class="ic">' + icon('shield') + '</span><div><b>Integrations & CRM Hub.</b> Connect your tools. Synced leads will carry owner details and offer drafts straight into your active CRM. <b>[SIMULATED]</b></div></div>'
-      +'<div class="grid g3" style="gap:16px">'
-      +crms.map(function(c) {
-        var conn = _crmConnections[c.id] && _crmConnections[c.id].connected;
-        return '<div class="card pad" style="display:flex;flex-direction:column;justify-content:space-between;height:100%">'
-          +'<div>'
-            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
-              +'<div style="font-weight:700;font-size:15px;color:var(--ink)">' + esc(c.name) + '</div>'
-              +(conn ? '<span class="badge q" style="background:var(--green);color:#fff;display:inline-flex;align-items:center;gap:4px">' + icon('check') + ' Connected</span>' : '<span class="badge p">Not Connected</span>')
-            +'</div>'
-            +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:16px">' + esc(c.desc) + '</p>'
-          +'</div>'
-          +'<div>'
-            +(conn 
-              ? '<div style="display:flex;gap:8px"><button class="btn ghost block sm" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Reconfigure</button>'
-                +'<button class="btn ghost block sm text-red" onclick="VIQ._disconnectCrm(\'' + c.id + '\')" style="color:var(--red)">Disconnect</button></div>'
-              : '<button class="btn block" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Connect Integration</button>'
-            )
-          +'</div>'
-        +'</div>';
-      }).join('')
-      +'</div>';
-  }
-  if (_autoTab === 'logs') {
-    return '<div class="card pad"><div class="card-h"><h3>Execution history</h3></div><div class="feed">' + ACTIVITY.map(feedItem).join('') + '</div></div>';
-  }
-  return '';
+    }).join('')
+    +'</div>';
 }
 
 function automationView(){
@@ -1755,13 +1729,8 @@ function automationView(){
   });
 
   return '<section class="view">'
-    +pagehead("Automation & Connectors","Configure custom workflows, connect CRM integrations, and inspect AI agent logs.")
-    +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Simulated automation hub.</b> All connected integrations, CRM pipelines, Gmail triggers, and workflows are simulated for demonstration purposes. <b>Consent required in production.</b></div></div>'
-    +'<div class="tabs" style="margin-bottom:18px">'
-      +'<button class="tab ' + (_autoTab === 'workflows' ? 'active' : '') + '" id="tab-auto-workflows" onclick="VIQ._setAutoTab(\'workflows\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">Workflows builder</button>'
-      +'<button class="tab ' + (_autoTab === 'connectors' ? 'active' : '') + '" id="tab-auto-connectors" onclick="VIQ._setAutoTab(\'connectors\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">CRM Connectors</button>'
-      +'<button class="tab ' + (_autoTab === 'logs' ? 'active' : '') + '" id="tab-auto-logs" onclick="VIQ._setAutoTab(\'logs\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">Execution log</button>'
-    +'</div>'
+    +pagehead("Automation & Connectors","Connect CRM integrations and manage external tools.")
+    +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Simulated automation hub.</b> All connected integrations and CRM pipelines are simulated for demonstration purposes. <b>Consent required in production.</b></div></div>'
     +'<div id="automationContent">'
       +'<div class="spin" style="width:24px;height:24px;margin:30px auto"></div>'
     +'</div>'
@@ -1769,11 +1738,11 @@ function automationView(){
 }
 function accountView(){
   return '<section class="view">'+pagehead("Plan","Subscription access to the verified database. Prices are illustrative and deliberately below the market leader\'s ceiling — pending real willingness-to-pay validation.")
-   +'<div class="grid g3" style="margin-bottom:16px">'+PLANS.map(function(p){return '<div class="card pad" style="position:relative;'+(p.popular?'border-color:var(--blue);box-shadow:0 0 0 2px rgba(30,116,255,.22),var(--sh2)':'')+'">'
-     +(p.popular?'<span class="badge q" style="position:absolute;top:-11px;left:20px;background:var(--blue);color:#fff">MOST POPULAR</span>':'')
+   +'<div class="grid g3" style="margin-bottom:16px">'+PLANS.map(function(p){return '<div class="card pad" style="position:relative;'+(p.popular?'border-color:var(--ink);box-shadow:0 0 0 2px rgba(0,0,0,0.15),var(--sh2)':'')+'">'
+     +(p.popular?'<span class="badge q" style="position:absolute;top:-11px;left:20px;background:var(--ink);color:#fff">MOST POPULAR</span>':'')
      +'<h3 style="font-size:17px">'+esc(p.name)+'</h3><p style="font-size:12.5px;color:var(--txt3);margin-bottom:12px">'+esc(p.tagline)+'</p>'
      +'<div style="font-size:32px;font-weight:800;letter-spacing:-1.5px;color:var(--ink)">$'+p.price+'<span style="font-size:14px;color:var(--txt3);font-weight:600">/mo</span></div>'
-     +'<div style="margin:14px 0">'+p.feats.map(function(f){return '<div style="display:flex;gap:9px;align-items:center;font-size:13px;padding:5px 0"><span style="color:var(--green);display:flex">'+icon("check")+'</span>'+esc(f)+'</div>';}).join('')+'</div>'
+     +'<div style="margin:14px 0">'+p.feats.map(function(f){return '<div style="display:flex;gap:9px;align-items:center;font-size:13px;padding:5px 0"><span style="color:var(--ink);display:flex">'+icon("check")+'</span>'+esc(f)+'</div>';}).join('')+'</div>'
      +'<button class="btn block'+(p.popular?'':' ghost')+'" onclick="VIQ.toast(\'This is a demo — no billing is connected.\',\'info\')">Choose '+esc(p.name)+'</button></div>';}).join('')+'</div>'
    +'<div class="notice info"><span class="ic">'+icon("tag")+'</span><div><b>Pricing is illustrative [ASSUMPTION].</b> The category leader (DealMachine) tops out at <b>$249/mo</b> [VERIFIED, 2026]. VacancyIQ launches below that ceiling; any premium must be earned with demonstrably fresher, cleaner data and validated in the pilot. No billing is connected in this demo.</div></div>'
    +complianceFoot()+'</section>';
@@ -1916,44 +1885,39 @@ function discoveryContent(){
   var rows=(_discoveredProps.length?_discoveredProps.slice(-20).reverse():[]);
   var tableRows=rows.length?rows.map(function(p,i){
     return '<tr style="border-top:1px solid var(--line)">'
-      +'<td style="padding:8px 10px"><div style="font-weight:600;font-size:13px">'+esc(p.address)+'</div>'
-        +'<div style="font-size:11.5px;color:var(--txt3)">'+esc(p.source)+'</div></td>'
-      +'<td style="padding:8px 10px;text-align:right;font-size:13px">$'+Math.round(p.price).toLocaleString()+'</td>'
-      +'<td style="padding:8px 10px;text-align:center;font-weight:600;color:var(--blue)">'+p.score+'</td>'
-      +'<td style="padding:8px 10px;font-size:12px">'+(p.signals||[]).map(function(s){return '<span class="tag vac" style="font-size:10.5px;margin:1px">'+esc(s)+'</span>';}).join('')+'</td>'
-      +'<td style="padding:8px 10px"><span class="badge q" style="font-size:11px">'+esc(p.status)+'</span></td>'
+      +'<td style="padding:10px 14px"><div style="font-weight:700;font-size:13.5px">'+esc(p.address)+'</div>'
+        +'<div style="font-size:12px;color:var(--txt3)">'+esc(p.source)+'</div></td>'
+      +'<td style="padding:10px 14px;text-align:right;font-size:13.5px">$'+Math.round(p.price).toLocaleString()+'</td>'
+      +'<td style="padding:10px 14px;text-align:center;font-weight:800;color:var(--ink)">'+p.score+'</td>'
+      +'<td style="padding:10px 14px;font-size:12px">'+(p.signals||[]).map(function(s){return '<span class="tag vac" style="font-size:10.5px;margin:1px;background:rgba(0,0,0,0.05);color:var(--txt2);border-color:var(--line)">'+esc(s)+'</span>';}).join('')+'</td>'
+      +'<td style="padding:10px 14px"><span class="badge q" style="font-size:11px;background:rgba(0,0,0,0.85);color:#fff">'+esc(p.status)+'</span></td>'
       +'</tr>';}).join('')
-    :'<tr><td colspan="5" style="padding:28px;text-align:center;color:var(--txt3)">No properties yet — run a discovery job to populate this list.</td></tr>';
-  var logHTML=_discoveryLog.slice(0,5).map(function(e){return '<div class="fitem"><div style="flex:1"><div class="ft">'+esc(e.t)+'</div><div class="fm">'+esc(e.msg)+'</div></div></div>';}).join('');
-  return '<div class="grid g3" style="margin-bottom:14px">'
+    :'<tr><td colspan="5" style="padding:32px;text-align:center;color:var(--txt3);font-size:14px">No properties yet — run AI discovery to populate this list.</td></tr>';
+  
+  return '<div class="grid g3" style="margin-bottom:16px">'
     +'<div class="stat card"><div class="st"><span class="l">Discovered</span><span class="ic">'+icon('building')+'</span></div><div class="v">'+_discoveredProps.length+'</div><div class="foot">in this session</div></div>'
     +'<div class="stat card"><div class="st"><span class="l">Available</span><span class="ic">'+icon('check')+'</span></div><div class="v">'+_discoveredProps.filter(function(p){return p.status==='available';}).length+'</div><div class="foot">not stale/sold</div></div>'
     +'<div class="stat card"><div class="st"><span class="l">Avg score</span><span class="ic">'+icon('gauge')+'</span></div><div class="v">'+(_discoveredProps.length?Math.round(_discoveredProps.reduce(function(a,p){return a+p.score;},0)/_discoveredProps.length):0)+'</div><div class="foot">quality</div></div>'
     +'</div>'
-    +'<div class="row" style="margin-bottom:14px;gap:8px">'
-      +'<div id="discJobCard" class="card pad" style="flex:1;display:flex;align-items:center;gap:10px">'
-        +'<div style="flex:1"><div style="font-weight:600;font-size:13px">Daily deep-research job</div><div style="font-size:12px;color:var(--txt3)">Scans Zillow API, county tax registers, HUD vacancy list, USPS AMS (all simulated)</div></div>'
-        +'<button class="btn" onclick="VIQ.runDiscoveryJob()">'+icon('sync')+'Run now</button>'
-      +'</div>'
-      +'<div class="card pad" style="display:flex;align-items:center;gap:10px">'
-        +'<div style="flex:1"><div style="font-weight:600;font-size:13px">Weekly cleanup</div><div style="font-size:12px;color:var(--txt3)">Dedup, availability verify, stale removal</div></div>'
-        +'<button class="btn ghost" onclick="VIQ.runWeeklyJob()">'+icon('broom')+'Run now</button>'
+    +'<div class="row" style="margin-bottom:16px">'
+      +'<div id="discJobCard" class="card pad" style="flex:1;display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.95)">'
+        +'<div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:2px">Run AI Discovery Sync</div><div style="font-size:12.5px;color:var(--txt2)">Scan permitted sources for new properties matching your investment criteria (simulated).</div></div>'
+        +'<button class="btn" onclick="VIQ.runDiscoveryJob()">'+icon('search')+'Scan properties</button>'
       +'</div>'
     +'</div>'
-    +'<div class="card" style="margin-bottom:14px;overflow:auto">'
-      +'<div class="card-h" style="padding:12px 14px 10px"><h3>Discovered properties (latest 20)</h3></div>'
-      +'<table style="width:100%;border-collapse:collapse;font-size:13px">'
+    +'<div class="card" style="margin-bottom:16px;overflow:auto">'
+      +'<div class="card-h" style="padding:16px 20px 12px"><h3>'+icon('list')+' Discovered properties (latest 20)</h3></div>'
+      +'<table style="width:100%;border-collapse:collapse;font-size:13.5px">'
         +'<thead><tr style="background:var(--panel2)">'
-          +'<th style="padding:8px 10px;text-align:left;font-size:11.5px;font-weight:600;color:var(--txt3)">Address</th>'
-          +'<th style="padding:8px 10px;text-align:right;font-size:11.5px;font-weight:600;color:var(--txt3)">Price</th>'
-          +'<th style="padding:8px 10px;text-align:center;font-size:11.5px;font-weight:600;color:var(--txt3)">Score</th>'
-          +'<th style="padding:8px 10px;font-size:11.5px;font-weight:600;color:var(--txt3)">Signals</th>'
-          +'<th style="padding:8px 10px;font-size:11.5px;font-weight:600;color:var(--txt3)">Status</th>'
+          +'<th style="padding:12px 14px;text-align:left;font-size:11.5px;font-weight:800;color:var(--txt3)">Address</th>'
+          +'<th style="padding:12px 14px;text-align:right;font-size:11.5px;font-weight:800;color:var(--txt3)">Price</th>'
+          +'<th style="padding:12px 14px;text-align:center;font-size:11.5px;font-weight:800;color:var(--txt3)">Score</th>'
+          +'<th style="padding:12px 14px;font-size:11.5px;font-weight:800;color:var(--txt3)">Signals</th>'
+          +'<th style="padding:12px 14px;font-size:11.5px;font-weight:800;color:var(--txt3)">Status</th>'
         +'</tr></thead>'
         +'<tbody>'+tableRows+'</tbody>'
       +'</table>'
-    +'</div>'
-    +(logHTML?'<div class="card pad"><div class="card-h"><h3>Job history</h3></div><div class="feed">'+logHTML+'</div></div>':'');
+    +'</div>';
 }
 function discoveryView(){
   return '<section class="view">'
@@ -2193,19 +2157,11 @@ function outreachContent(){
     +(_discoveredProps.length?_discoveredProps.slice(-20).reverse().map(function(p){return '<option value="'+esc(p.id)+'"'+(p.id===_outreachPropId?' selected':'')+'>'+esc(p.address)+'</option>';}).join(''):'<option value="">— Run AI Discovery first —</option>')
     +'</select></div>';
 
-  // Pipeline indicator
-  var pipelineBoard = prop ? pipelineChevron(stage) : '';
+  // Pipeline indicator removed for simplicity
+  var pipelineBoard = '';
 
-  // Manual Stage Mover
-  var stageMover = prop 
-    ? '<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
-      +'<span style="font-size:12.5px;font-weight:700;color:var(--txt)">Move stage manually:</span>'
-      +'<div style="display:flex;gap:6px">'
-        +'<button class="btn ghost sm" onclick="VIQ._movePipelineStage(\'' + prop.id + '\', \'contacted\')">Mark contacted</button>'
-        +'<button class="btn ghost sm" onclick="VIQ._movePipelineStage(\'' + prop.id + '\', \'contract\')">Mark contract</button>'
-      +'</div>'
-      +'</div>'
-    : '';
+  // Manual Stage Mover removed for simplicity
+  var stageMover = '';
 
   // Contact enrichment card
   var enrichCard='<div class="card pad" style="margin-bottom:14px">'
