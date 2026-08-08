@@ -656,7 +656,7 @@ var STAR='<svg viewBox="0 0 576 512" aria-hidden="true"><path d="M288 0c12 0 23 
 var NAV=[
  {label:null,items:[["#/","grid","Overview",null],["#/account","users","Account",null]]},
  {label:"Spotter",items:[["#/spotter","gauge","Dashboard",null],["#/spotter/capture","camera","New capture",null],["#/spotter/submissions","list","Submissions",SUBMISSIONS.length],["#/spotter/earnings","dollar","Earnings",null]]},
- {label:"Buyer",items:[["#/buyer","grid","Dashboard",null],["#/buyer/leads","building","Leads",LEADS.length],["#/buyer/automation","sync","Automation",null],["#/buyer/account","tag","Plan",null]]}
+ {label:"Buyer",items:[["#/buyer","grid","Dashboard",null],["#/buyer/leads","building","Leads",LEADS.length],["#/buyer/automation","sync","Automation",null],["#/buyer/account","tag","Plan",null],["#/buyer/discovery","search","AI Discovery",null],["#/buyer/outreach","rocket","Outreach",null]]}
 ];
 function activeHref(){
   var h="#"+(location.hash||"#/").replace(/^#/,"");
@@ -970,7 +970,329 @@ function notFoundView(){
    +'<button class="btn" style="margin:0 auto" onclick="VIQ.go(\'#/\')">Back to overview</button></section>';
 }
 
+/* ================= AI Discovery & Outreach ================= */
+// All API calls go to the Node backend on localhost:3001 during dev.
+// On GitHub Pages (no backend), every call falls back to a local simulation
+// so the demo never renders blank.
+var AI_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3001' : null; // null = use inline simulation
+
+var _demoToken = null;
+var _gmailConnected = false;
+var _discoveredProps = []; // in-memory list for the demo session
+var _currentDraft = null;  // pending email draft
+var _currentOffer = null;  // pending offer
+
+/* ---------- mock token (no backend) ---------- */
+function getDemoToken(){
+  if(_demoToken) return Promise.resolve(_demoToken);
+  if(!AI_BASE){ _demoToken='demo-mock-token'; return Promise.resolve(_demoToken); }
+  return fetch(AI_BASE+'/api/auth/demo-token',{method:'POST'})
+    .then(function(r){return r.json();})
+    .then(function(d){_demoToken=d.token; return _demoToken;})
+    .catch(function(){_demoToken='demo-mock-token'; return _demoToken;});
+}
+function apiCall(method,path,body){
+  return getDemoToken().then(function(tok){
+    if(!AI_BASE) return Promise.resolve(null); // backend offline — inline sim
+    var opts={method:method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok}};
+    if(body) opts.body=JSON.stringify(body);
+    return fetch(AI_BASE+path,opts).then(function(r){return r.json();}).catch(function(){return null;});
+  });
+}
+
+/* ---------- inline simulations (GitHub Pages fallback) ---------- */
+var _propIdCounter=1;
+function simProp(){
+  var cities=[['Toledo','OH'],['Akron','OH'],['Dayton','OH'],['Cleveland','OH'],['Canton','OH']];
+  var streets=['Elm','Oak','Cedar','Birch','Maple','Ridge','Summit','Valley'];
+  var c=cities[Math.floor(Math.random()*cities.length)];
+  var sigs=[['vacant','Vacant'],['tax','Tax delinquent'],['abs','Absentee owner'],['pre','Pre-foreclosure']].filter(function(){return Math.random()>.5;}).slice(0,3);
+  return {id:'prop-sim-'+(Date.now())+'-'+(_propIdCounter++),address:(Math.floor(Math.random()*9900)+100)+' '+streets[Math.floor(Math.random()*streets.length)]+' St, '+c[0]+', '+c[1],price:Math.round(Math.random()*450000)+80000,beds:Math.floor(Math.random()*4)+1,baths:Math.floor(Math.random()*3)+1,sqft:Math.round(Math.random()*2000)+800,score:Math.floor(Math.random()*35)+55,signals:sigs.map(function(s){return s[1];}),source:'Zillow compliant API (simulated)',discoveredAt:new Date().toISOString(),status:'available',note:'[SIMULATED]'};
+}
+
+/* ---------- consent modal ---------- */
+function openConsentModal(title,body,onConfirm){
+  openModal('<h3>'+esc(title)+'</h3>'
+    +'<p style="font-size:13px;color:var(--txt2);margin-bottom:12px">'+body+'</p>'
+    +'<div class="notice warn" style="margin-bottom:14px"><span class="ic">'+icon('shield')+'</span><div><b>Demo consent.</b> No real data is transmitted, no real email sent, and no charges occur. All results are <b>[SIMULATED]</b>. In production, real consent, opt-out, and TCPA/FCRA controls would apply.</div></div>'
+    +'<div style="display:flex;gap:8px"><button class="btn block" id="consentOk">I Understand — Proceed</button><button class="btn ghost block" onclick="VIQ.closeModal()">Cancel</button></div>');
+  setTimeout(function(){ var b=el('consentOk'); if(b)b.onclick=function(){closeModal();onConfirm();}; },50);
+}
+
+/* ---------- Discovery view ---------- */
+var _discoveryLog=[];
+function runDiscoveryJob(){
+  if(!auth.signedIn){openSignIn(function(){runDiscoveryJob();}); return;}
+  var card=el('discJobCard'); if(!card)return;
+  card.innerHTML='<div class="spin" style="width:18px;height:18px;margin:0 auto 8px"></div><div style="text-align:center;font-size:12.5px;color:var(--txt3)">Running simulated discovery…</div>';
+  var count=5+Math.floor(Math.random()*5);
+  apiCall('GET','/api/discover?count='+count,null).then(function(r){
+    var newProps;
+    if(r&&r.properties){
+      newProps=r.properties;
+      _discoveryLog.unshift({t:new Date().toLocaleTimeString(),msg:'API: +'+r.added+' added, '+r.dupsRemoved+' dupes removed, '+r.staleRemoved+' stale removed. Total: '+r.total});
+    } else {
+      // inline simulation
+      newProps=Array.from({length:count},simProp);
+      _discoveryLog.unshift({t:new Date().toLocaleTimeString(),msg:'[Simulated offline] +'+count+' properties discovered, 0 dupes, 0 stale. Total: '+(_discoveredProps.length+count)});
+    }
+    // dedup by id in local list
+    newProps.forEach(function(p){if(!_discoveredProps.find(function(x){return x.id===p.id;}))_discoveredProps.push(p);});
+    toast('Discovery complete — '+newProps.length+' new properties.','ok');
+    var dv=el('discoveryContent'); if(dv)dv.innerHTML=discoveryContent();
+  });
+}
+function runWeeklyJob(){
+  if(!auth.signedIn){openSignIn(function(){runWeeklyJob();}); return;}
+  // Simulate stale removal: mark 10-15% sold
+  var removed=0;
+  _discoveredProps=_discoveredProps.filter(function(){if(Math.random()<0.12){removed++;return false;}return true;});
+  _discoveryLog.unshift({t:new Date().toLocaleTimeString(),msg:'Weekly cleanup: '+removed+' stale/sold removed. '+_discoveredProps.length+' remain.'});
+  toast('Weekly cleanup complete — '+removed+' stale leads removed.','ok');
+  var dv=el('discoveryContent'); if(dv)dv.innerHTML=discoveryContent();
+  apiCall('POST','/api/jobs/run-weekly',{}).catch(function(){});
+}
+function discoveryContent(){
+  var rows=(_discoveredProps.length?_discoveredProps.slice(-20).reverse():[]);
+  var tableRows=rows.length?rows.map(function(p,i){
+    return '<tr style="border-top:1px solid var(--line)">'
+      +'<td style="padding:8px 10px"><div style="font-weight:600;font-size:13px">'+esc(p.address)+'</div>'
+        +'<div style="font-size:11.5px;color:var(--txt3)">'+esc(p.source)+'</div></td>'
+      +'<td style="padding:8px 10px;text-align:right;font-size:13px">$'+Math.round(p.price).toLocaleString()+'</td>'
+      +'<td style="padding:8px 10px;text-align:center;font-weight:600;color:var(--blue)">'+p.score+'</td>'
+      +'<td style="padding:8px 10px;font-size:12px">'+(p.signals||[]).map(function(s){return '<span class="tag vac" style="font-size:10.5px;margin:1px">'+esc(s)+'</span>';}).join('')+'</td>'
+      +'<td style="padding:8px 10px"><span class="badge q" style="font-size:11px">'+esc(p.status)+'</span></td>'
+      +'</tr>';}).join('')
+    :'<tr><td colspan="5" style="padding:28px;text-align:center;color:var(--txt3)">No properties yet — run a discovery job to populate this list.</td></tr>';
+  var logHTML=_discoveryLog.slice(0,5).map(function(e){return '<div class="fitem"><div style="flex:1"><div class="ft">'+esc(e.t)+'</div><div class="fm">'+esc(e.msg)+'</div></div></div>';}).join('');
+  return '<div class="grid g3" style="margin-bottom:14px">'
+    +'<div class="stat card"><div class="st"><span class="l">Discovered</span><span class="ic">'+icon('building')+'</span></div><div class="v">'+_discoveredProps.length+'</div><div class="foot">in this session</div></div>'
+    +'<div class="stat card"><div class="st"><span class="l">Available</span><span class="ic">'+icon('check')+'</span></div><div class="v">'+_discoveredProps.filter(function(p){return p.status==='available';}).length+'</div><div class="foot">not stale/sold</div></div>'
+    +'<div class="stat card"><div class="st"><span class="l">Avg score</span><span class="ic">'+icon('gauge')+'</span></div><div class="v">'+(_discoveredProps.length?Math.round(_discoveredProps.reduce(function(a,p){return a+p.score;},0)/_discoveredProps.length):0)+'</div><div class="foot">quality</div></div>'
+    +'</div>'
+    +'<div class="row" style="margin-bottom:14px;gap:8px">'
+      +'<div id="discJobCard" class="card pad" style="flex:1;display:flex;align-items:center;gap:10px">'
+        +'<div style="flex:1"><div style="font-weight:600;font-size:13px">Daily deep-research job</div><div style="font-size:12px;color:var(--txt3)">Scans Zillow API, county tax registers, HUD vacancy list, USPS AMS (all simulated)</div></div>'
+        +'<button class="btn" onclick="VIQ.runDiscoveryJob()">'+icon('sync')+'Run now</button>'
+      +'</div>'
+      +'<div class="card pad" style="display:flex;align-items:center;gap:10px">'
+        +'<div style="flex:1"><div style="font-weight:600;font-size:13px">Weekly cleanup</div><div style="font-size:12px;color:var(--txt3)">Dedup, availability verify, stale removal</div></div>'
+        +'<button class="btn ghost" onclick="VIQ.runWeeklyJob()">'+icon('broom')+'Run now</button>'
+      +'</div>'
+    +'</div>'
+    +'<div class="card" style="margin-bottom:14px;overflow:auto">'
+      +'<div class="card-h" style="padding:12px 14px 10px"><h3>Discovered properties (latest 20)</h3></div>'
+      +'<table style="width:100%;border-collapse:collapse;font-size:13px">'
+        +'<thead><tr style="background:var(--panel2)">'
+          +'<th style="padding:8px 10px;text-align:left;font-size:11.5px;font-weight:600;color:var(--txt3)">Address</th>'
+          +'<th style="padding:8px 10px;text-align:right;font-size:11.5px;font-weight:600;color:var(--txt3)">Price</th>'
+          +'<th style="padding:8px 10px;text-align:center;font-size:11.5px;font-weight:600;color:var(--txt3)">Score</th>'
+          +'<th style="padding:8px 10px;font-size:11.5px;font-weight:600;color:var(--txt3)">Signals</th>'
+          +'<th style="padding:8px 10px;font-size:11.5px;font-weight:600;color:var(--txt3)">Status</th>'
+        +'</tr></thead>'
+        +'<tbody>'+tableRows+'</tbody>'
+      +'</table>'
+    +'</div>'
+    +(logHTML?'<div class="card pad"><div class="card-h"><h3>Job history</h3></div><div class="feed">'+logHTML+'</div></div>':'');
+}
+function discoveryView(){
+  return '<section class="view">'
+    +pagehead('AI Property Discovery','Automated daily and weekly syncs across Zillow and public property-listing sources. All integrations are <b>[SIMULATED]</b> — compliant APIs and permitted datasets only. No unauthorized scraping.',
+      '<span class="badge p" style="margin-right:6px">SIMULATED</span>')
+    +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Compliant sources only.</b> In production, discovery uses Zillow Partner API, USPS AMS, HUD vacancy feeds, and county public records — all via licensed/permitted channels, not scraping. No real data queries occur here.</div></div>'
+    +'<div id="discoveryContent">'+discoveryContent()+'</div>'
+    +complianceFoot()+'</section>';
+}
+
+/* ---------- Outreach view ---------- */
+var _outreachPropId=null;
+var _outreachContact=null;
+var _currentDraftId=null;
+var _currentOfferId=null;
+var _buyerProfile={name:'',firm:'',phone:'',investmentGoal:'',notes:''};
+
+function enrichLead(id){
+  openConsentModal('Enrich contact data','Retrieve owner contact information from a licensed skip-trace provider (simulated). In production this requires buyer consent and DNC/TCPA compliance.',function(){
+    apiCall('POST','/api/enrich',{propertyId:id,consentGiven:true}).then(function(r){
+      var contact;
+      if(r&&r.contact){ contact=r.contact; }
+      else {
+        // inline sim
+        var available=Math.random()>0.35;
+        contact=available
+          ?{available:true,phone:'(419)-555-'+Math.floor(Math.random()*9000+1000),email:'owner'+id.slice(-3)+'@example-demo.com',provider:'MockSkipTrace (simulated)',note:'[SIMULATED]'}
+          :{available:false,phone:null,email:null,note:'[SIMULATED] No contact data found.'};
+      }
+      _outreachContact=contact;
+      toast(contact.available?'Contact enriched (simulated).':'No contact data found.',contact.available?'ok':'info');
+      var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+    });
+  });
+}
+
+function connectGmail(){
+  openConsentModal('Connect Gmail (simulated)','This simulates connecting your Gmail account via OAuth so the AI agent can draft and send outreach emails on your behalf. In production, real Google OAuth consent is required.',function(){
+    apiCall('POST','/api/gmail/connect',{userEmail:auth.email||'demo@gmail.com',consentGiven:true}).then(function(r){
+      _gmailConnected=true;
+      toast('Gmail connected (simulated).','ok');
+      var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+    });
+  });
+}
+
+function draftEmail(){
+  if(!_outreachPropId){toast('Select a discovered property first.','info');return;}
+  var subj=(_outreachPropId?('Interest in your property — '+_outreachPropId):'Acquisition inquiry');
+  // Build a property stub from discovered list
+  var prop=_discoveredProps.find(function(p){return p.id===_outreachPropId;});
+  if(!prop&&_discoveredProps.length){prop=_discoveredProps[0];}
+  if(!prop){toast('Run discovery first.','info');return;}
+  apiCall('POST','/api/gmail/draft',{propertyId:prop.id,buyerProfile:_buyerProfile,contactInfo:_outreachContact}).then(function(r){
+    var draft;
+    if(r&&r.draft){ _currentDraftId=r.draftId; draft=r.draft; }
+    else {
+      _currentDraftId='draft-sim-'+Date.now();
+      var buyerName=_buyerProfile.name||'A Local Investor';
+      draft={to:(_outreachContact&&_outreachContact.email)||'[owner email — enrich first]',subject:'Interest in Your Property at '+prop.address,body:'Dear Property Owner,\n\nI noticed your property at '+prop.address+' and would like to discuss a potential acquisition.\n\nMy name is '+buyerName+' and I specialize in buying vacant properties in your area.\n\nBest regards,\n'+buyerName+'\n\n---\n[SIMULATED] No real email will be sent.',draftedAt:new Date().toISOString()};
+    }
+    _currentDraft=draft;
+    toast('Draft created — review before sending.','ok');
+    var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+  });
+}
+
+function approveAndSendEmail(){
+  if(!_currentDraftId){toast('Generate a draft first.','info');return;}
+  var bodyEl=el('draftBodyEdit'); var subjEl=el('draftSubjEdit');
+  var editedBody=bodyEl?bodyEl.value:null; var editedSubj=subjEl?subjEl.value:null;
+  openConsentModal('Send outreach email?','You are about to approve and send this AI-drafted email. Review it carefully before proceeding. In production this would send via Gmail API.',function(){
+    apiCall('POST','/api/gmail/send-approved',{draftId:_currentDraftId,approvalConfirmed:true,editedBody:editedBody,editedSubject:editedSubj}).then(function(r){
+      toast('Email sent (simulated). No real email transmitted.','ok');
+      _currentDraft=null; _currentDraftId=null;
+      var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+    });
+  });
+}
+
+function generateOfferUI(){
+  if(!_outreachPropId&&!_discoveredProps.length){toast('Run discovery first.','info');return;}
+  var prop=(_outreachPropId&&_discoveredProps.find(function(p){return p.id===_outreachPropId;}))||_discoveredProps[0]||{id:'sim',address:'123 Demo St, Toledo, OH',price:150000};
+  apiCall('POST','/api/generate-offer',{propertyId:prop.id,buyerProfile:_buyerProfile}).then(function(r){
+    if(r&&r.offer){ _currentOfferId=r.offerId; _currentOffer=r.offer; }
+    else {
+      _currentOfferId='offer-sim-'+Date.now();
+      var buyerName=_buyerProfile.name||'Demo Investor';
+      var offerAmt=Math.round(prop.price*(0.80+Math.random()*0.15));
+      _currentOffer={offerAmount:offerAmt,earnestMoney:Math.round(offerAmt*0.01),closingDays:21,requiresApproval:true,text:'LETTER OF INTENT — NON-BINDING [SIMULATED]\n\nProperty: '+prop.address+'\nBuyer: '+buyerName+'\nOffer: $'+offerAmt.toLocaleString()+'\nEarnest: $'+Math.round(offerAmt*0.01).toLocaleString()+'\nClose: 21 days\n\n[SIMULATED] AI-generated draft. Not a real offer. Buyer must review and approve.',note:'[SIMULATED]'};
+    }
+    toast('Offer draft generated — review before approving.','ok');
+    var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+  });
+}
+
+function approveOffer(){
+  if(!_currentOfferId){toast('Generate an offer first.','info');return;}
+  var editEl=el('offerTextEdit'); var editedText=editEl?editEl.value:null;
+  openConsentModal('Approve this offer?','You are approving an AI-generated offer letter. This is for demo purposes only — no real offer will be transmitted. In production, legal review is required.',function(){
+    apiCall('POST','/api/approve-offer',{offerId:_currentOfferId,approvalConfirmed:true,editedText:editedText}).then(function(){
+      toast('Offer approved (simulated). Not a real legal offer.','ok');
+      _currentOffer=null; _currentOfferId=null;
+      var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+    });
+  });
+}
+
+function saveBuyerProfile(){
+  _buyerProfile.name=(el('bpName')||{}).value||'';
+  _buyerProfile.firm=(el('bpFirm')||{}).value||'';
+  _buyerProfile.phone=(el('bpPhone')||{}).value||'';
+  _buyerProfile.investmentGoal=(el('bpGoal')||{}).value||'';
+  _buyerProfile.notes=(el('bpNotes')||{}).value||'';
+  toast('Profile saved.','ok');
+}
+
+function outreachContent(){
+  var prop=(_outreachPropId&&_discoveredProps.find(function(p){return p.id===_outreachPropId;}))||_discoveredProps[0]||null;
+  // Property selector
+  var propSel='<label class="fld" for="outreachPropSel">Selected property</label>'
+    +'<select id="outreachPropSel" onchange="VIQ._selectOutreachProp(this.value)" style="max-width:460px">'
+    +(_discoveredProps.length?_discoveredProps.slice(-20).reverse().map(function(p){return '<option value="'+esc(p.id)+'"'+(p.id===_outreachPropId?' selected':'')+'>'+esc(p.address)+'</option>';}).join(''):'<option value="">— Run AI Discovery first —</option>')
+    +'</select>';
+  // Contact enrichment card
+  var enrichCard='<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>'+icon('users')+' Contact enrichment</h3></div>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">After a lead is unlocked, retrieve owner phone/email from a licensed skip-trace provider. <b>[SIMULATED]</b></p>'
+    +(_outreachContact
+      ?('<div class="notice info" style="margin-bottom:10px"><span class="ic">'+icon('check')+'</span><div>'+(_outreachContact.available?('<b>Contact enriched.</b> Phone: '+esc(_outreachContact.phone)+' · Email: '+esc(_outreachContact.email)+'<br><span style="font-size:11px;color:var(--txt3)">'+esc(_outreachContact.consentNote||_outreachContact.note)+'</span>'):'<b>No contact data found</b> in permitted sources for this record.')+'</div></div>')
+      :'')
+    +'<button class="btn'+ (_outreachContact?' ghost':'') +'" onclick="VIQ.enrichLead(\''+(prop?prop.id:'sim-prop')+'\')">'
+    +icon('users')+(_outreachContact?'Re-enrich contact':'Enrich contact (simulated)')+'</button></div>';
+  // Gmail card
+  var gmailCard='<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>'+icon('rocket')+' Gmail outreach <span class="badge '+ (_gmailConnected?'q':'p') +'" style="margin-left:8px">'+(_gmailConnected?'Connected':'Not connected')+'</span></h3></div>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">Connect Gmail OAuth to let the AI agent draft personalised outreach emails for your approval. <b>[SIMULATED]</b></p>'
+    +(!_gmailConnected?'<button class="btn ghost" style="margin-bottom:12px" onclick="VIQ.connectGmail()">'+icon('handshake')+'Connect Gmail (simulated)</button>':'')
+    +'<button class="btn'+ (!_gmailConnected?' ghost':'') +'" onclick="VIQ.draftEmail()">'+icon('rocket')+'AI-draft outreach email</button>'
+    +(_currentDraft?'<div style="margin-top:14px">'
+      +'<label class="fld">Subject <span class="badge p" style="margin-left:4px">Review &amp; edit</span></label>'
+      +'<input id="draftSubjEdit" value="'+esc(_currentDraft.subject||'')+'" style="margin-bottom:8px">'
+      +'<label class="fld">To</label>'
+      +'<input value="'+esc(_currentDraft.to||'')+'" disabled style="margin-bottom:8px;background:var(--panel2)">'
+      +'<label class="fld">Body <span class="badge p" style="margin-left:4px">Review &amp; edit before sending</span></label>'
+      +'<textarea id="draftBodyEdit" rows="8" style="margin-bottom:8px">'+esc(_currentDraft.body||'')+'</textarea>'
+      +'<div class="notice warn" style="margin-bottom:10px"><span class="ic">'+icon('shield')+'</span><div><b>Your approval is required.</b> Review the draft above. Edit freely. Clicking Send confirms you have reviewed, consent to outreach, and acknowledge DNC/TCPA requirements.</div></div>'
+      +'<div style="display:flex;gap:8px"><button class="btn" onclick="VIQ.approveAndSendEmail()">'+icon('check')+'Approve &amp; send (simulated)</button><button class="btn ghost" onclick="_currentDraft=null;_currentDraftId=null;var oc=el(\'outreachContent\');if(oc)oc.innerHTML=outreachContent();">Discard</button></div>'
+      +'</div>':'')
+    +'</div>';
+  // Offer generator card
+  var offerCard='<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>'+icon('handshake')+' AI Offer generator</h3></div>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">Generate a non-binding Letter of Intent based on the selected property and your buyer profile. Review and edit before approving. <b>[SIMULATED] — not legal advice.</b></p>'
+    +'<button class="btn" onclick="VIQ.generateOfferUI()">'+icon('chart')+'Generate offer draft</button>'
+    +(_currentOffer?'<div style="margin-top:14px">'
+      +'<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px">'
+        +'<div class="stat card" style="flex:1;min-width:120px;padding:12px"><div class="st"><span class="l">Offer amount</span></div><div class="v" style="font-size:18px">$'+_currentOffer.offerAmount.toLocaleString()+'</div></div>'
+        +'<div class="stat card" style="flex:1;min-width:120px;padding:12px"><div class="st"><span class="l">Earnest</span></div><div class="v" style="font-size:18px">$'+_currentOffer.earnestMoney.toLocaleString()+'</div></div>'
+        +'<div class="stat card" style="flex:1;min-width:120px;padding:12px"><div class="st"><span class="l">Close in</span></div><div class="v" style="font-size:18px">'+_currentOffer.closingDays+'d</div></div>'
+      +'</div>'
+      +'<label class="fld">Offer text <span class="badge p" style="margin-left:4px">Review &amp; edit — not legal advice</span></label>'
+      +'<textarea id="offerTextEdit" rows="12" style="margin-bottom:10px;font-family:monospace;font-size:12px">'+esc(_currentOffer.text||'')+'</textarea>'
+      +'<div class="notice warn" style="margin-bottom:10px"><span class="ic">'+icon('shield')+'</span><div><b>Your approval is required.</b> This is a non-binding AI draft. It is not legal advice. Consult qualified legal counsel before transmitting any real offer.</div></div>'
+      +'<div style="display:flex;gap:8px"><button class="btn" onclick="VIQ.approveOffer()">'+icon('check')+'Approve offer (simulated)</button><button class="btn ghost" onclick="_currentOffer=null;_currentOfferId=null;var oc=el(\'outreachContent\');if(oc)oc.innerHTML=outreachContent();">Discard</button></div>'
+      +'</div>':'')
+    +'</div>';
+  // Buyer profile card
+  var profileCard='<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>Your buyer profile</h3></div>'
+    +'<div class="grid g2" style="gap:10px;margin-bottom:10px">'
+      +'<div><label class="fld" for="bpName">Full name</label><input id="bpName" placeholder="Jane Smith" value="'+esc(_buyerProfile.name)+'"></div>'
+      +'<div><label class="fld" for="bpFirm">Firm / company</label><input id="bpFirm" placeholder="Smith Investments LLC" value="'+esc(_buyerProfile.firm)+'"></div>'
+      +'<div><label class="fld" for="bpPhone">Phone</label><input id="bpPhone" placeholder="(555) 555-0100" value="'+esc(_buyerProfile.phone)+'"></div>'
+      +'<div><label class="fld" for="bpGoal">Investment goal</label><input id="bpGoal" placeholder="Fix and flip, buy and hold…" value="'+esc(_buyerProfile.investmentGoal)+'"></div>'
+    +'</div>'
+    +'<label class="fld" for="bpNotes">Additional notes (optional)</label>'
+    +'<textarea id="bpNotes" rows="2" style="margin-bottom:10px">'+esc(_buyerProfile.notes)+'</textarea>'
+    +'<button class="btn ghost sm" onclick="VIQ._saveBuyerProfile()">Save profile</button></div>';
+  return '<div style="margin-bottom:12px"><label class="fld">Property to target</label>'+propSel+'</div>'
+    +profileCard+enrichCard+gmailCard+offerCard;
+}
+window.VIQ=window.VIQ||{}; // forward-declare so inline functions can reference VIQ._selectOutreachProp
+// will be fully overwritten below after all functions defined
+function _selectOutreachPropFn(id){_outreachPropId=id;_outreachContact=null;_currentDraft=null;_currentDraftId=null;_currentOffer=null;_currentOfferId=null;var oc=el('outreachContent');if(oc)oc.innerHTML=outreachContent();}
+function _saveBuyerProfileFn(){saveBuyerProfile();}
+
+function outreachView(){
+  return '<section class="view">'
+    +pagehead('Outreach Center','AI-powered contact enrichment, Gmail draft-and-approval, and offer generation. All integrations are <b>[SIMULATED]</b>. Buyer review and approval required before any outreach.',
+      '<span class="badge p">SIMULATED</span>')
+    +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Approval gates active.</b> The AI drafts — you review, edit, and approve. No email is sent and no offer is transmitted without your explicit confirmation. No real data is used. <b>DNC/TCPA compliance required in production.</b></div></div>'
+    +'<div id="outreachContent">'+outreachContent()+'</div>'
+    +complianceFoot()+'</section>';
+}
+
 /* ================= deep search ================= */
+
 function runSearch(retry){
   var s=SAMPLES[state.capIdx]; var card=el("captureCard"); if(!card)return;
   if(!retry){ var ne=el("noteInp"); state._note=ne?ne.value.trim():""; }
@@ -1172,11 +1494,13 @@ function resolve(segs){
     if(segs[1]==="leads") return {view:leadsView,crumb:[["Buyer","#/buyer"],"Leads"],title:"Leads",skeleton:skeletonTable()};
     if(segs[1]==="automation") return {view:automationView,crumb:[["Buyer","#/buyer"],"Automation"],title:"Automation"};
     if(segs[1]==="account") return {view:accountView,crumb:[["Buyer","#/buyer"],"Plan"],title:"Plan"};
+    if(segs[1]==="discovery") return {view:discoveryView,crumb:[["Buyer","#/buyer"],"AI Discovery"],title:"AI Discovery"};
+    if(segs[1]==="outreach") return {view:outreachView,crumb:[["Buyer","#/buyer"],"Outreach Center"],title:"Outreach Center"};
   }
   if(r==="account") return {view:accountProfileView,crumb:["Account"],title:"Account"};
   return {view:notFoundView,crumb:["Not found"],title:"Not found"};
 }
-var APPTABS=[["#/","grid","Home"],["#/buyer/leads","building","Browse"],["#/spotter/capture","camera","Submit"],["#/account","users","Account"]];
+var APPTABS=[["#/","grid","Home"],["#/buyer/leads","building","Browse"],["#/buyer/discovery","search","Discover"],["#/spotter/capture","camera","Submit"],["#/account","users","Account"]];
 function buildTabs(){
   var h="#"+(location.hash||"#/").replace(/^#/,"");
   el("apptabs").innerHTML=APPTABS.map(function(t){
@@ -1232,6 +1556,11 @@ window.VIQ={
   openAbout:openAbout, openCompliance:openCompliance, closeModal:closeModal, toast:toast,
   openDrawer:openDrawer, closeDrawer:closeDrawer, toggleAcct:toggleAcct, closeAcct:closeAcct, resetDemo:resetDemo,
   setTab:setTab, tabKey:tabKey, toggleSave:toggleSave, clearFilters:clearFilters,
+  runDiscoveryJob:runDiscoveryJob, runWeeklyJob:runWeeklyJob,
+  connectGmail:connectGmail, draftEmail:draftEmail, approveAndSendEmail:approveAndSendEmail,
+  generateOfferUI:generateOfferUI, approveOffer:approveOffer,
+  enrichLead:enrichLead, openConsentModal:openConsentModal,
+  _selectOutreachProp:_selectOutreachPropFn, _saveBuyerProfile:_saveBuyerProfileFn,
   _state:state, _auth:auth, _leads:LEADS, _samples:SAMPLES,
   setInstant:function(v){instant=v;}, get instant(){return instant;}
 };
