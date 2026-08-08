@@ -58,6 +58,26 @@ describe('redact()', () => {
     redact(orig);
     assert.equal(orig.email, 'a@b.com'); // unchanged
   });
+
+  it('redacts "to" field (email recipient)', () => {
+    const out = redact({ to: 'owner@test.com', subject: 'Hi' });
+    assert.equal(out.to, '[REDACTED]');
+    assert.equal(out.subject, 'Hi');
+  });
+
+  it('redacts "from" field', () => {
+    const out = redact({ from: 'buyer@test.com', count: 1 });
+    assert.equal(out.from, '[REDACTED]');
+    assert.equal(out.count, 1);
+  });
+
+  it('redacts editedBody, editedSubject, editedText', () => {
+    const out = redact({ editedBody: 'Dear owner...', editedSubject: 'Re: property', editedText: 'LOI...', ok: true });
+    assert.equal(out.editedBody, '[REDACTED]');
+    assert.equal(out.editedSubject, '[REDACTED]');
+    assert.equal(out.editedText, '[REDACTED]');
+    assert.equal(out.ok, true);
+  });
 });
 
 // ─── buildAuditEvent ─────────────────────────────────────────────────────────
@@ -283,6 +303,18 @@ describe('generateOffer()', () => {
     const offer = generateOffer(prop, buyer);
     assert.ok(offer.text.includes('John Smith'));
     assert.ok(offer.text.includes('Smith Holdings'));
+  });
+});
+
+// ─── redact additional connectors / credentials ──────────────────────────────
+describe('redact() connectors credentials', () => {
+  it('redacts CRM secrets and API keys', () => {
+    const out = redact({ apikey: 'secret-key', clientsecret: 'secret-client', crmsecret: 'crm-sec', crmkey: 'key-crm', privatekey: 'priv-key' });
+    assert.equal(out.apikey, '[REDACTED]');
+    assert.equal(out.clientsecret, '[REDACTED]');
+    assert.equal(out.crmsecret, '[REDACTED]');
+    assert.equal(out.crmkey, '[REDACTED]');
+    assert.equal(out.privatekey, '[REDACTED]');
   });
 });
 

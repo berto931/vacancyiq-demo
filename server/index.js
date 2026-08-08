@@ -332,6 +332,150 @@ app.post('/api/approve-offer', (req, res) => {
   res.json({ status: 'approved', offerId, note: '[SIMULATED] Offer approved for transmittal — not a real legal offer.' });
 });
 
+// ─── CRM, Workflows, Pipeline, Followups (simulated) ──────────────────────────
+
+const CRM_FILE = path.join(DATA_DIR, 'crm_connections.json');
+const WORKFLOWS_FILE = path.join(DATA_DIR, 'workflows.json');
+const PIPELINE_FILE = path.join(DATA_DIR, 'pipeline_states.json');
+const FOLLOWUPS_FILE = path.join(DATA_DIR, 'followups.json');
+
+/** POST /api/integrations/crm/connect — connect a CRM */
+app.post('/api/integrations/crm/connect', (req, res) => {
+  const { provider, apiKey, clientSecret } = req.body;
+  if (!provider) return res.status(400).json({ error: 'provider required' });
+
+  const crms = loadJSON(CRM_FILE, {});
+  crms[provider] = {
+    connected: true,
+    connectedAt: new Date().toISOString(),
+    apiKey: apiKey || 'mock-key',
+    clientSecret: clientSecret || 'mock-secret',
+    actor: req.user.sub
+  };
+  saveJSON(CRM_FILE, crms);
+
+  writeAudit(buildAuditEvent({
+    actor: req.user.sub, action: 'crm.connect', resource: provider,
+    status: 'ok',
+    meta: { provider }
+  }));
+
+  res.json({ status: 'connected', provider, note: `[SIMULATED] Successfully connected to ${provider}.` });
+});
+
+/** POST /api/integrations/crm/sync — sync lead to connected CRM */
+app.post('/api/integrations/crm/sync', (req, res) => {
+  const { propertyId, provider } = req.body;
+  if (!propertyId || !provider) return res.status(400).json({ error: 'propertyId and provider required' });
+
+  const crms = loadJSON(CRM_FILE, {});
+  if (!crms[provider] || !crms[provider].connected) {
+    return res.status(400).json({ error: `CRM ${provider} not connected. Connect first.` });
+  }
+
+  writeAudit(buildAuditEvent({
+    actor: req.user.sub, action: 'crm.sync', resource: propertyId,
+    status: 'ok',
+    meta: { provider, propertyId }
+  }));
+
+  res.json({ status: 'synced', propertyId, provider, note: `[SIMULATED] Lead pushed to ${provider} CRM pipeline successfully.` });
+});
+
+/** GET /api/workflows — read custom workflows */
+app.get('/api/workflows', (req, res) => {
+  const defaultWorkflows = [
+    { id: 'auto-enrich', name: 'Auto-enrich owner contact', desc: 'Auto-request skip trace upon unlocking a lead', enabled: false },
+    { id: 'auto-draft', name: 'Gmail auto-draft', desc: 'Draft acquisition email via Gmail API upon enrichment', enabled: false },
+    { id: 'auto-offer', name: 'AI auto-offer generation', desc: 'Auto-generate Letter of Intent when contact is verified', enabled: false },
+    { id: 'auto-crm', name: 'CRM auto-sync', desc: 'Instantly push lead to connected CRM when status moves to contacted', enabled: false }
+  ];
+  const stored = loadJSON(WORKFLOWS_FILE, null);
+  if (!stored) {
+    saveJSON(WORKFLOWS_FILE, defaultWorkflows);
+    return res.json({ workflows: defaultWorkflows });
+  }
+  res.json({ workflows: stored });
+});
+
+/** POST /api/workflows — save custom workflows configuration */
+app.post('/api/workflows', (req, res) => {
+  const { workflows } = req.body;
+  if (!Array.isArray(workflows)) return res.status(400).json({ error: 'workflows array required' });
+
+  saveJSON(WORKFLOWS_FILE, workflows);
+
+  writeAudit(buildAuditEvent({
+    actor: req.user.sub, action: 'workflows.update', resource: 'workflows',
+    status: 'ok',
+    meta: { count: workflows.length }
+  }));
+
+  res.json({ status: 'saved', workflows });
+});
+
+/** GET /api/pipeline — get pipeline stages for all leads */
+app.get('/api/pipeline', (req, res) => {
+  const pipeline = loadJSON(PIPELINE_FILE, {});
+  res.json({ pipeline });
+});
+
+/** POST /api/pipeline/move — update a lead's pipeline stage */
+app.post('/api/pipeline/move', (req, res) => {
+  const { propertyId, stage } = req.body;
+  const validStages = ['unlocked', 'enriched', 'drafted', 'contacted', 'loi_sent', 'contract'];
+  if (!propertyId || !stage) return res.status(400).json({ error: 'propertyId and stage required' });
+  if (!validStages.includes(stage)) return res.status(400).json({ error: `Invalid stage: ${stage}. Valid: ${validStages.join(', ')}` });
+
+  const pipeline = loadJSON(PIPELINE_FILE, {});
+  pipeline[propertyId] = stage;
+  saveJSON(PIPELINE_FILE, pipeline);
+
+  writeAudit(buildAuditEvent({
+    actor: req.user.sub, action: 'pipeline.move', resource: propertyId,
+    status: 'ok',
+    meta: { stage }
+  }));
+
+  res.json({ status: 'moved', propertyId, stage });
+});
+
+/** GET /api/followups — list all scheduled follow-ups */
+app.get('/api/followups', (req, res) => {
+  const followups = loadJSON(FOLLOWUPS_FILE, []);
+  res.json({ followups });
+});
+
+/** POST /api/followups/schedule — schedule a follow-up action */
+app.post('/api/followups/schedule', (req, res) => {
+  const { propertyId, taskName, dueDays } = req.body;
+  if (!propertyId || !taskName) return res.status(400).json({ error: 'propertyId and taskName required' });
+
+  const followups = loadJSON(FOLLOWUPS_FILE, []);
+  const dueAt = new Date();
+  dueAt.setDate(dueAt.getDate() + (dueDays || 3));
+
+  const entry = {
+    id: 'flw-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+    propertyId,
+    taskName,
+    dueAt: dueAt.toISOString(),
+    completed: false,
+    actor: req.user.sub
+  };
+
+  followups.push(entry);
+  saveJSON(FOLLOWUPS_FILE, followups);
+
+  writeAudit(buildAuditEvent({
+    actor: req.user.sub, action: 'followups.schedule', resource: propertyId,
+    status: 'ok',
+    meta: { taskName, dueDays }
+  }));
+
+  res.json({ status: 'scheduled', followup: entry });
+});
+
 // ─── /api/jobs ────────────────────────────────────────────────────────────────
 
 /** POST /api/jobs/run-daily — manually trigger the daily job */

@@ -3,17 +3,27 @@
  * Scrubs sensitive fields from objects before they are written to audit logs.
  * Rules:
  *  - Never log: authorization, password, token, secret, credential, oauth,
- *    phone, email, ssn, dob, contact, owner_name fields
+ *    phone, email, ssn, dob, contact, owner_name, to, from, editedBody,
+ *    editedSubject, editedText fields
  *  - Truncate body values that are long strings (potential PII in freeform fields)
+ *  - All entries must be lowercase — keys are lowercased before matching.
  *  - Deep-copies input, never mutates original
  */
 
 const BLOCKED_KEYS = new Set([
+  // Auth / credentials
   'authorization', 'password', 'token', 'secret', 'credential', 'oauth',
   'access_token', 'refresh_token', 'id_token', 'client_secret', 'api_key',
-  'phone', 'email', 'ssn', 'dob', 'contact', 'owner_name', 'ownerName',
-  'mailing', 'offerText', 'body', // email body may contain PII
+  'apikey', 'clientsecret', 'crmsecret', 'crmkey', 'privatekey',
+  // PII
+  'phone', 'email', 'ssn', 'dob', 'contact', 'owner_name', 'ownername',
+  'mailing',
+  // Email content (may contain PII or recipient addresses)
+  'body', 'to', 'from', 'replyto', 'reply_to',
+  // Buyer-edited content (subject, body, offer text)
+  'offertext', 'editedbody', 'editedsubject', 'editedtext',
 ]);
+
 
 const TRUNCATE_THRESHOLD = 120; // characters
 

@@ -1,0 +1,4 @@
+node_modules/
+screenshots/
+.netlify/
+package-lock.json

@@ -5,266 +5,303 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VacancyIQ — Product Demo</title>
 <meta name="description" content="Interactive demo of the VacancyIQ vacant & distressed property lead marketplace. Synthetic data.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231E74FF'/%3E%3Cpath d='M50 24c-11 0-20 9-20 20 0 15 20 32 20 32s20-17 20-32c0-11-9-20-20-20z' fill='white'/%3E%3Ccircle cx='50' cy='44' r='8' fill='%231E74FF'/%3E%3C/svg%3E">
-<style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231E74FF'/%3E%3Cpath d='M50 24c-11 0-20 9-20 20 0 15 20 32 20 32s20-17 20-32c0-11-9-20-20-20z' fill='white'/%3E%3Ccircle cx='50' cy='44' r='8' fill='%231E74FF'/%3E%3C/svg%3E"><style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 :root{
-  --bg:#F6F7F9;--panel:#FFFFFF;--panel2:#FAFBFC;--panel3:#F3F4F6;
-  --ink:#111827;--txt:#1F2937;--txt2:#5B6472;--txt3:#8A909C;
-  --line:#E5E7EB;--line2:#EEF0F3;
-  --blue:#2563EB;--blue2:#1D4ED8;--sky:#5B8DEF;--bluetint:#EEF3FD;--bluetint2:#F6F9FE;
-  --green:#0E7C4A;--greenbg:#E7F4EC;--amber:#8A5A11;--amberbg:#F6EEDE;--red:#C13A3A;--redbg:#FBEBEB;
-  --r:8px;--rs:6px;--rl:10px;
-  --sh:0 1px 2px rgba(17,24,39,.05);--sh2:0 6px 20px rgba(17,24,39,.12);
-  --side:236px;--topbar:52px;
+  --bg:#F8FAFC;--panel:#FFFFFF;--panel2:#F1F5F9;--panel3:#E2E8F0;
+  --ink:#0F172A;--txt:#334155;--txt2:#64748B;--txt3:#94A3B8;
+  --line:#E2E8F0;--line2:#F1F5F9;
+  --blue:#4F46E5;--blue2:#4338CA;--sky:#6366F1;--bluetint:#EEF2FF;--bluetint2:#FAF5FF;
+  --green:#059669;--greenbg:#ECFDF5;--amber:#D97706;--amberbg:#FFFBEB;--red:#DC2626;--redbg:#FEF2F2;
+  --r:12px;--rs:8px;--rl:20px;
+  --sh:0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --sh2:0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+  --side:240px;--topbar:60px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer}
-h1,h2,h3,h4{color:var(--ink);font-weight:600;letter-spacing:-.01em}
-:focus-visible{outline:2px solid var(--blue);outline-offset:1px;border-radius:4px}
+body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-0.01em}
+a{color:inherit;text-decoration:none;transition:color 0.2s ease}
+button{font-family:inherit;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1)}
+h1,h2,h3,h4{color:var(--ink);font-weight:700;letter-spacing:-0.02em}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--blue);padding:8px 14px;border:1px solid var(--line);border-radius:6px;z-index:200;font-weight:600}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--blue);padding:8px 14px;border:1px solid var(--line);border-radius:8px;z-index:200;font-weight:600;box-shadow:var(--sh2);transition:left 0.2s ease}
 .skip:focus{left:12px}
-/* ===== shell ===== */
+
+/* ===== shell layout ===== */
 .shell{display:flex;min-height:100vh}
 .sidebar{width:var(--side);flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;z-index:50}
-.side-brand{display:flex;align-items:center;gap:9px;padding:0 14px;height:var(--topbar);border-bottom:1px solid var(--line)}
-.side-brand .mark{width:24px;height:24px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.side-brand .mark svg{width:15px;height:15px;fill:#fff}
-.side-brand .wm{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
-.side-nav{flex:1;overflow-y:auto;padding:8px}
-.nav-group{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--txt3);padding:12px 8px 4px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:6px;font-size:13px;font-weight:500;color:var(--txt2);width:100%;border:none;background:none;text-align:left}
-.nav-item svg{width:15px;height:15px;fill:currentColor;opacity:.85;flex-shrink:0}
-.nav-item:hover{background:var(--panel3);color:var(--txt)}
-.nav-item[aria-current="page"]{background:var(--bluetint);color:var(--blue);font-weight:600}
-.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--txt3);background:var(--panel3);padding:0 6px;border-radius:10px;line-height:16px}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 18px;height:var(--topbar);border-bottom:1px solid var(--line)}
+.side-brand .mark{width:28px;height:28px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 4px rgba(79,70,229,0.2)}
+.side-brand .mark svg{width:16px;height:16px;fill:#fff}
+.side-brand .wm{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-0.4px}
+.side-nav{flex:1;overflow-y:auto;padding:12px 8px}
+.nav-group{font-size:11px;font-weight:700;letter-spacing:0.05em;color:var(--txt3);padding:14px 12px 6px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--txt2);width:100%;border:none;background:none;text-align:left;position:relative}
+.nav-item svg{width:16px;height:16px;fill:currentColor;opacity:0.8;flex-shrink:0}
+.nav-item:hover{background:var(--panel2);color:var(--ink)}
+.nav-item[aria-current="page"]{background:var(--bluetint);color:var(--blue)}
+.nav-item[aria-current="page"]::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3.5px;border-radius:0 4px 4px 0;background:var(--blue)}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:700;color:var(--txt2);background:var(--panel2);padding:2px 8px;border-radius:10px;line-height:1}
 .nav-item[aria-current="page"] .cnt{background:#fff;color:var(--blue)}
-.side-foot{padding:8px;border-top:1px solid var(--line)}
-.acct{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;width:100%;border:1px solid var(--line);background:var(--panel);text-align:left}
-.acct:hover{background:var(--panel2)}
-.acct .av,.menu .mh .av{width:26px;height:26px;border-radius:5px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:11px;flex-shrink:0}
-.acct .an{font-size:12.5px;font-weight:600;line-height:1.2;color:var(--txt)}.acct .ap{font-size:11px;color:var(--txt3)}
-.demobadge{display:flex;align-items:center;gap:6px;margin-top:8px;padding:5px 9px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--txt2)}
-.demobadge .d{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+.side-foot{padding:12px 8px;border-top:1px solid var(--line);background:rgba(248,250,252,0.5)}
+.acct{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;width:100%;border:1px solid var(--line);background:var(--panel);text-align:left;box-shadow:var(--sh)}
+.acct:hover{background:var(--panel2);border-color:var(--txt3)}
+.acct .av,.menu .mh .av{width:28px;height:28px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0;box-shadow:var(--sh)}
+.acct .an{font-size:13px;font-weight:700;line-height:1.2;color:var(--ink)}.acct .ap{font-size:11px;color:var(--txt2)}
+.demobadge{display:flex;align-items:center;gap:6px;margin-top:10px;padding:6px 10px;border-radius:8px;background:var(--amberbg);border:1px solid rgba(217,119,6,0.15);font-size:10.5px;font-weight:700;letter-spacing:0.02em;color:var(--amber)}
+.demobadge .d{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,0.15)}
+
 /* content + topbar */
 .content{flex:1;min-width:0;display:flex;flex-direction:column}
-.topbar{height:var(--topbar);position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 18px;z-index:40}
-.crumb{font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:6px;min-width:0}
-.crumb .sep{color:var(--line);font-size:11px}.crumb b{color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar{height:var(--topbar);position:sticky;top:0;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 24px;z-index:40}
+.crumb{font-size:13.5px;color:var(--txt2);display:flex;align-items:center;gap:6px;min-width:0}
+.crumb .sep{color:var(--txt3);font-size:10px}.crumb b{color:var(--ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .crumb a:hover{color:var(--blue)}
-.top-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
 .topsearch{position:relative}
-.topsearch input{width:200px;padding:6px 10px 6px 30px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font-size:13px}
-.topsearch input:focus{outline:none;border-color:var(--blue)}
-.topsearch svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;fill:var(--txt3)}
-.iconbtn{width:32px;height:32px;border-radius:6px;border:1px solid transparent;background:none;position:relative;display:flex;align-items:center;justify-content:center;color:var(--txt2)}
-.iconbtn:hover{background:var(--panel3);color:var(--txt)}
+.topsearch input{width:220px;padding:8px 12px 8px 34px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);font-size:13px;transition:all 0.2s ease}
+.topsearch input:focus{outline:none;border-color:var(--blue);background:var(--panel);box-shadow:0 0 0 3px rgba(79,70,229,0.12)}
+.topsearch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:var(--txt2)}
+.iconbtn{width:36px;height:36px;border-radius:8px;border:1px solid transparent;background:none;position:relative;display:flex;align-items:center;justify-content:center;color:var(--txt2);transition:all 0.2s ease}
+.iconbtn:hover{background:var(--panel2);color:var(--ink)}
 .iconbtn svg{width:16px;height:16px;fill:currentColor}
-.dot-badge{position:absolute;top:2px;right:2px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--red);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--panel)}
+.dot-badge{position:absolute;top:3px;right:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--panel)}
 .hamb{display:none}
-main.page{padding:20px 22px 40px;max-width:1180px;width:100%;margin:0 auto;flex:1}
-.view{animation:enter .18s ease-out}
-@keyframes enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+main.page{padding:24px 24px 48px;max-width:1200px;width:100%;margin:0 auto;flex:1}
+.view{animation:enter .24s cubic-bezier(0.16,1,0.3,1)}
+@keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
 /* page header */
-.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.pagehead h1{font-size:19px;font-weight:600;letter-spacing:-.3px}
-.pagehead .lede{color:var(--txt2);font-size:13px;margin-top:3px;max-width:74ch}
+.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.pagehead h1{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.pagehead .lede{color:var(--txt2);font-size:13.5px;margin-top:4px;max-width:74ch}
 .pagehead .ph-actions{display:flex;gap:8px;flex-shrink:0}
-.backlink{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500;color:var(--txt2);margin-bottom:12px}
+.backlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--txt2);margin-bottom:14px;transition:color 0.2s}
 .backlink:hover{color:var(--blue)}
-/* grid */
-.grid{display:grid;gap:14px}
+
+/* layout grid */
+.grid{display:grid;gap:16px}
 .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
-.row{display:flex;gap:14px;flex-wrap:wrap}
-/* card */
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
-.card.pad{padding:16px}
-.card-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.card-h h3{font-size:13px;font-weight:600}
-.card-h .link{margin-left:auto;font-size:12px;color:var(--blue);font-weight:500}
-.card-h .link:hover{text-decoration:underline}
-.sect-t{font-size:11px;font-weight:600;color:var(--txt3)}
+.row{display:flex;gap:16px;flex-wrap:wrap}
+
+/* premium cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.card.pad{padding:20px}
+.card-h{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.card-h h3{font-size:14px;font-weight:700;color:var(--ink)}
+.card-h .link{margin-left:auto;font-size:13px;color:var(--blue);font-weight:600}
+.card-h .link:hover{color:var(--blue2);text-decoration:underline}
+.sect-t{font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+
 /* buttons */
-.btn{background:var(--blue);color:#fff;border:1px solid var(--blue);font-weight:600;font-size:13px;padding:7px 13px;border-radius:6px;line-height:1.2;display:inline-flex;align-items:center;gap:6px;justify-content:center;transition:background .12s}
-.btn:hover{background:var(--blue2);border-color:var(--blue2)}
+.btn{background:var(--blue);color:#fff;border:1px solid var(--blue);font-weight:600;font-size:13.5px;padding:8px 16px;border-radius:8px;line-height:1.2;display:inline-flex;align-items:center;gap:8px;justify-content:center;box-shadow:var(--sh);transition:all 0.2s cubic-bezier(0.4,0,0.2,1)}
+.btn:hover{background:var(--blue2);border-color:var(--blue2);transform:translateY(-0.5px)}
+.btn:active{transform:none}
 .btn svg{width:14px;height:14px;fill:currentColor}
-.btn.sm{padding:5px 10px;font-size:12.5px}
-.btn.ghost{background:var(--panel);color:var(--txt);border:1px solid var(--line)}
-.btn.ghost:hover{background:var(--panel2);border-color:#D6D9DE}
+.btn.sm{padding:6px 12px;font-size:12.5px;border-radius:6px}
+.btn.ghost{background:var(--panel);color:var(--txt);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{background:var(--panel2);border-color:var(--txt3)}
 .btn.block{width:100%}
-/* inputs */
-label.fld{font-size:12px;color:var(--txt2);font-weight:500;display:block;margin-bottom:5px}
-input,select,textarea{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);width:100%;color:var(--txt)}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-/* chips */
-.chip{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 11px;font-size:12.5px;color:var(--txt2);font-weight:500}
-.chip:hover{border-color:#D6D9DE;color:var(--txt)}
-.chip[aria-pressed="true"]{background:var(--bluetint);color:var(--blue);border-color:#C9DBF8}
-/* tags / badges / age */
-.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;margin:1px 4px 1px 0;background:var(--panel3);color:var(--txt2)}
-.tag.vac{background:#EDF1F7;color:#3D5A80}.tag.tax{background:var(--amberbg);color:var(--amber)}.tag.abs{background:#EEEBF6;color:#5B4B9E}
-.tag.pre{background:var(--redbg);color:var(--red)}.tag.prob{background:var(--greenbg);color:var(--green)}.tag.code{background:#EFECF7;color:#6A4BA8}
-.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+
+/* inputs & forms */
+label.fld{font-size:12.5px;color:var(--txt);font-weight:600;display:block;margin-bottom:6px}
+input,select,textarea{font-family:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);width:100%;color:var(--txt);transition:all 0.2s ease}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,70,229,0.12);background:var(--panel)}
+
+/* chips & selectors */
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 14px;font-size:13px;color:var(--txt2);font-weight:600;box-shadow:var(--sh);transition:all 0.2s ease}
+.chip:hover{border-color:var(--txt3);color:var(--ink);background:var(--panel2)}
+.chip[aria-pressed="true"]{background:var(--bluetint);color:var(--blue);border-color:rgba(79,70,229,0.3)}
+
+/* tags & badges */
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:700;margin:2px 4px 2px 0;background:var(--panel2);color:var(--txt2)}
+.tag.vac{background:#EFF6FF;color:#1D4ED8}.tag.tax{background:var(--amberbg);color:var(--amber)}.tag.abs{background:#F5F3FF;color:#6D28D9}
+.tag.pre{background:var(--redbg);color:var(--red)}.tag.prob{background:var(--greenbg);color:var(--green)}.tag.code{background:#FDF2F8;color:#BE185D}
+.badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px}
 .badge svg{width:10px;height:10px;fill:currentColor}
 .badge.q{background:var(--greenbg);color:var(--green)}.badge.r{background:var(--redbg);color:var(--red)}.badge.p{background:var(--amberbg);color:var(--amber)}
-.age{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:4px;white-space:nowrap}
+.age{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
 .age.fresh{background:var(--greenbg);color:var(--green)}.age.mid{background:var(--amberbg);color:var(--amber)}.age.old{background:var(--redbg);color:var(--red)}
-/* stat tile */
-.stat{padding:14px 16px}
-.stat .st{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.stat .l{font-size:12px;color:var(--txt2);font-weight:500}
-.stat .ic{width:24px;height:24px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
-.stat .ic svg{width:13px;height:13px;fill:var(--txt3)}
-.stat .v{font-size:22px;font-weight:600;letter-spacing:-.4px;color:var(--ink)}
-.stat .foot{font-size:11.5px;color:var(--txt3);margin-top:2px}
-.stat .up{color:var(--green);font-weight:600}
-/* table */
-.tablewrap{overflow-x:auto;padding:0}
+
+/* stats tiles */
+.stat{padding:18px 20px;display:flex;flex-direction:column}
+.stat .st{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.stat .l{font-size:12.5px;color:var(--txt2);font-weight:600}
+.stat .ic{width:28px;height:28px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.stat .ic svg{width:14px;height:14px;fill:var(--txt2)}
+.stat .v{font-size:24px;font-weight:700;letter-spacing:-0.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .foot{font-size:12px;color:var(--txt2);margin-top:4px}
+.stat .up{color:var(--green);font-weight:700}
+
+/* tables */
+.tablewrap{overflow-x:auto;padding:0;background:var(--panel);border-radius:var(--r);border:1px solid var(--line)}
 table{width:100%;border-collapse:collapse}
-thead th{text-align:left;font-size:11.5px;padding:8px 14px;font-weight:600;color:var(--txt3);border-bottom:1px solid var(--line);background:var(--panel2);white-space:nowrap;position:sticky;top:var(--topbar)}
-th.sortable{cursor:pointer;user-select:none}
-th.sortable:hover{color:var(--txt)}
-th .arr{font-size:9px;color:var(--blue)}
-td{padding:9px 14px;font-size:13px;border-bottom:1px solid var(--line2);vertical-align:middle}
-tbody tr{cursor:pointer}
-tbody tr:hover{background:var(--panel2)}
+thead th{text-align:left;font-size:11px;font-weight:700;letter-spacing:0.05em;padding:12px 16px;color:var(--txt2);border-bottom:1px solid var(--line);background:var(--panel2);text-transform:uppercase;white-space:nowrap;position:sticky;top:var(--topbar)}
+th.sortable{cursor:pointer;user-select:none;transition:color 0.2s}
+th.sortable:hover{color:var(--blue)}
+th .arr{font-size:9.5px;color:var(--blue);margin-left:4px}
+td{padding:12px 16px;font-size:13.5px;border-bottom:1px solid var(--line2);vertical-align:middle;transition:background-color 0.15s ease}
+tbody tr{cursor:pointer;transition:all 0.15s}
+tbody tr:hover{background:rgba(248,250,252,0.85)}
+tbody tr:hover td{background-color:rgba(79,70,229,0.02)}
 tr:last-child td{border-bottom:none}
-.addr{font-weight:600;color:var(--ink)}.subtle{color:var(--txt3);font-size:12px}
-.scnum{font-weight:600;font-size:13.5px}
+.addr{font-weight:700;color:var(--ink)}.subtle{color:var(--txt2);font-size:12px}
+.scnum{font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
 .actcell{text-align:right}
-/* feed */
+
+/* updates feed */
 .feed{display:flex;flex-direction:column}
-.fitem{display:flex;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line2);align-items:center}
+.fitem{display:flex;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line2);align-items:center}
 .fitem:last-child{border-bottom:none}
-.fico{width:26px;height:26px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.fico svg{width:13px;height:13px;fill:currentColor}
+.fico{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fico svg{width:14px;height:14px;fill:currentColor}
 .fico.blue{background:var(--bluetint);color:var(--blue)}.fico.green{background:var(--greenbg);color:var(--green)}.fico.red{background:var(--redbg);color:var(--red)}.fico.amber{background:var(--amberbg);color:var(--amber)}
-.fitem .ft{font-size:13px;font-weight:500;color:var(--txt)}.fitem .fm{font-size:12px;color:var(--txt3);margin-top:1px}
+.fitem .ft{font-size:13.5px;font-weight:600;color:var(--ink)}.fitem .fm{font-size:12px;color:var(--txt2);margin-top:2px}
 .fitem time{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;align-self:flex-start;padding-top:2px}
-.list-link{border-radius:6px}.list-link:hover{background:var(--panel2)}
-/* pipeline */
-.progress{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin:2px 0 14px}
-.progress .fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease;width:0}
+.list-link{border-radius:8px}.list-link:hover{background:var(--panel2)}
+
+/* pipeline workflow tracking */
+.progress{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:4px 0 16px}
+.progress .fill{height:100%;background:var(--blue);border-radius:3px;transition:width 0.4s ease;width:0}
 .pipe{display:flex;flex-direction:column}
-.pl{padding:10px 2px;border-bottom:1px solid var(--line2);opacity:.5;transition:opacity .25s}
+.pl{padding:12px 4px;border-bottom:1px solid var(--line2);opacity:0.6;transition:all 0.25s}
 .pl:last-child{border-bottom:none}.pl.on,.pl.done,.pl.err{opacity:1}
 .pl .top{display:flex;align-items:center;gap:10px}
-.pl .d{width:22px;height:22px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700}
-.pl .d svg{width:11px;height:11px;fill:currentColor}
-.pl.on .d{border-color:var(--blue);color:var(--blue)}
+.pl .d{width:24px;height:24px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700}
+.pl .d svg{width:12px;height:12px;fill:currentColor}
+.pl.on .d{border-color:var(--blue);color:var(--blue);box-shadow:0 0 0 3px rgba(79,70,229,0.12)}
 .pl.done .d{background:var(--blue);border-color:var(--blue);color:#fff}
 .pl.err .d{background:var(--red);border-color:var(--red);color:#fff}
-.pl .name{font-size:13px;font-weight:500}
-.pl .subs{margin:6px 0 0 32px;font-size:12px;color:var(--txt3);display:flex;flex-direction:column;gap:2px}
-.spin{width:11px;height:11px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite}
+.pl .name{font-size:13.5px;font-weight:600}
+.pl .subs{margin:8px 0 0 34px;font-size:12px;color:var(--txt2);display:flex;flex-direction:column;gap:4px}
+.spin{width:12px;height:12px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-/* ring */
+
+/* circular rings */
 .ringwrap{position:relative;flex-shrink:0}
 .ringwrap .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ringwrap .lbl b{font-weight:600;letter-spacing:-.5px;line-height:1;color:var(--ink)}
-.ringwrap .lbl span{font-size:9px;color:var(--txt3);font-weight:600;margin-top:1px}
-/* result */
-.result{border-radius:var(--r);padding:18px;text-align:center;border:1px solid var(--line)}
-.result.ok{background:var(--greenbg);border-color:#CDE7D8}
-.result.rej{background:var(--redbg);border-color:#EFCFCF}
-.result h3{font-size:16px;margin:6px 0 3px}.result.ok h3{color:var(--green)}.result.rej h3{color:var(--red)}
-.result p{font-size:13px;color:var(--txt2)}
-/* detail */
-.detail-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-items:start}
-.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
-.kv:last-child{border-bottom:none}.kv span{color:var(--txt3)}.kv b{text-align:right;font-weight:600;color:var(--txt)}
-.locked{filter:blur(4px);user-select:none}
-.mapph{height:170px;position:relative}.mapph svg{width:100%;height:100%;display:block}
-.mapnote{position:absolute;bottom:8px;left:8px;background:rgba(17,24,39,.72);color:#fff;font-size:10px;padding:3px 8px;border-radius:4px}
-.breakdown{display:flex;flex-direction:column;gap:9px}
-.bd{display:grid;grid-template-columns:128px 1fr 30px;align-items:center;gap:10px;font-size:12.5px}
+.ringwrap .lbl b{font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--ink);font-size:18px}
+.ringwrap .lbl span{font-size:9.5px;color:var(--txt2);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.02em}
+
+/* action results */
+.result{border-radius:var(--r);padding:20px;text-align:center;border:1px solid var(--line);box-shadow:var(--sh)}
+.result.ok{background:var(--greenbg);border-color:rgba(5,150,105,0.2)}
+.result.rej{background:var(--redbg);border-color:rgba(220,38,38,0.2)}
+.result h3{font-size:16px;margin:6px 0 4px}.result.ok h3{color:var(--green)}.result.rej h3{color:var(--red)}
+.result p{font-size:13px;color:var(--txt)}
+
+/* details split */
+.detail-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
+.kv:last-child{border-bottom:none}.kv span{color:var(--txt2);font-weight:500}.kv b{text-align:right;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.locked{filter:blur(5px);user-select:none}
+.mapph{height:180px;position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--line)}.mapph svg{width:100%;height:100%;display:block}
+.mapnote{position:absolute;bottom:10px;left:10px;background:rgba(15,23,42,0.85);color:#fff;font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;backdrop-filter:blur(4px)}
+.breakdown{display:flex;flex-direction:column;gap:10px}
+.bd{display:grid;grid-template-columns:134px 1fr 32px;align-items:center;gap:12px;font-size:13px}
 .bd .track{height:6px;border-radius:3px;background:var(--line)}
 .bd .tf{height:100%;border-radius:3px;background:var(--blue)}
-.bd b{text-align:right;color:var(--txt)}
-/* chart holder */
-.bars{display:flex;align-items:flex-end;gap:10px;height:88px;margin-bottom:20px}
-/* notices */
-.notice{padding:11px 13px;display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--txt2);border-radius:var(--r);line-height:1.5}
-.notice .ic{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700}
-.notice .ic svg{width:12px;height:12px;fill:currentColor}
-.notice.warn{background:var(--amberbg);border:1px solid #E7D3AC}.notice.warn .ic{background:#fff;color:var(--amber)}
-.notice.info{background:var(--bluetint);border:1px solid #D3E1F9}.notice.info .ic{background:#fff;color:var(--blue)}
-.notice b{color:var(--txt)}
-/* overview intro */
-.hero{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
-.hero .rings{display:none}
-.hero h2{font-size:19px;font-weight:600;max-width:40ch;color:var(--ink)}
-.hero p{color:var(--txt2);font-size:13.5px;margin-top:6px;max-width:64ch}
-.hero .cta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.ecards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.ecard{padding:16px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);text-align:left;display:block;transition:border-color .12s}
-.ecard:hover{border-color:#C9DBF8;background:var(--bluetint2)}
-.ecard .ei{width:30px;height:30px;border-radius:6px;background:var(--bluetint);color:var(--blue);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
-.ecard .ei svg{width:15px;height:15px;fill:currentColor}
-.ecard h3{font-size:14px}.ecard p{font-size:12.5px;color:var(--txt2);margin-top:3px}
+.bd b{text-align:right;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* charts */
+.bars{display:flex;align-items:flex-end;gap:12px;height:96px;margin-bottom:20px}
+
+/* warning and info notices */
+.notice{padding:12px 16px;display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--txt);border-radius:var(--r);line-height:1.5}
+.notice .ic{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700}
+.notice .ic svg{width:13px;height:13px;fill:currentColor}
+.notice.warn{background:var(--amberbg);border:1px solid rgba(217,119,6,0.15);color:var(--txt)}.notice.warn .ic{background:#fff;color:var(--amber);box-shadow:var(--sh)}
+.notice.info{background:var(--bluetint);border:1px solid rgba(79,70,229,0.15);color:var(--txt)}.notice.info .ic{background:#fff;color:var(--blue);box-shadow:var(--sh)}
+.notice b{color:var(--ink);font-weight:700}
+
+/* intro hero card */
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.hero h2{font-size:20px;font-weight:700;max-width:40ch;color:var(--ink);letter-spacing:-0.5px}
+.hero p{color:var(--txt2);font-size:14px;margin-top:6px;max-width:64ch}
+.hero .cta{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.ecards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ecard{padding:18px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);text-align:left;display:block;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);box-shadow:var(--sh)}
+.ecard:hover{border-color:rgba(79,70,229,0.3);background:var(--bluetint2);transform:translateY(-1px)}
+.ecard .ei{width:32px;height:32px;border-radius:8px;background:var(--bluetint);color:var(--blue);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.ecard .ei svg{width:16px;height:16px;fill:currentColor}
+.ecard h3{font-size:14px;font-weight:700;color:var(--ink)}.ecard p{font-size:12.5px;color:var(--txt2);margin-top:4px}
 .ticker{overflow:hidden;white-space:nowrap}
-.ticker .track{display:inline-flex;gap:22px;animation:tick 40s linear infinite;padding:9px 0}
+.ticker .track{display:inline-flex;gap:24px;animation:tick 45s linear infinite;padding:12px 0}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ticker .ti{font-size:12px;color:var(--txt3)}.ticker .ti b{color:var(--txt2);font-weight:600}
-/* skeleton */
-.sk{background:var(--panel3);border-radius:var(--rs);position:relative;overflow:hidden}
-.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:translateX(-100%);animation:shim 1.4s infinite}
+.ticker .ti{font-size:12px;color:var(--txt2)}.ticker .ti b{color:var(--ink);font-weight:700}
+
+/* skeleton placeholder indicators */
+.sk{background:var(--panel2);border-radius:var(--rs);position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);transform:translateX(-100%);animation:shim 1.6s infinite}
 @keyframes shim{to{transform:translateX(100%)}}
-.sk-card{height:78px}.sk-row{height:40px;margin-bottom:8px}
-/* empty */
-.empty{text-align:center;color:var(--txt3);padding:34px 20px}
-.empty svg{width:28px;height:28px;fill:var(--txt3);opacity:.55;margin-bottom:8px}
-.empty h4{color:var(--txt2);font-size:14px;margin-bottom:3px;font-weight:600}
-.empty p{font-size:12.5px}
-/* modal */
-.backdrop{position:fixed;inset:0;background:rgba(17,24,39,.45);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px;animation:enter .15s}
-.modal{background:var(--panel);border:1px solid var(--line);border-radius:var(--rl);max-width:460px;width:100%;padding:22px;box-shadow:var(--sh2);max-height:88vh;overflow:auto;position:relative}
-.modal h3{font-size:16px;margin-bottom:8px}
-.modal .close{position:absolute;top:12px;right:12px}
-/* toast */
-.toasts{position:fixed;bottom:18px;left:18px;z-index:130;display:flex;flex-direction:column;gap:8px;align-items:flex-start;max-width:360px}
-.toast{background:var(--ink);color:#fff;padding:9px 13px;border-radius:6px;box-shadow:var(--sh2);font-size:13px;display:flex;align-items:center;gap:9px;animation:enter .18s}
-.toast .tc{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.toast .tc svg{width:11px;height:11px;fill:#fff}
+.sk-card{height:84px}.sk-row{height:44px;margin-bottom:8px}
+
+/* empty placeholders */
+.empty{text-align:center;color:var(--txt2);padding:40px 20px}
+.empty svg{width:32px;height:32px;fill:var(--txt3);opacity:0.7;margin-bottom:10px}
+.empty h4{color:var(--ink);font-size:14.5px;margin-bottom:4px;font-weight:700}
+.empty p{font-size:13px;color:var(--txt2)}
+
+/* modals */
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,0.3);backdrop-filter:blur(4px);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease-out}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:var(--rl);max-width:480px;width:100%;padding:24px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);max-height:88vh;overflow:auto;position:relative;animation:modalEnter .25s cubic-bezier(0.16,1,0.3,1)}
+@keyframes modalEnter{from{opacity:0;transform:scale(0.95) translateY(10px)}to{opacity:1;transform:none}}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.modal .close{position:absolute;top:14px;right:14px}
+
+/* toasts */
+.toasts{position:fixed;bottom:20px;left:20px;z-index:130;display:flex;flex-direction:column;gap:8px;align-items:flex-start;max-width:360px}
+.toast{background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;box-shadow:var(--sh2);font-size:13px;display:flex;align-items:center;gap:10px;animation:toastEnter .24s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes toastEnter{from{opacity:0;transform:translateY(12px) scale(0.9)}to{opacity:1;transform:none}}
+.toast .tc{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast .tc svg{width:12px;height:12px;fill:#fff}
 .toast.ok .tc{background:var(--green)}.toast.info .tc{background:var(--blue)}
-/* notif + menu popovers */
-.notif-panel,.menu{position:absolute;top:42px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh2);z-index:60;animation:enter .12s}
-.notif-panel{width:320px;max-width:86vw;padding:6px;max-height:70vh;overflow:auto}
-.notif-panel h4{font-size:11px;padding:7px 9px 4px;color:var(--txt3);font-weight:600}
-.menu{min-width:224px;padding:5px}
-.menu .mh{padding:8px 10px;border-bottom:1px solid var(--line2);margin-bottom:4px;display:flex;align-items:center;gap:9px}
-.menu .mh b{font-size:12.5px;display:block;color:var(--txt)}.menu .mh span{font-size:11px;color:var(--txt3)}
-.menu button,.menu a{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;border:none;background:none;border-radius:6px;font-size:13px;color:var(--txt);font-weight:500;text-align:left}
-.menu button:hover,.menu a:hover{background:var(--panel2)}
-.menu button svg,.menu a svg{width:14px;height:14px;fill:var(--txt3)}
-.menu .div{height:1px;background:var(--line2);margin:5px 6px}
-.menu .lab{font-size:10.5px;font-weight:600;color:var(--txt3);padding:6px 10px 3px}
-/* tabs */
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
-.tab{padding:8px 12px;border:none;background:none;font-size:13px;font-weight:500;color:var(--txt2);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab:hover{color:var(--txt)}
-.tab[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
-.tabpanel{animation:enter .18s}
-/* bookmark */
-.bm{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel);display:inline-flex;align-items:center;justify-content:center;color:var(--txt3);flex-shrink:0}
-.bm:hover{border-color:#D6D9DE;color:var(--txt2)}
-.bm[aria-pressed="true"]{color:var(--amber);border-color:#E7D3AC;background:var(--amberbg)}
+
+/* panels & popovers */
+.notif-panel,.menu{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh2);z-index:60;animation:popEnter .2s cubic-bezier(0.16,1,0.3,1);overflow:hidden}
+@keyframes popEnter{from{opacity:0;transform:scale(0.95) translateY(4px)}to{opacity:1;transform:none}}
+.notif-panel{width:320px;max-width:86vw;padding:8px;max-height:70vh;overflow:auto}
+.notif-panel h4{font-size:11px;padding:8px 10px 6px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+.menu{min-width:224px;padding:6px}
+.menu .mh{padding:10px;border-bottom:1px solid var(--line2);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.menu .mh b{font-size:13px;display:block;color:var(--ink);font-weight:700}.menu .mh span{font-size:11px;color:var(--txt2)}
+.menu button,.menu a{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:none;background:none;border-radius:8px;font-size:13px;color:var(--txt);font-weight:600;text-align:left}
+.menu button:hover,.menu a:hover{background:var(--panel2);color:var(--ink)}
+.menu button svg,.menu a svg{width:14px;height:14px;fill:var(--txt2)}
+.menu .div{height:1px;background:var(--line2);margin:6px}
+.menu .lab{font-size:10.5px;font-weight:700;color:var(--txt2);padding:6px 10px 4px;text-transform:uppercase;letter-spacing:0.05em}
+
+/* tab navigation */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
+.tab{padding:10px 16px;border:none;background:none;font-size:13.5px;font-weight:600;color:var(--txt2);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.tabpanel{animation:enter .24s cubic-bezier(0.16,1,0.3,1)}
+
+/* bookmarks */
+.bm{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--panel);display:inline-flex;align-items:center;justify-content:center;color:var(--txt2);flex-shrink:0;box-shadow:var(--sh);transition:all 0.2s}
+.bm:hover{border-color:var(--txt2);color:var(--ink);background:var(--panel2)}
+.bm[aria-pressed="true"]{color:var(--amber);border-color:rgba(217,119,6,0.3);background:var(--amberbg)}
 .bm svg{width:14px;height:14px;fill:currentColor}
 .bm.sm{width:28px;height:28px}.bm.sm svg{width:12px;height:12px}
-/* scrim */
-.scrim{display:none;position:fixed;inset:0;background:rgba(17,24,39,.4);z-index:45}
+
+/* mobile backdrop drawer */
+.scrim{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.3);backdrop-filter:blur(4px);z-index:45;transition:opacity 0.2s ease}
 .scrim.show{display:block}
-/* footer */
-.appfoot{font-size:11.5px;color:var(--txt3);margin-top:22px;line-height:1.6;padding-top:14px;border-top:1px solid var(--line2)}
-/* ===== responsive ===== */
+
+/* document footer styling */
+.appfoot{font-size:12px;color:var(--txt2);margin-top:32px;line-height:1.6;padding-top:16px;border-top:1px solid var(--line2)}
+
+/* ===== responsiveness tweaks ===== */
 @media(max-width:1050px){.g4{grid-template-columns:1fr 1fr}}
 @media(max-width:960px){
-  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .2s ease;box-shadow:var(--sh2)}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)}
   .sidebar.open{transform:none}
   .hamb{display:inline-flex}
-  main.page{padding:16px 16px 40px}
+  main.page{padding:20px 16px 40px}
   .topsearch{display:none}
   .g2,.g3,.detail-grid{grid-template-columns:1fr}
   .ecards{grid-template-columns:1fr}
@@ -273,77 +310,80 @@ tr:last-child td{border-bottom:none}
 @media(max-width:620px){
   .g4{grid-template-columns:1fr 1fr}
   .resp-table thead{display:none}
-  .resp-table tr{display:block;border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;padding:6px 12px;background:var(--panel)}
-  .resp-table td{display:flex;justify-content:space-between;gap:12px;border:none;padding:6px 2px;font-size:13px}
-  .resp-table td::before{content:attr(data-l);color:var(--txt3);font-weight:600;font-size:12px}
-  .resp-table td.actcell{justify-content:flex-end}
-  .pagehead h1{font-size:18px}.hero h2{font-size:17px}
+  .resp-table tr{display:block;border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;padding:12px;background:var(--panel);box-shadow:var(--sh)}
+  .resp-table td{display:flex;justify-content:space-between;gap:12px;border:none;padding:6px 0;font-size:13.5px}
+  .resp-table td::before{content:attr(data-l);color:var(--txt2);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.02em}
+  .resp-table td.actcell{justify-content:flex-end;border-top:1px solid var(--line2);margin-top:4px;padding-top:10px}
+  .pagehead h1{font-size:20px}.hero h2{font-size:18px}
 }
-/* ===== presentation polish ===== */
+
+/* ===== additional refinements ===== */
 .stat{display:flex;flex-direction:column}
-.spark{width:100%;height:28px;display:block;margin-top:10px}
-.freshpill{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-weight:500;white-space:nowrap}
-.freshpill .d{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(14,124,74,.12)}
+.spark{width:100%;height:32px;display:block;margin-top:12px}
+.freshpill{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 12px;font-weight:600;white-space:nowrap;box-shadow:var(--sh)}
+.freshpill .d{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(5,150,105,0.15)}
 .pagehead .ph-actions{flex-wrap:wrap;align-items:center}
-.tbmeta{margin-left:auto;display:flex;align-items:center;gap:10px}
-.linkbtn{border:none;background:none;color:var(--blue);font-weight:600;font-size:12.5px;padding:0}
-.linkbtn:hover{text-decoration:underline}
+.tbmeta{margin-left:auto;display:flex;align-items:center;gap:12px}
+.linkbtn{border:none;background:none;color:var(--blue);font-weight:700;font-size:13px;padding:0}
+.linkbtn:hover{color:var(--blue2);text-decoration:underline}
 td,.kv b,.scnum,.stat .v{font-variant-numeric:tabular-nums}
 th.num,td.num{text-align:right}
 @media(max-width:620px){ .freshpill{display:none} }
-/* ===== premium refinements ===== */
-.pagehead h1{font-size:20px;letter-spacing:-.45px}
-.stat .v{letter-spacing:-.6px}
-.card-h h3{letter-spacing:-.1px}
+.pagehead h1{font-size:22px;letter-spacing:-0.5px}
+.stat .v{letter-spacing:-0.75px}
+.card-h h3{letter-spacing:-0.2px}
 th.sortable[aria-sort="ascending"],th.sortable[aria-sort="descending"]{color:var(--blue)}
-.thumb{width:52px;height:36px;border-radius:6px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;background:var(--panel2);display:block}
+.thumb{width:56px;height:40px;border-radius:8px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;background:var(--panel2);display:block}
 .thumb svg{width:100%;height:100%;display:block}
-.thumb.sm{width:44px;height:30px}
-.leadcell{display:flex;gap:11px;align-items:center;min-width:0}
-.leadcell .addr{line-height:1.25}
-.tagmore{font-size:10.5px;color:var(--txt3);font-weight:600;margin-left:1px;white-space:nowrap}
-.stack{display:flex;height:10px;border-radius:5px;overflow:hidden;border:1px solid var(--line);background:var(--line2)}
+.thumb.sm{width:46px;height:32px}
+.leadcell{display:flex;gap:12px;align-items:center;min-width:0}
+.leadcell .addr{line-height:1.3}
+.tagmore{font-size:10.5px;color:var(--txt2);font-weight:700;margin-left:2px;white-space:nowrap}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:var(--line2)}
 .stack span{display:block;height:100%}
-.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px;font-size:12px;color:var(--txt2)}
-.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:middle}
-@media(max-width:620px){ .leadcell .subtle{font-size:11.5px} }
-/* ===== marketplace app: source, auth, payments, mobile ===== */
-.srcbadge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:4px;white-space:nowrap}
-.srcbadge svg{width:11px;height:11px;fill:currentColor}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--txt2)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
+@media(max-width:620px){ .leadcell .subtle{font-size:12px} }
+
+/* ===== app integrations ===== */
+.srcbadge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.srcbadge svg{width:12px;height:12px;fill:currentColor}
 .srcbadge.deep{background:var(--bluetint);color:var(--blue)}
-.srcbadge.comm{background:#EAF3EC;color:#3F7A4E}
-.gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1F2937;border:1px solid #DADCE0;border-radius:8px;font-weight:600;font-size:14px;padding:11px 14px}
-.gbtn:hover{background:#F8F9FA;border-color:#C9CDD3}
-.apay{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;background:#000;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:15px;padding:12px 14px}
-.apay:hover{background:#151515}
+.srcbadge.comm{background:#EAF3EC;color:#2E7D32}
+.gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#374151;border:1px solid #D1D5DB;border-radius:8px;font-weight:700;font-size:14px;padding:12px 14px;box-shadow:var(--sh)}
+.gbtn:hover{background:#F9FAFB;border-color:#9CA3AF}
+.apay{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#000;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:15px;padding:12px 14px;box-shadow:var(--sh)}
+.apay:hover{background:#111827}
 .apay svg{fill:#fff}
-.signin-wrap{max-width:400px;margin:0 auto;padding:6vh 8px 8px}
-.signin-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 22px}
-.signin-card .logo{width:50px;height:50px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 0 14px}
-.signin-card .logo svg{width:28px;height:28px;fill:#fff}
-.payrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
-.payrow:last-child{border-bottom:none}.payrow b{font-weight:700}
-.idpill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:4px 10px 4px 4px;font-size:12.5px;font-weight:600}
-.idpill .av{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.signin-wrap{max-width:400px;margin:0 auto;padding:8vh 8px 8px}
+.signin-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px 24px;box-shadow:var(--sh2)}
+.signin-card .logo{width:56px;height:56px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 0 16px;box-shadow:0 4px 6px rgba(79,70,229,0.15)}
+.signin-card .logo svg{width:30px;height:30px;fill:#fff}
+.payrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line2);font-size:14px}
+.payrow:last-child{border-bottom:none}.payrow b{font-weight:700;color:var(--ink)}
+.idpill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:4px 12px 4px 4px;font-size:13px;font-weight:700;box-shadow:var(--sh)}
+.idpill .av{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+
+/* bottom app tabs for mobile devices */
 .apptabs{display:none}
 @media(max-width:960px){
-  .apptabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:44;background:var(--panel);border-top:1px solid var(--line);padding:4px 2px calc(4px + env(safe-area-inset-bottom));justify-content:space-around}
-  .apptabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:8px;color:var(--txt3);font-size:10px;font-weight:600;min-height:50px;justify-content:center;text-decoration:none}
-  .apptabs a[aria-current="page"]{color:var(--blue)}
-  .apptabs svg{width:20px;height:20px;fill:currentColor}
-  main.page{padding:16px 14px 78px}
-  .btn{padding:9px 14px}
-  .btn.sm{padding:7px 11px}
-  .chip{padding:7px 12px}
+  .apptabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:44;background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));justify-content:space-around;box-shadow:0 -4px 12px -2px rgba(0,0,0,0.05)}
+  .apptabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:10px;color:var(--txt2);font-size:10px;font-weight:700;min-height:52px;justify-content:center;text-decoration:none;transition:all 0.15s ease}
+  .apptabs a[aria-current="page"]{color:var(--blue);background:var(--bluetint)}
+  .apptabs svg{width:18px;height:18px;fill:currentColor}
+  main.page{padding:20px 16px 84px}
+  .btn{padding:10px 16px}
+  .btn.sm{padding:8px 12px}
+  .chip{padding:8px 14px}
 }
 @media(max-width:620px){
   .backdrop{align-items:flex-end;padding:0}
-  .modal{max-width:100%;width:100%;border-radius:12px 12px 0 0;max-height:92vh;animation:sheetup .22s ease-out}
+  .modal{max-width:100%;width:100%;border-radius:20px 20px 0 0;max-height:92vh;animation:sheetup 0.28s cubic-bezier(0.16,1,0.3,1);box-shadow:0 -10px 25px rgba(0,0,0,0.08);padding:24px 20px 32px}
 }
 @keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
 
-</style>
+</style>e>
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
@@ -940,18 +980,146 @@ function ownerBlock(l){
    +'<div class="kv"><span>Price</span><b>'+fmtPrice(l.price)+(l.source==="deepsearch"?' · '+fmtPrice(DEEP_DISCOUNT)+' below submitted':'')+'</b></div>'
    +'<button class="btn block" style="margin-top:14px" onclick="VIQ.buyListing(\''+l.id+'\')">'+icon("lock")+'Buy listing &amp; unlock owner · '+fmtPrice(l.price)+'</button>';
 }
+function setAutoTab(tab) {
+  _autoTab = tab;
+  var dv = el('automationContent');
+  if (dv) dv.innerHTML = automationTabContent();
+}
+
+function toggleWorkflow(id) {
+  var wf = _workflows.find(function(w) { return w.id === id; });
+  if (wf) {
+    wf.enabled = !wf.enabled;
+    apiCall('POST', '/api/workflows', { workflows: _workflows }).then(function() {
+      toast(wf.name + ' workflow ' + (wf.enabled ? 'enabled' : 'disabled'), 'ok');
+      setAutoTab('workflows');
+    });
+  }
+}
+
+function openCrmConnectModal(provider) {
+  var name = provider === 'hubspot' ? 'HubSpot' : provider === 'salesforce' ? 'Salesforce' : 'Follow Up Boss';
+  openModal('<h3>Connect ' + name + '</h3>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:12px">Enter your CRM API Key and Client Secret to sync VacancyIQ property leads automatically. <b>[SIMULATED]</b></p>'
+    +'<div class="grid g1" style="gap:10px;margin-bottom:14px">'
+      +'<div><label class="fld">API Key</label><input type="password" id="crmApiKey" placeholder="xoxb-mock-api-key" style="background:var(--panel)"></div>'
+      +'<div><label class="fld">Client Secret</label><input type="password" id="crmSecret" placeholder="••••••••••••" style="background:var(--panel)"></div>'
+    +'</div>'
+    +'<div class="notice warn" style="margin-bottom:14px"><span class="ic">' + icon('shield') + '</span><div><b>Simulated credentials.</b> These fields are redacted in audit logs. No actual data will leave the browser.</div></div>'
+    +'<div style="display:flex;gap:8px"><button class="btn block" id="crmConfirmBtn">Connect ' + name + '</button><button class="btn ghost block" onclick="VIQ.closeModal()">Cancel</button></div>'
+  );
+  setTimeout(function() {
+    var b = el('crmConfirmBtn');
+    if (b) {
+      b.onclick = function() {
+        var key = el('crmApiKey').value;
+        var sec = el('crmSecret').value;
+        openConsentModal('Authorize ' + name + ' connection', 'Allow VacancyIQ to read and write lead records to your ' + name + ' account.', function() {
+          apiCall('POST', '/api/integrations/crm/connect', { provider: provider, apiKey: key, clientSecret: sec }).then(function(r) {
+            _crmConnections[provider] = { connected: true, apiKey: key };
+            toast('Connected to ' + name + ' (simulated).', 'ok');
+            closeModal();
+            setAutoTab('connectors');
+          });
+        });
+      };
+    }
+  }, 50);
+}
+
+function disconnectCrm(provider) {
+  var name = provider === 'hubspot' ? 'HubSpot' : provider === 'salesforce' ? 'Salesforce' : 'Follow Up Boss';
+  openConsentModal('Disconnect ' + name, 'Are you sure you want to disconnect the simulated ' + name + ' integration?', function() {
+    _crmConnections[provider] = { connected: false, apiKey: '' };
+    toast('Disconnected ' + name + ' integration.', 'info');
+    setAutoTab('connectors');
+  });
+}
+
+function syncCrmLead(propertyId, provider) {
+  var name = provider === 'hubspot' ? 'HubSpot' : provider === 'salesforce' ? 'Salesforce' : 'Follow Up Boss';
+  openConsentModal('Export to ' + name, 'Push this property record, including skip-traced owner contact details if enriched, to your ' + name + ' database.', function() {
+    apiCall('POST', '/api/integrations/crm/sync', { propertyId: propertyId, provider: provider }).then(function(r) {
+      toast('Lead synced to ' + name + ' (simulated).', 'ok');
+    });
+  });
+}
+
+function automationTabContent() {
+  if (_autoTab === 'workflows') {
+    return '<div class="notice info" style="margin-bottom:16px"><span class="ic">' + icon('shield') + '</span><div><b>Custom Workflow Builder.</b> Toggle automation steps to configure how property leads flow. Each step operates automatically within compliance boundaries.</div></div>'
+      +'<div class="grid g1" style="gap:12px">'
+      +_workflows.map(function(w) {
+        return '<div class="card pad" style="display:flex;align-items:center;justify-content:space-between;gap:16px">'
+          +'<div style="flex:1">'
+            +'<div style="font-weight:700;font-size:14px;color:var(--ink)">' + esc(w.name) + '</div>'
+            +'<div style="font-size:12px;color:var(--txt2);margin-top:2px">' + esc(w.desc) + '</div>'
+          +'</div>'
+          +'<div>'
+            +'<label class="switch-lbl" style="position:relative;display:inline-block;width:44px;height:24px">'
+              +'<input type="checkbox" ' + (w.enabled ? 'checked' : '') + ' onclick="VIQ._toggleWorkflow(\'' + w.id + '\')" style="opacity:0;width:0;height:0;position:absolute">'
+              +'<span class="switch-slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:' + (w.enabled ? 'var(--blue)' : 'var(--line)') + ';transition:.3s;border-radius:24px;display:flex;align-items:center;padding:2px">'
+                +'<span style="display:block;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;transform:' + (w.enabled ? 'translateX(20px)' : 'translateX(0)') + '"></span>'
+              +'</span>'
+            +'</label>'
+          +'</div>'
+        +'</div>';
+      }).join('')
+      +'</div>';
+  }
+  if (_autoTab === 'connectors') {
+    var crms = [
+      { id: 'hubspot', name: 'HubSpot CRM', desc: 'Sync leads to HubSpot contacts and pipelines.' },
+      { id: 'salesforce', name: 'Salesforce', desc: 'Push target property leads directly to Salesforce opportunities.' },
+      { id: 'followupboss', name: 'Follow Up Boss', desc: 'Sync skip-traced lead files to FUB database.' }
+    ];
+    return '<div class="notice info" style="margin-bottom:16px"><span class="ic">' + icon('shield') + '</span><div><b>Integrations & CRM Hub.</b> Connect your tools. Synced leads will carry owner details and offer drafts straight into your active CRM. <b>[SIMULATED]</b></div></div>'
+      +'<div class="grid g3" style="gap:16px">'
+      +crms.map(function(c) {
+        var conn = _crmConnections[c.id] && _crmConnections[c.id].connected;
+        return '<div class="card pad" style="display:flex;flex-direction:column;justify-content:space-between;height:100%">'
+          +'<div>'
+            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+              +'<div style="font-weight:700;font-size:15px;color:var(--ink)">' + esc(c.name) + '</div>'
+              +(conn ? '<span class="badge q" style="background:var(--green);color:#fff;display:inline-flex;align-items:center;gap:4px">' + icon('check') + ' Connected</span>' : '<span class="badge p">Not Connected</span>')
+            +'</div>'
+            +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:16px">' + esc(c.desc) + '</p>'
+          +'</div>'
+          +'<div>'
+            +(conn 
+              ? '<div style="display:flex;gap:8px"><button class="btn ghost block sm" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Reconfigure</button>'
+                +'<button class="btn ghost block sm text-red" onclick="VIQ._disconnectCrm(\'' + c.id + '\')" style="color:var(--red)">Disconnect</button></div>'
+              : '<button class="btn block" onclick="VIQ._openCrmConnectModal(\'' + c.id + '\')">Connect Integration</button>'
+            )
+          +'</div>'
+        +'</div>';
+      }).join('')
+      +'</div>';
+  }
+  if (_autoTab === 'logs') {
+    return '<div class="card pad"><div class="card-h"><h3>Execution history</h3></div><div class="feed">' + ACTIVITY.map(feedItem).join('') + '</div></div>';
+  }
+  return '';
+}
+
 function automationView(){
-  var autos=[
-    {ico:"blue",icon:"sync",name:"Daily deep-research",desc:"Scans sources each morning and adds fresh vacant / distressed properties; auto-rejects weak ones.",sched:"Every day · 6:00 AM",next:"Tomorrow 6:00 AM",last:"14 added, 6 rejected"},
-    {ico:"amber",icon:"broom",name:"Weekly cleanup",desc:"De-dupes, re-checks status, and drops sold or dead leads so buyers only ever see live inventory.",sched:"Every Monday · 4:00 AM",next:"Mon 4:00 AM",last:"9 removed"},
-    {ico:"green",icon:"shield",name:"Owner re-enrichment",desc:"Refreshes owner/contact data for aging leads from licensed vendors, within compliance limits.",sched:"Every 14 days",next:"In 6 days",last:"31 refreshed"}];
-  return '<section class="view">'+pagehead("Automation & data health","The engine that keeps the list fresh, deduped, and enriched — the core of the product.")
-   +'<div class="notice warn" style="margin-bottom:18px"><span class="ic">'+icon("shield")+'</span><div><b>Simulated automation — not live production functionality.</b> These schedules and results are illustrative. No live vendor calls, scraping, or data purchases occur in this demo.</div></div>'
-   +'<div class="grid g3" style="margin-bottom:16px">'+autos.map(function(a){return '<div class="card pad"><div class="card-h"><div class="fico '+a.ico+'" style="width:38px;height:38px;border-radius:11px">'+icon(a.icon)+'</div><h3 style="font-size:15px">'+esc(a.name)+'</h3></div>'
-     +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">'+esc(a.desc)+'</p>'
-     +'<div class="kv" style="padding:6px 0"><span>Schedule</span><b>'+esc(a.sched)+'</b></div><div class="kv" style="padding:6px 0"><span>Next run</span><b>'+esc(a.next)+'</b></div><div class="kv" style="padding:6px 0;border:none"><span>Last result</span><b style="color:var(--green)">'+esc(a.last)+'</b></div></div>';}).join('')+'</div>'
-   +'<div class="card pad"><div class="card-h"><h3>Activity log (simulated)</h3></div><div class="feed">'+ACTIVITY.map(feedItem).join('')+'</div></div>'
-   +complianceFoot()+'</section>';
+  loadAutomationState(function() {
+    var dv = el('automationContent');
+    if (dv) dv.innerHTML = automationTabContent();
+  });
+
+  return '<section class="view">'
+    +pagehead("Automation & Connectors","Configure custom workflows, connect CRM integrations, and inspect AI agent logs.")
+    +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Simulated automation hub.</b> All connected integrations, CRM pipelines, Gmail triggers, and workflows are simulated for demonstration purposes. <b>Consent required in production.</b></div></div>'
+    +'<div class="tabs" style="margin-bottom:18px">'
+      +'<button class="tab ' + (_autoTab === 'workflows' ? 'active' : '') + '" id="tab-auto-workflows" onclick="VIQ._setAutoTab(\'workflows\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">Workflows builder</button>'
+      +'<button class="tab ' + (_autoTab === 'connectors' ? 'active' : '') + '" id="tab-auto-connectors" onclick="VIQ._setAutoTab(\'connectors\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">CRM Connectors</button>'
+      +'<button class="tab ' + (_autoTab === 'logs' ? 'active' : '') + '" id="tab-auto-logs" onclick="VIQ._setAutoTab(\'logs\');[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'active\')});this.classList.add(\'active\')">Execution log</button>'
+    +'</div>'
+    +'<div id="automationContent">'
+      +'<div class="spin" style="width:24px;height:24px;margin:30px auto"></div>'
+    +'</div>'
+    +complianceFoot()+'</section>';
 }
 function accountView(){
   return '<section class="view">'+pagehead("Plan","Subscription access to the verified database. Prices are illustrative and deliberately below the market leader\'s ceiling — pending real willingness-to-pay validation.")
@@ -982,6 +1150,51 @@ var _gmailConnected = false;
 var _discoveredProps = []; // in-memory list for the demo session
 var _currentDraft = null;  // pending email draft
 var _currentOffer = null;  // pending offer
+
+var _autoTab = 'workflows';
+var _crmConnections = {
+  hubspot: { connected: false, apiKey: '', clientSecret: '' },
+  salesforce: { connected: false, apiKey: '', clientSecret: '' },
+  followupboss: { connected: false, apiKey: '', clientSecret: '' }
+};
+var _workflows = [
+  { id: 'auto-enrich', name: 'Auto-enrich owner contact', desc: 'Auto-request skip trace upon unlocking a lead', enabled: false },
+  { id: 'auto-draft', name: 'Gmail auto-draft', desc: 'Draft acquisition email via Gmail API upon enrichment', enabled: false },
+  { id: 'auto-offer', name: 'AI auto-offer generation', desc: 'Auto-generate Letter of Intent when contact is verified', enabled: false },
+  { id: 'auto-crm', name: 'CRM auto-sync', desc: 'Instantly push lead to connected CRM when status moves to contacted', enabled: false }
+];
+var _pipelineStates = {}; // mapping of propId -> stage ('unlocked', 'enriched', 'drafted', 'contacted', 'loi_sent', 'contract')
+var _followups = []; // array of follow-up tasks
+
+function initAutomationData() {
+  if (!AI_BASE) return Promise.resolve();
+  // Fetch workflows
+  var p1 = apiCall('GET', '/api/workflows', null).then(function(r) {
+    if (r && r.workflows) _workflows = r.workflows;
+  });
+  // Fetch pipeline
+  var p2 = apiCall('GET', '/api/pipeline', null).then(function(r) {
+    if (r && r.pipeline) _pipelineStates = r.pipeline;
+  });
+  // Fetch follow-ups
+  var p3 = apiCall('GET', '/api/followups', null).then(function(r) {
+    if (r && r.followups) _followups = r.followups;
+  });
+  return Promise.all([p1, p2, p3]);
+}
+
+function loadAutomationState(callback) {
+  if (state._automationLoaded) {
+    if (callback) {
+      setTimeout(callback, 20);
+    }
+    return;
+  }
+  initAutomationData().then(function() {
+    state._automationLoaded = true;
+    if (callback) callback();
+  });
+}
 
 /* ---------- mock token (no backend) ---------- */
 function getDemoToken(){
@@ -1125,8 +1338,21 @@ function enrichLead(id){
           :{available:false,phone:null,email:null,note:'[SIMULATED] No contact data found.'};
       }
       _outreachContact=contact;
+      
+      _pipelineStates[id] = 'enriched';
+      apiCall('POST', '/api/pipeline/move', { propertyId: id, stage: 'enriched' });
+
       toast(contact.available?'Contact enriched (simulated).':'No contact data found.',contact.available?'ok':'info');
-      var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+
+      // Auto-draft trigger
+      var draftWf = _workflows.find(function(w) { return w.id === 'auto-draft'; });
+      if (draftWf && draftWf.enabled && contact.available) {
+        setTimeout(function() {
+          draftEmail();
+        }, 1000);
+      } else {
+        var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
+      }
     });
   });
 }
@@ -1142,12 +1368,9 @@ function connectGmail(){
 }
 
 function draftEmail(){
-  if(!_outreachPropId){toast('Select a discovered property first.','info');return;}
-  var subj=(_outreachPropId?('Interest in your property — '+_outreachPropId):'Acquisition inquiry');
-  // Build a property stub from discovered list
   var prop=_discoveredProps.find(function(p){return p.id===_outreachPropId;});
   if(!prop&&_discoveredProps.length){prop=_discoveredProps[0];}
-  if(!prop){toast('Run discovery first.','info');return;}
+  if(!prop){toast('Select a discovered property first.','info');return;}
   apiCall('POST','/api/gmail/draft',{propertyId:prop.id,buyerProfile:_buyerProfile,contactInfo:_outreachContact}).then(function(r){
     var draft;
     if(r&&r.draft){ _currentDraftId=r.draftId; draft=r.draft; }
@@ -1157,6 +1380,10 @@ function draftEmail(){
       draft={to:(_outreachContact&&_outreachContact.email)||'[owner email — enrich first]',subject:'Interest in Your Property at '+prop.address,body:'Dear Property Owner,\n\nI noticed your property at '+prop.address+' and would like to discuss a potential acquisition.\n\nMy name is '+buyerName+' and I specialize in buying vacant properties in your area.\n\nBest regards,\n'+buyerName+'\n\n---\n[SIMULATED] No real email will be sent.',draftedAt:new Date().toISOString()};
     }
     _currentDraft=draft;
+
+    _pipelineStates[prop.id] = 'drafted';
+    apiCall('POST', '/api/pipeline/move', { propertyId: prop.id, stage: 'drafted' });
+
     toast('Draft created — review before sending.','ok');
     var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
   });
@@ -1166,9 +1393,23 @@ function approveAndSendEmail(){
   if(!_currentDraftId){toast('Generate a draft first.','info');return;}
   var bodyEl=el('draftBodyEdit'); var subjEl=el('draftSubjEdit');
   var editedBody=bodyEl?bodyEl.value:null; var editedSubj=subjEl?subjEl.value:null;
+  var targetId = _outreachPropId || (_discoveredProps[0] && _discoveredProps[0].id) || 'sim';
   openConsentModal('Send outreach email?','You are about to approve and send this AI-drafted email. Review it carefully before proceeding. In production this would send via Gmail API.',function(){
     apiCall('POST','/api/gmail/send-approved',{draftId:_currentDraftId,approvalConfirmed:true,editedBody:editedBody,editedSubject:editedSubj}).then(function(r){
       toast('Email sent (simulated). No real email transmitted.','ok');
+      
+      _pipelineStates[targetId] = 'contacted';
+      apiCall('POST', '/api/pipeline/move', { propertyId: targetId, stage: 'contacted' });
+
+      // Auto-CRM sync trigger
+      var crmWf = _workflows.find(function(w) { return w.id === 'auto-crm'; });
+      if (crmWf && crmWf.enabled) {
+        var activeCrms = Object.keys(_crmConnections).filter(function(k) { return _crmConnections[k] && _crmConnections[k].connected; });
+        activeCrms.forEach(function(c) {
+          syncCrmLead(targetId, c);
+        });
+      }
+
       _currentDraft=null; _currentDraftId=null;
       var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
     });
@@ -1194,9 +1435,23 @@ function generateOfferUI(){
 function approveOffer(){
   if(!_currentOfferId){toast('Generate an offer first.','info');return;}
   var editEl=el('offerTextEdit'); var editedText=editEl?editEl.value:null;
+  var targetId = _outreachPropId || (_discoveredProps[0] && _discoveredProps[0].id) || 'sim';
   openConsentModal('Approve this offer?','You are approving an AI-generated offer letter. This is for demo purposes only — no real offer will be transmitted. In production, legal review is required.',function(){
     apiCall('POST','/api/approve-offer',{offerId:_currentOfferId,approvalConfirmed:true,editedText:editedText}).then(function(){
       toast('Offer approved (simulated). Not a real legal offer.','ok');
+      
+      _pipelineStates[targetId] = 'loi_sent';
+      apiCall('POST', '/api/pipeline/move', { propertyId: targetId, stage: 'loi_sent' });
+
+      // Auto-CRM sync trigger
+      var crmWf = _workflows.find(function(w) { return w.id === 'auto-crm'; });
+      if (crmWf && crmWf.enabled) {
+        var activeCrms = Object.keys(_crmConnections).filter(function(k) { return _crmConnections[k] && _crmConnections[k].connected; });
+        activeCrms.forEach(function(c) {
+          syncCrmLead(targetId, c);
+        });
+      }
+
       _currentOffer=null; _currentOfferId=null;
       var oc=el('outreachContent'); if(oc)oc.innerHTML=outreachContent();
     });
@@ -1212,13 +1467,100 @@ function saveBuyerProfile(){
   toast('Profile saved.','ok');
 }
 
+function pipelineChevron(currentStage) {
+  var stages = [
+    { id: 'unlocked', name: '1. Unlocked' },
+    { id: 'enriched', name: '2. Enriched' },
+    { id: 'drafted', name: '3. Drafted' },
+    { id: 'contacted', name: '4. Contacted' },
+    { id: 'loi_sent', name: '5. LOI Sent' },
+    { id: 'contract', name: '6. Contract' }
+  ];
+  var currIdx = stages.findIndex(function(s) { return s.id === currentStage; });
+  if (currIdx === -1) currIdx = 0;
+
+  return '<div class="pipeline-bar" style="display:flex;gap:4px;overflow-x:auto;padding:8px 0;margin-bottom:16px;scrollbar-width:none">'
+    +stages.map(function(s, idx) {
+      var active = idx <= currIdx;
+      var current = idx === currIdx;
+      var bg = current ? 'var(--blue)' : active ? 'rgba(30,116,255,0.15)' : 'var(--panel)';
+      var fg = current ? '#fff' : active ? 'var(--blue)' : 'var(--txt2)';
+      var fw = current ? '700' : '500';
+      return '<div style="flex:1;min-width:100px;text-align:center;padding:6px 12px;border-radius:16px;font-size:12px;font-weight:' + fw + ';background:' + bg + ';color:' + fg + ';white-space:nowrap;border:1px solid ' + (current ? 'var(--blue)' : 'var(--line)') + '">' + esc(s.name) + '</div>';
+    }).join('')
+    +'</div>';
+}
+
+function movePipelineStage(propertyId, stage) {
+  apiCall('POST', '/api/pipeline/move', { propertyId: propertyId, stage: stage }).then(function(r) {
+    _pipelineStates[propertyId] = stage;
+    toast('Lead moved to stage: ' + stage.toUpperCase() + ' (simulated)', 'ok');
+    var oc = el('outreachContent');
+    if (oc) oc.innerHTML = outreachContent();
+  });
+}
+
+function renderFollowups(propertyId) {
+  var list = _followups.filter(function(f) { return f.propertyId === propertyId; });
+  if (!list.length) {
+    list = [
+      { id: 'f1-' + propertyId, propertyId: propertyId, taskName: 'AI Follow-up 3-day email nudge', dueAt: new Date(Date.now() + 3*24*60*60*1000).toLocaleDateString(), completed: false },
+      { id: 'f2-' + propertyId, propertyId: propertyId, taskName: 'Owner phone outreach reminder', dueAt: new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString(), completed: false }
+    ];
+  }
+  return '<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>' + icon('check') + ' Active AI Agent Follow-ups</h3></div>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">Scheduled tasks managed by simulated AI agents to nudge unresponsive leads. <b>[SIMULATED]</b></p>'
+    +'<div style="display:flex;flex-direction:column;gap:8px">'
+    +list.map(function(f) {
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--panel);border-radius:8px;border:1px solid var(--line)">'
+        +'<div style="display:flex;align-items:center;gap:10px">'
+          +'<input type="checkbox" ' + (f.completed ? 'checked' : '') + ' onclick="VIQ._toggleFollowup(\'' + f.id + '\')" style="cursor:pointer">'
+          +'<div style="font-size:13px;text-decoration:' + (f.completed ? 'line-through' : 'none') + ';color:' + (f.completed ? 'var(--txt3)' : 'var(--ink)') + '">' + esc(f.taskName) + '</div>'
+        +'</div>'
+        +'<span style="font-size:11.5px;color:var(--txt3)">Due: ' + new Date(f.dueAt).toLocaleDateString() + '</span>'
+      +'</div>';
+    }).join('')
+    +'</div>'
+    +'</div>';
+}
+
+function toggleFollowup(id) {
+  var f = _followups.find(function(x) { return x.id === id; });
+  if (f) {
+    f.completed = !f.completed;
+    toast('Follow-up task updated', 'ok');
+  } else {
+    toast('Simulated task status updated', 'ok');
+  }
+  var oc = el('outreachContent');
+  if (oc) oc.innerHTML = outreachContent();
+}
+
 function outreachContent(){
   var prop=(_outreachPropId&&_discoveredProps.find(function(p){return p.id===_outreachPropId;}))||_discoveredProps[0]||null;
+  var stage = prop ? (_pipelineStates[prop.id] || 'unlocked') : 'unlocked';
+
   // Property selector
-  var propSel='<label class="fld" for="outreachPropSel">Selected property</label>'
+  var propSel='<div style="margin-bottom:14px"><label class="fld" for="outreachPropSel">Selected property</label>'
     +'<select id="outreachPropSel" onchange="VIQ._selectOutreachProp(this.value)" style="max-width:460px">'
     +(_discoveredProps.length?_discoveredProps.slice(-20).reverse().map(function(p){return '<option value="'+esc(p.id)+'"'+(p.id===_outreachPropId?' selected':'')+'>'+esc(p.address)+'</option>';}).join(''):'<option value="">— Run AI Discovery first —</option>')
-    +'</select>';
+    +'</select></div>';
+
+  // Pipeline indicator
+  var pipelineBoard = prop ? pipelineChevron(stage) : '';
+
+  // Manual Stage Mover
+  var stageMover = prop 
+    ? '<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+      +'<span style="font-size:12.5px;font-weight:700;color:var(--txt)">Move stage manually:</span>'
+      +'<div style="display:flex;gap:6px">'
+        +'<button class="btn ghost sm" onclick="VIQ._movePipelineStage(\'' + prop.id + '\', \'contacted\')">Mark contacted</button>'
+        +'<button class="btn ghost sm" onclick="VIQ._movePipelineStage(\'' + prop.id + '\', \'contract\')">Mark contract</button>'
+      +'</div>'
+      +'</div>'
+    : '';
+
   // Contact enrichment card
   var enrichCard='<div class="card pad" style="margin-bottom:14px">'
     +'<div class="card-h"><h3>'+icon('users')+' Contact enrichment</h3></div>'
@@ -1228,6 +1570,7 @@ function outreachContent(){
       :'')
     +'<button class="btn'+ (_outreachContact?' ghost':'') +'" onclick="VIQ.enrichLead(\''+(prop?prop.id:'sim-prop')+'\')">'
     +icon('users')+(_outreachContact?'Re-enrich contact':'Enrich contact (simulated)')+'</button></div>';
+
   // Gmail card
   var gmailCard='<div class="card pad" style="margin-bottom:14px">'
     +'<div class="card-h"><h3>'+icon('rocket')+' Gmail outreach <span class="badge '+ (_gmailConnected?'q':'p') +'" style="margin-left:8px">'+(_gmailConnected?'Connected':'Not connected')+'</span></h3></div>'
@@ -1245,6 +1588,7 @@ function outreachContent(){
       +'<div style="display:flex;gap:8px"><button class="btn" onclick="VIQ.approveAndSendEmail()">'+icon('check')+'Approve &amp; send (simulated)</button><button class="btn ghost" onclick="_currentDraft=null;_currentDraftId=null;var oc=el(\'outreachContent\');if(oc)oc.innerHTML=outreachContent();">Discard</button></div>'
       +'</div>':'')
     +'</div>';
+
   // Offer generator card
   var offerCard='<div class="card pad" style="margin-bottom:14px">'
     +'<div class="card-h"><h3>'+icon('handshake')+' AI Offer generator</h3></div>'
@@ -1262,6 +1606,7 @@ function outreachContent(){
       +'<div style="display:flex;gap:8px"><button class="btn" onclick="VIQ.approveOffer()">'+icon('check')+'Approve offer (simulated)</button><button class="btn ghost" onclick="_currentOffer=null;_currentOfferId=null;var oc=el(\'outreachContent\');if(oc)oc.innerHTML=outreachContent();">Discard</button></div>'
       +'</div>':'')
     +'</div>';
+
   // Buyer profile card
   var profileCard='<div class="card pad" style="margin-bottom:14px">'
     +'<div class="card-h"><h3>Your buyer profile</h3></div>'
@@ -1274,20 +1619,48 @@ function outreachContent(){
     +'<label class="fld" for="bpNotes">Additional notes (optional)</label>'
     +'<textarea id="bpNotes" rows="2" style="margin-bottom:10px">'+esc(_buyerProfile.notes)+'</textarea>'
     +'<button class="btn ghost sm" onclick="VIQ._saveBuyerProfile()">Save profile</button></div>';
-  return '<div style="margin-bottom:12px"><label class="fld">Property to target</label>'+propSel+'</div>'
-    +profileCard+enrichCard+gmailCard+offerCard;
+
+  // CRM Connectors Sync Card
+  var activeCrms = Object.keys(_crmConnections).filter(function(k) { return _crmConnections[k] && _crmConnections[k].connected; });
+  var crmSyncCard = '<div class="card pad" style="margin-bottom:14px">'
+    +'<div class="card-h"><h3>'+icon('users')+' CRM Integration Sync</h3></div>'
+    +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">Instantly push this lead record to your connected CRM. <b>[SIMULATED]</b></p>'
+    +(activeCrms.length
+      ? '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+        +activeCrms.map(function(c) {
+          var name = c === 'hubspot' ? 'HubSpot' : c === 'salesforce' ? 'Salesforce' : 'Follow Up Boss';
+          return '<button class="btn ghost sm" onclick="VIQ._syncCrmLead(\'' + (prop ? prop.id : 'sim') + '\', \'' + c + '\')">' + icon('check') + ' Sync to ' + name + '</button>';
+        }).join('')
+        +'</div>'
+      : '<div style="font-size:12px;color:var(--txt3)">No CRM integrations connected. Connect HubSpot or Salesforce in the <a href="#/buyer/automation" style="color:var(--blue);font-weight:700">Automation Hub</a>.</div>'
+    )
+    +'</div>';
+
+  // Follow-up card
+  var followupCard = prop ? renderFollowups(prop.id) : '';
+
+  return propSel + pipelineBoard + stageMover + profileCard + crmSyncCard + followupCard + enrichCard + gmailCard + offerCard;
 }
-window.VIQ=window.VIQ||{}; // forward-declare so inline functions can reference VIQ._selectOutreachProp
-// will be fully overwritten below after all functions defined
-function _selectOutreachPropFn(id){_outreachPropId=id;_outreachContact=null;_currentDraft=null;_currentDraftId=null;_currentOffer=null;_currentOfferId=null;var oc=el('outreachContent');if(oc)oc.innerHTML=outreachContent();}
-function _saveBuyerProfileFn(){saveBuyerProfile();}
+
+function loadOutreachState(callback) {
+  loadAutomationState(function() {
+    if (callback) callback();
+  });
+}
 
 function outreachView(){
+  loadOutreachState(function() {
+    var oc = el('outreachContent');
+    if (oc) oc.innerHTML = outreachContent();
+  });
+
   return '<section class="view">'
     +pagehead('Outreach Center','AI-powered contact enrichment, Gmail draft-and-approval, and offer generation. All integrations are <b>[SIMULATED]</b>. Buyer review and approval required before any outreach.',
       '<span class="badge p">SIMULATED</span>')
     +'<div class="notice warn" style="margin-bottom:16px"><span class="ic">'+icon('shield')+'</span><div><b>Approval gates active.</b> The AI drafts — you review, edit, and approve. No email is sent and no offer is transmitted without your explicit confirmation. No real data is used. <b>DNC/TCPA compliance required in production.</b></div></div>'
-    +'<div id="outreachContent">'+outreachContent()+'</div>'
+    +'<div id="outreachContent">'
+      +'<div class="spin" style="width:24px;height:24px;margin:30px auto"></div>'
+    +'</div>'
     +complianceFoot()+'</section>';
 }
 
@@ -1402,7 +1775,28 @@ function renderAcctMenu(){
 }
 function toggleAcct(e){ if(e)e.stopPropagation(); if(state.notifOpen)closeNotif(); state.acctOpen=!state.acctOpen; el("acctMenu").innerHTML=state.acctOpen?renderAcctMenu():""; el("acctBtn").setAttribute("aria-expanded",state.acctOpen); }
 function closeAcct(){ state.acctOpen=false; var m=el("acctMenu"); if(m)m.innerHTML=""; var b=el("acctBtn"); if(b)b.setAttribute("aria-expanded","false"); }
-function resetDemo(){ LEADS.forEach(function(l){l.pulled=false;l.saved=false;}); state.filter="all";state.q="";state.source="all";state.sort={key:"score",dir:-1};state.capIdx=0;state.detailTab=0;state._note=""; closeAcct(); toast("Demo data reset.","ok"); go("#/"); render(); }
+function resetDemo(){
+  LEADS.forEach(function(l){l.pulled=false;l.saved=false;});
+  state.filter="all";state.q="";state.source="all";state.sort={key:"score",dir:-1};state.capIdx=0;state.detailTab=0;state._note="";
+  state._automationLoaded = false;
+  _discoveredProps = [];
+  _outreachPropId = null;
+  _outreachContact = null;
+  _currentDraft = null;
+  _currentDraftId = null;
+  _currentOffer = null;
+  _currentOfferId = null;
+  _gmailConnected = false;
+  _crmConnections = {
+    hubspot: { connected: false, apiKey: '', clientSecret: '' },
+    salesforce: { connected: false, apiKey: '', clientSecret: '' },
+    followupboss: { connected: false, apiKey: '', clientSecret: '' }
+  };
+  closeAcct();
+  toast("Demo data reset.","ok");
+  go("#/");
+  render();
+}
 function openCompliance(){
   openModal('<h3>Compliance &amp; disclaimers</h3>'
    +'<div class="notice warn" style="margin-bottom:14px"><span class="ic">'+icon("shield")+'</span><div><b>All data is synthetic.</b> No real property, owner, or vendor data; no live automation, scraping, skip-tracing, or billing in this demo.</div></div>'
@@ -1475,7 +1869,25 @@ function openPay(id){
     +'<button class="apay" onclick="VIQ.completePurchase(\''+id+'\')">'+APPLE_MARK+'Pay '+fmtPrice(l.price)+'</button>'
     +'<p style="font-size:11.5px;color:var(--txt3);text-align:center;margin-top:10px">Simulated Apple Pay — no real charge. [ASSUMPTION: payment processing, taxes, and refunds pending integration and legal review.]</p>');
 }
-function completePurchase(id){ var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return; l.pulled=true; closeModal(); toast("Purchased (simulated) — owner contact unlocked.","ok"); render(); }
+function completePurchase(id){
+  var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return;
+  l.pulled=true;
+  closeModal();
+  toast("Purchased (simulated) — owner contact unlocked.","ok");
+
+  _pipelineStates[id] = 'unlocked';
+  apiCall('POST', '/api/pipeline/move', { propertyId: id, stage: 'unlocked' });
+
+  // Auto-enrich workflow trigger
+  var enrichWf = _workflows.find(function(w) { return w.id === 'auto-enrich'; });
+  if (enrichWf && enrichWf.enabled) {
+    setTimeout(function() {
+      enrichLead(id);
+    }, 800);
+  }
+
+  render();
+}
 
 /* ================= router ================= */
 function currentSegs(){ return (location.hash||"#/").replace(/^#/,"").split("/").filter(Boolean); }
@@ -1547,6 +1959,9 @@ document.addEventListener("click",function(e){
 });
 window.addEventListener("hashchange",render);
 
+function _selectOutreachPropFn(id){_outreachPropId=id;_outreachContact=null;_currentDraft=null;_currentDraftId=null;_currentOffer=null;_currentOfferId=null;var oc=el('outreachContent');if(oc)oc.innerHTML=outreachContent();}
+function _saveBuyerProfileFn(){saveBuyerProfile();}
+
 window.VIQ={
   go:go, render:render, cyclePhoto:cyclePhoto, pickSample:pickSample, resetCapture:resetCapture,
   runSearch:runSearch, setQuery:setQuery, setFilter:setFilter, setSource:setSource, setSort:setSort, topSearch:topSearch,
@@ -1560,7 +1975,15 @@ window.VIQ={
   connectGmail:connectGmail, draftEmail:draftEmail, approveAndSendEmail:approveAndSendEmail,
   generateOfferUI:generateOfferUI, approveOffer:approveOffer,
   enrichLead:enrichLead, openConsentModal:openConsentModal,
-  _selectOutreachProp:_selectOutreachPropFn, _saveBuyerProfile:_saveBuyerProfileFn,
+  _toggleWorkflow: toggleWorkflow,
+  _openCrmConnectModal: openCrmConnectModal,
+  _disconnectCrm: disconnectCrm,
+  _syncCrmLead: syncCrmLead,
+  _movePipelineStage: movePipelineStage,
+  _toggleFollowup: toggleFollowup,
+  _setAutoTab: setAutoTab,
+  _selectOutreachProp:_selectOutreachPropFn,
+  _saveBuyerProfile:_saveBuyerProfileFn,
   _state:state, _auth:auth, _leads:LEADS, _samples:SAMPLES,
   setInstant:function(v){instant=v;}, get instant(){return instant;}
 };
