@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VacancyIQ — Product Demo</title>
+<meta name="description" content="Interactive demo of the VacancyIQ vacant & distressed property lead marketplace. Synthetic data.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231E74FF'/%3E%3Cpath d='M50 24c-11 0-20 9-20 20 0 15 20 32 20 32s20-17 20-32c0-11-9-20-20-20z' fill='white'/%3E%3Ccircle cx='50' cy='44' r='8' fill='%231E74FF'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#F6F7F9;--panel:#FFFFFF;--panel2:#FAFBFC;--panel3:#F3F4F6;
+  --ink:#111827;--txt:#1F2937;--txt2:#5B6472;--txt3:#8A909C;
+  --line:#E5E7EB;--line2:#EEF0F3;
+  --blue:#2563EB;--blue2:#1D4ED8;--sky:#5B8DEF;--bluetint:#EEF3FD;--bluetint2:#F6F9FE;
+  --green:#0E7C4A;--greenbg:#E7F4EC;--amber:#8A5A11;--amberbg:#F6EEDE;--red:#C13A3A;--redbg:#FBEBEB;
+  --r:8px;--rs:6px;--rl:10px;
+  --sh:0 1px 2px rgba(17,24,39,.05);--sh2:0 6px 20px rgba(17,24,39,.12);
+  --side:236px;--topbar:52px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3,h4{color:var(--ink);font-weight:600;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--blue);outline-offset:1px;border-radius:4px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--blue);padding:8px 14px;border:1px solid var(--line);border-radius:6px;z-index:200;font-weight:600}
+.skip:focus{left:12px}
+/* ===== shell ===== */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:var(--side);flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;z-index:50}
+.side-brand{display:flex;align-items:center;gap:9px;padding:0 14px;height:var(--topbar);border-bottom:1px solid var(--line)}
+.side-brand .mark{width:24px;height:24px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.side-brand .mark svg{width:15px;height:15px;fill:#fff}
+.side-brand .wm{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
+.side-nav{flex:1;overflow-y:auto;padding:8px}
+.nav-group{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--txt3);padding:12px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:6px;font-size:13px;font-weight:500;color:var(--txt2);width:100%;border:none;background:none;text-align:left}
+.nav-item svg{width:15px;height:15px;fill:currentColor;opacity:.85;flex-shrink:0}
+.nav-item:hover{background:var(--panel3);color:var(--txt)}
+.nav-item[aria-current="page"]{background:var(--bluetint);color:var(--blue);font-weight:600}
+.nav-item .cnt{margin-left:auto;font-size:11px;font-weight:600;color:var(--txt3);background:var(--panel3);padding:0 6px;border-radius:10px;line-height:16px}
+.nav-item[aria-current="page"] .cnt{background:#fff;color:var(--blue)}
+.side-foot{padding:8px;border-top:1px solid var(--line)}
+.acct{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;width:100%;border:1px solid var(--line);background:var(--panel);text-align:left}
+.acct:hover{background:var(--panel2)}
+.acct .av,.menu .mh .av{width:26px;height:26px;border-radius:5px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:11px;flex-shrink:0}
+.acct .an{font-size:12.5px;font-weight:600;line-height:1.2;color:var(--txt)}.acct .ap{font-size:11px;color:var(--txt3)}
+.demobadge{display:flex;align-items:center;gap:6px;margin-top:8px;padding:5px 9px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--txt2)}
+.demobadge .d{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+/* content + topbar */
+.content{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:var(--topbar);position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 18px;z-index:40}
+.crumb{font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:6px;min-width:0}
+.crumb .sep{color:var(--line);font-size:11px}.crumb b{color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb a:hover{color:var(--blue)}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+.topsearch{position:relative}
+.topsearch input{width:200px;padding:6px 10px 6px 30px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font-size:13px}
+.topsearch input:focus{outline:none;border-color:var(--blue)}
+.topsearch svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;fill:var(--txt3)}
+.iconbtn{width:32px;height:32px;border-radius:6px;border:1px solid transparent;background:none;position:relative;display:flex;align-items:center;justify-content:center;color:var(--txt2)}
+.iconbtn:hover{background:var(--panel3);color:var(--txt)}
+.iconbtn svg{width:16px;height:16px;fill:currentColor}
+.dot-badge{position:absolute;top:2px;right:2px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--red);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--panel)}
+.hamb{display:none}
+main.page{padding:20px 22px 40px;max-width:1180px;width:100%;margin:0 auto;flex:1}
+.view{animation:enter .18s ease-out}
+@keyframes enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* page header */
+.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pagehead h1{font-size:19px;font-weight:600;letter-spacing:-.3px}
+.pagehead .lede{color:var(--txt2);font-size:13px;margin-top:3px;max-width:74ch}
+.pagehead .ph-actions{display:flex;gap:8px;flex-shrink:0}
+.backlink{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500;color:var(--txt2);margin-bottom:12px}
+.backlink:hover{color:var(--blue)}
+/* grid */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+/* card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+.card.pad{padding:16px}
+.card-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card-h h3{font-size:13px;font-weight:600}
+.card-h .link{margin-left:auto;font-size:12px;color:var(--blue);font-weight:500}
+.card-h .link:hover{text-decoration:underline}
+.sect-t{font-size:11px;font-weight:600;color:var(--txt3)}
+/* buttons */
+.btn{background:var(--blue);color:#fff;border:1px solid var(--blue);font-weight:600;font-size:13px;padding:7px 13px;border-radius:6px;line-height:1.2;display:inline-flex;align-items:center;gap:6px;justify-content:center;transition:background .12s}
+.btn:hover{background:var(--blue2);border-color:var(--blue2)}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.btn.ghost{background:var(--panel);color:var(--txt);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--panel2);border-color:#D6D9DE}
+.btn.block{width:100%}
+/* inputs */
+label.fld{font-size:12px;color:var(--txt2);font-weight:500;display:block;margin-bottom:5px}
+input,select,textarea{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);width:100%;color:var(--txt)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+/* chips */
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 11px;font-size:12.5px;color:var(--txt2);font-weight:500}
+.chip:hover{border-color:#D6D9DE;color:var(--txt)}
+.chip[aria-pressed="true"]{background:var(--bluetint);color:var(--blue);border-color:#C9DBF8}
+/* tags / badges / age */
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;margin:1px 4px 1px 0;background:var(--panel3);color:var(--txt2)}
+.tag.vac{background:#EDF1F7;color:#3D5A80}.tag.tax{background:var(--amberbg);color:var(--amber)}.tag.abs{background:#EEEBF6;color:#5B4B9E}
+.tag.pre{background:var(--redbg);color:var(--red)}.tag.prob{background:var(--greenbg);color:var(--green)}.tag.code{background:#EFECF7;color:#6A4BA8}
+.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+.badge svg{width:10px;height:10px;fill:currentColor}
+.badge.q{background:var(--greenbg);color:var(--green)}.badge.r{background:var(--redbg);color:var(--red)}.badge.p{background:var(--amberbg);color:var(--amber)}
+.age{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:4px;white-space:nowrap}
+.age.fresh{background:var(--greenbg);color:var(--green)}.age.mid{background:var(--amberbg);color:var(--amber)}.age.old{background:var(--redbg);color:var(--red)}
+/* stat tile */
+.stat{padding:14px 16px}
+.stat .st{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.stat .l{font-size:12px;color:var(--txt2);font-weight:500}
+.stat .ic{width:24px;height:24px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.stat .ic svg{width:13px;height:13px;fill:var(--txt3)}
+.stat .v{font-size:22px;font-weight:600;letter-spacing:-.4px;color:var(--ink)}
+.stat .foot{font-size:11.5px;color:var(--txt3);margin-top:2px}
+.stat .up{color:var(--green);font-weight:600}
+/* table */
+.tablewrap{overflow-x:auto;padding:0}
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:11.5px;padding:8px 14px;font-weight:600;color:var(--txt3);border-bottom:1px solid var(--line);background:var(--panel2);white-space:nowrap;position:sticky;top:var(--topbar)}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--txt)}
+th .arr{font-size:9px;color:var(--blue)}
+td{padding:9px 14px;font-size:13px;border-bottom:1px solid var(--line2);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel2)}
+tr:last-child td{border-bottom:none}
+.addr{font-weight:600;color:var(--ink)}.subtle{color:var(--txt3);font-size:12px}
+.scnum{font-weight:600;font-size:13.5px}
+.actcell{text-align:right}
+/* feed */
+.feed{display:flex;flex-direction:column}
+.fitem{display:flex;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line2);align-items:center}
+.fitem:last-child{border-bottom:none}
+.fico{width:26px;height:26px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fico svg{width:13px;height:13px;fill:currentColor}
+.fico.blue{background:var(--bluetint);color:var(--blue)}.fico.green{background:var(--greenbg);color:var(--green)}.fico.red{background:var(--redbg);color:var(--red)}.fico.amber{background:var(--amberbg);color:var(--amber)}
+.fitem .ft{font-size:13px;font-weight:500;color:var(--txt)}.fitem .fm{font-size:12px;color:var(--txt3);margin-top:1px}
+.fitem time{margin-left:auto;font-size:11.5px;color:var(--txt3);white-space:nowrap;align-self:flex-start;padding-top:2px}
+.list-link{border-radius:6px}.list-link:hover{background:var(--panel2)}
+/* pipeline */
+.progress{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin:2px 0 14px}
+.progress .fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease;width:0}
+.pipe{display:flex;flex-direction:column}
+.pl{padding:10px 2px;border-bottom:1px solid var(--line2);opacity:.5;transition:opacity .25s}
+.pl:last-child{border-bottom:none}.pl.on,.pl.done,.pl.err{opacity:1}
+.pl .top{display:flex;align-items:center;gap:10px}
+.pl .d{width:22px;height:22px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700}
+.pl .d svg{width:11px;height:11px;fill:currentColor}
+.pl.on .d{border-color:var(--blue);color:var(--blue)}
+.pl.done .d{background:var(--blue);border-color:var(--blue);color:#fff}
+.pl.err .d{background:var(--red);border-color:var(--red);color:#fff}
+.pl .name{font-size:13px;font-weight:500}
+.pl .subs{margin:6px 0 0 32px;font-size:12px;color:var(--txt3);display:flex;flex-direction:column;gap:2px}
+.spin{width:11px;height:11px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* ring */
+.ringwrap{position:relative;flex-shrink:0}
+.ringwrap .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ringwrap .lbl b{font-weight:600;letter-spacing:-.5px;line-height:1;color:var(--ink)}
+.ringwrap .lbl span{font-size:9px;color:var(--txt3);font-weight:600;margin-top:1px}
+/* result */
+.result{border-radius:var(--r);padding:18px;text-align:center;border:1px solid var(--line)}
+.result.ok{background:var(--greenbg);border-color:#CDE7D8}
+.result.rej{background:var(--redbg);border-color:#EFCFCF}
+.result h3{font-size:16px;margin:6px 0 3px}.result.ok h3{color:var(--green)}.result.rej h3{color:var(--red)}
+.result p{font-size:13px;color:var(--txt2)}
+/* detail */
+.detail-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;align-items:start}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
+.kv:last-child{border-bottom:none}.kv span{color:var(--txt3)}.kv b{text-align:right;font-weight:600;color:var(--txt)}
+.locked{filter:blur(4px);user-select:none}
+.mapph{height:170px;position:relative}.mapph svg{width:100%;height:100%;display:block}
+.mapnote{position:absolute;bottom:8px;left:8px;background:rgba(17,24,39,.72);color:#fff;font-size:10px;padding:3px 8px;border-radius:4px}
+.breakdown{display:flex;flex-direction:column;gap:9px}
+.bd{display:grid;grid-template-columns:128px 1fr 30px;align-items:center;gap:10px;font-size:12.5px}
+.bd .track{height:6px;border-radius:3px;background:var(--line)}
+.bd .tf{height:100%;border-radius:3px;background:var(--blue)}
+.bd b{text-align:right;color:var(--txt)}
+/* chart holder */
+.bars{display:flex;align-items:flex-end;gap:10px;height:88px;margin-bottom:20px}
+/* notices */
+.notice{padding:11px 13px;display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--txt2);border-radius:var(--r);line-height:1.5}
+.notice .ic{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700}
+.notice .ic svg{width:12px;height:12px;fill:currentColor}
+.notice.warn{background:var(--amberbg);border:1px solid #E7D3AC}.notice.warn .ic{background:#fff;color:var(--amber)}
+.notice.info{background:var(--bluetint);border:1px solid #D3E1F9}.notice.info .ic{background:#fff;color:var(--blue)}
+.notice b{color:var(--txt)}
+/* overview intro */
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
+.hero .rings{display:none}
+.hero h2{font-size:19px;font-weight:600;max-width:40ch;color:var(--ink)}
+.hero p{color:var(--txt2);font-size:13.5px;margin-top:6px;max-width:64ch}
+.hero .cta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.ecards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ecard{padding:16px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);text-align:left;display:block;transition:border-color .12s}
+.ecard:hover{border-color:#C9DBF8;background:var(--bluetint2)}
+.ecard .ei{width:30px;height:30px;border-radius:6px;background:var(--bluetint);color:var(--blue);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.ecard .ei svg{width:15px;height:15px;fill:currentColor}
+.ecard h3{font-size:14px}.ecard p{font-size:12.5px;color:var(--txt2);margin-top:3px}
+.ticker{overflow:hidden;white-space:nowrap}
+.ticker .track{display:inline-flex;gap:22px;animation:tick 40s linear infinite;padding:9px 0}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker .ti{font-size:12px;color:var(--txt3)}.ticker .ti b{color:var(--txt2);font-weight:600}
+/* skeleton */
+.sk{background:var(--panel3);border-radius:var(--rs);position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:translateX(-100%);animation:shim 1.4s infinite}
+@keyframes shim{to{transform:translateX(100%)}}
+.sk-card{height:78px}.sk-row{height:40px;margin-bottom:8px}
+/* empty */
+.empty{text-align:center;color:var(--txt3);padding:34px 20px}
+.empty svg{width:28px;height:28px;fill:var(--txt3);opacity:.55;margin-bottom:8px}
+.empty h4{color:var(--txt2);font-size:14px;margin-bottom:3px;font-weight:600}
+.empty p{font-size:12.5px}
+/* modal */
+.backdrop{position:fixed;inset:0;background:rgba(17,24,39,.45);z-index:120;display:flex;align-items:center;justify-content:center;padding:20px;animation:enter .15s}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:var(--rl);max-width:460px;width:100%;padding:22px;box-shadow:var(--sh2);max-height:88vh;overflow:auto;position:relative}
+.modal h3{font-size:16px;margin-bottom:8px}
+.modal .close{position:absolute;top:12px;right:12px}
+/* toast */
+.toasts{position:fixed;bottom:18px;left:18px;z-index:130;display:flex;flex-direction:column;gap:8px;align-items:flex-start;max-width:360px}
+.toast{background:var(--ink);color:#fff;padding:9px 13px;border-radius:6px;box-shadow:var(--sh2);font-size:13px;display:flex;align-items:center;gap:9px;animation:enter .18s}
+.toast .tc{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast .tc svg{width:11px;height:11px;fill:#fff}
+.toast.ok .tc{background:var(--green)}.toast.info .tc{background:var(--blue)}
+/* notif + menu popovers */
+.notif-panel,.menu{position:absolute;top:42px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh2);z-index:60;animation:enter .12s}
+.notif-panel{width:320px;max-width:86vw;padding:6px;max-height:70vh;overflow:auto}
+.notif-panel h4{font-size:11px;padding:7px 9px 4px;color:var(--txt3);font-weight:600}
+.menu{min-width:224px;padding:5px}
+.menu .mh{padding:8px 10px;border-bottom:1px solid var(--line2);margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.menu .mh b{font-size:12.5px;display:block;color:var(--txt)}.menu .mh span{font-size:11px;color:var(--txt3)}
+.menu button,.menu a{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;border:none;background:none;border-radius:6px;font-size:13px;color:var(--txt);font-weight:500;text-align:left}
+.menu button:hover,.menu a:hover{background:var(--panel2)}
+.menu button svg,.menu a svg{width:14px;height:14px;fill:var(--txt3)}
+.menu .div{height:1px;background:var(--line2);margin:5px 6px}
+.menu .lab{font-size:10.5px;font-weight:600;color:var(--txt3);padding:6px 10px 3px}
+/* tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tab{padding:8px 12px;border:none;background:none;font-size:13px;font-weight:500;color:var(--txt2);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--txt)}
+.tab[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.tabpanel{animation:enter .18s}
+/* bookmark */
+.bm{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel);display:inline-flex;align-items:center;justify-content:center;color:var(--txt3);flex-shrink:0}
+.bm:hover{border-color:#D6D9DE;color:var(--txt2)}
+.bm[aria-pressed="true"]{color:var(--amber);border-color:#E7D3AC;background:var(--amberbg)}
+.bm svg{width:14px;height:14px;fill:currentColor}
+.bm.sm{width:28px;height:28px}.bm.sm svg{width:12px;height:12px}
+/* scrim */
+.scrim{display:none;position:fixed;inset:0;background:rgba(17,24,39,.4);z-index:45}
+.scrim.show{display:block}
+/* footer */
+.appfoot{font-size:11.5px;color:var(--txt3);margin-top:22px;line-height:1.6;padding-top:14px;border-top:1px solid var(--line2)}
+/* ===== responsive ===== */
+@media(max-width:1050px){.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:960px){
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .2s ease;box-shadow:var(--sh2)}
+  .sidebar.open{transform:none}
+  .hamb{display:inline-flex}
+  main.page{padding:16px 16px 40px}
+  .topsearch{display:none}
+  .g2,.g3,.detail-grid{grid-template-columns:1fr}
+  .ecards{grid-template-columns:1fr}
+  thead th{position:static}
+}
+@media(max-width:620px){
+  .g4{grid-template-columns:1fr 1fr}
+  .resp-table thead{display:none}
+  .resp-table tr{display:block;border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;padding:6px 12px;background:var(--panel)}
+  .resp-table td{display:flex;justify-content:space-between;gap:12px;border:none;padding:6px 2px;font-size:13px}
+  .resp-table td::before{content:attr(data-l);color:var(--txt3);font-weight:600;font-size:12px}
+  .resp-table td.actcell{justify-content:flex-end}
+  .pagehead h1{font-size:18px}.hero h2{font-size:17px}
+}
+/* ===== presentation polish ===== */
+.stat{display:flex;flex-direction:column}
+.spark{width:100%;height:28px;display:block;margin-top:10px}
+.freshpill{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-weight:500;white-space:nowrap}
+.freshpill .d{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(14,124,74,.12)}
+.pagehead .ph-actions{flex-wrap:wrap;align-items:center}
+.tbmeta{margin-left:auto;display:flex;align-items:center;gap:10px}
+.linkbtn{border:none;background:none;color:var(--blue);font-weight:600;font-size:12.5px;padding:0}
+.linkbtn:hover{text-decoration:underline}
+td,.kv b,.scnum,.stat .v{font-variant-numeric:tabular-nums}
+th.num,td.num{text-align:right}
+@media(max-width:620px){ .freshpill{display:none} }
+/* ===== premium refinements ===== */
+.pagehead h1{font-size:20px;letter-spacing:-.45px}
+.stat .v{letter-spacing:-.6px}
+.card-h h3{letter-spacing:-.1px}
+th.sortable[aria-sort="ascending"],th.sortable[aria-sort="descending"]{color:var(--blue)}
+.thumb{width:52px;height:36px;border-radius:6px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;background:var(--panel2);display:block}
+.thumb svg{width:100%;height:100%;display:block}
+.thumb.sm{width:44px;height:30px}
+.leadcell{display:flex;gap:11px;align-items:center;min-width:0}
+.leadcell .addr{line-height:1.25}
+.tagmore{font-size:10.5px;color:var(--txt3);font-weight:600;margin-left:1px;white-space:nowrap}
+.stack{display:flex;height:10px;border-radius:5px;overflow:hidden;border:1px solid var(--line);background:var(--line2)}
+.stack span{display:block;height:100%}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px;font-size:12px;color:var(--txt2)}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:middle}
+@media(max-width:620px){ .leadcell .subtle{font-size:11.5px} }
+/* ===== marketplace app: source, auth, payments, mobile ===== */
+.srcbadge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:4px;white-space:nowrap}
+.srcbadge svg{width:11px;height:11px;fill:currentColor}
+.srcbadge.deep{background:var(--bluetint);color:var(--blue)}
+.srcbadge.comm{background:#EAF3EC;color:#3F7A4E}
+.gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1F2937;border:1px solid #DADCE0;border-radius:8px;font-weight:600;font-size:14px;padding:11px 14px}
+.gbtn:hover{background:#F8F9FA;border-color:#C9CDD3}
+.apay{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;background:#000;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:15px;padding:12px 14px}
+.apay:hover{background:#151515}
+.apay svg{fill:#fff}
+.signin-wrap{max-width:400px;margin:0 auto;padding:6vh 8px 8px}
+.signin-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 22px}
+.signin-card .logo{width:50px;height:50px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 0 14px}
+.signin-card .logo svg{width:28px;height:28px;fill:#fff}
+.payrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
+.payrow:last-child{border-bottom:none}.payrow b{font-weight:700}
+.idpill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:4px 10px 4px 4px;font-size:12.5px;font-weight:600}
+.idpill .av{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.apptabs{display:none}
+@media(max-width:960px){
+  .apptabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:44;background:var(--panel);border-top:1px solid var(--line);padding:4px 2px calc(4px + env(safe-area-inset-bottom));justify-content:space-around}
+  .apptabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:8px;color:var(--txt3);font-size:10px;font-weight:600;min-height:50px;justify-content:center;text-decoration:none}
+  .apptabs a[aria-current="page"]{color:var(--blue)}
+  .apptabs svg{width:20px;height:20px;fill:currentColor}
+  main.page{padding:16px 14px 78px}
+  .btn{padding:9px 14px}
+  .btn.sm{padding:7px 11px}
+  .chip{padding:7px 12px}
+}
+@media(max-width:620px){
+  .backdrop{align-items:flex-end;padding:0}
+  .modal{max-width:100%;width:100%;border-radius:12px 12px 0 0;max-height:92vh;animation:sheetup .22s ease-out}
+}
+@keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+    <div class="side-brand">
+      <span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+      <span class="wm">Vacancy<b style="color:var(--blue)">IQ</b></span>
+    </div>
+    <nav class="side-nav" id="sideNav" aria-label="Main navigation"></nav>
+    <div class="side-foot">
+      <button class="acct" onclick="VIQ.openAbout()" aria-label="About this demo workspace">
+        <span class="av">DW</span><span><span class="an">Demo workspace</span><span class="ap">Pro plan · sandbox</span></span>
+      </button>
+      <div class="demobadge"><span class="d"></span>DEMO · SIMULATED DATA</div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim" onclick="VIQ.closeDrawer()" aria-hidden="true"></div>
+  <div class="content">
+    <header class="topbar" role="banner">
+      <button class="iconbtn hamb" id="hamb" aria-label="Open navigation" onclick="VIQ.openDrawer()"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M0 96C0 78 14 64 32 64H416c18 0 32 14 32 32s-14 32-32 32H32C14 128 0 114 0 96zM0 256c0-18 14-32 32-32H416c18 0 32 14 32 32s-14 32-32 32H32c-18 0-32-14-32-32zM448 416c0 18-14 32-32 32H32c-18 0-32-14-32-32s14-32 32-32H416c18 0 32 14 32 32z"/></svg></button>
+      <div class="crumb" id="crumb" aria-live="polite"></div>
+      <div class="top-actions">
+        <div class="topsearch"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M416 208c0 46-15 88-40 123l127 127c12 12 12 33 0 45s-33 12-45 0L331 376c-34 25-77 40-123 40C93 416 0 323 0 208S93 0 208 0s208 93 208 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+          <input id="topSearch" placeholder="Search leads…" aria-label="Search leads" onkeydown="VIQ.topSearch(event)"></div>
+        <button class="iconbtn" id="notifBtn" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" onclick="VIQ.toggleNotif(event)">
+          <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224 0c-18 0-32 14-32 32V50C120 61 64 124 64 200v33c0 45-16 90-44 125L5 377c-6 7-7 17-3 25s13 14 22 14H424c9 0 18-5 22-14s3-18-3-25l-15-19c-28-35-44-80-44-125V200c0-76-56-139-128-150V32c0-18-14-32-32-32zm45 493c12-12 19-28 19-45H160c0 17 7 33 19 45s28 19 45 19 33-7 45-19z"/></svg>
+          <span class="dot-badge" id="notifBadge">3</span></button>
+        <button class="iconbtn" aria-label="About this demo & compliance" onclick="VIQ.openAbout()"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13 0-24-11-24-24s11-24 24-24h48c13 0 24 11 24 24v88h8c13 0 24 11 24 24s-11 24-24 24H216c-13 0-24-11-24-24s11-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg></button>
+        <button class="iconbtn" id="acctBtn" aria-label="Account menu" aria-haspopup="true" aria-expanded="false" onclick="VIQ.toggleAcct(event)"><span class="av" style="width:22px;height:22px;border-radius:5px">DW</span></button>
+        <div id="notifPanel"></div>
+        <div id="acctMenu"></div>
+      </div>
+    </header>
+    <main class="page" id="main" role="main" tabindex="-1"><noscript><div style="max-width:620px;margin:48px auto;padding:22px;border:1px solid #E5E7EB;border-radius:8px;color:#1F2937"><h1 style="font-size:18px;margin:0 0 8px">This demo needs JavaScript to run</h1><p style="margin:0 0 10px;color:#5B6472;font-size:14px">The VacancyIQ demo draws its interface with JavaScript, so it appears blank when scripts aren&rsquo;t allowed to run (for example, inside an in-app file preview).</p><p style="margin:0;color:#5B6472;font-size:14px"><b>To view it:</b> download this file and open it directly in a web browser (Chrome, Safari, Edge, or Firefox), or host it &mdash; e.g. drag it onto <b>app.netlify.com/drop</b> &mdash; and open the link.</p></div></noscript></main>
+  </div>
+</div>
+<nav class="apptabs" id="apptabs" aria-label="App tabs"></nav>
+<div id="modalRoot"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="sr-only" aria-live="polite" id="routeAnnounce"></div>
+
+<script>
+/* ================================================================
+   VacancyIQ — investor product demo (single-file, no build).
+   All data is SYNTHETIC. No live vendor calls or production automation.
+   State is in-memory only. window.VIQ exposes the API for testing.
+================================================================ */
+(function(){
+"use strict";
+/* ---------------- SYNTHETIC DATA (clearly not real) ---------------- */
+// Buyer leads seeded compactly, then enriched deterministically.
+// seed: [address, city, ownerMasked, ownerType, score, ageDays, signals[], status]
+var SIG={vac:["vac","Vacant"],vac8:["vac","Vacant 8mo+"],vac1y:["vac","Vacant 1yr+"],
+  tax:["tax","Tax delinquent"],lien:["tax","Tax lien"],abs:["abs","Absentee owner"],
+  pre:["pre","Pre-foreclosure"],prob:["prob","Probate"],code:["code","Code violations"],util:["vac","Utilities off"]};
+var LEAD_SEED=[
+ ["742 Elm Ct","Toledo, OH","D. O███████","Individual",90,2,["vac1y","lien"],"active"],
+ ["19 Sycamore Pl","Canton, OH","The H██████ Trust","Trust",84,5,["abs","pre"],"active"],
+ ["233 Rowntree Dr","Dayton, OH","L. P█████","Individual",79,9,["vac"],"active"],
+ ["56 Garnet Way","Akron, OH","B. N███████","Individual",76,14,["abs"],"active"],
+ ["1201 Foundry St","Cleveland, OH","Estate of A. R███","Estate",83,22,["vac","prob"],"active"],
+ ["87 Larkspur Ave","Columbus, OH","G. S█████","Individual",72,31,["tax"],"active"],
+ ["410 Beacon Rd","Toledo, OH","M. F███████","Individual",88,1,["vac8","tax","abs"],"active"],
+ ["3 Windmere Ln","Akron, OH","K██████ Holdings LLC","LLC",81,4,["abs","vac"],"active"],
+ ["628 Chapel St","Dayton, OH","R. & T. V████","Individual",70,18,["code"],"active"],
+ ["915 Kestrel Dr","Columbus, OH","P. A███████","Individual",86,3,["vac8","pre"],"active"],
+ ["44 Dunmore Ave","Canton, OH","Estate of J. M██","Estate",78,27,["prob","vac"],"active"],
+ ["1360 Slate Run","Cleveland, OH","H. C██████","Individual",74,12,["abs","code"],"active"],
+ ["77 Alderwood Ct","Toledo, OH","S██████ Group LLC","LLC",82,6,["vac","lien"],"active"],
+ ["205 Merrow St","Akron, OH","D. W████████","Individual",68,40,["tax"],"active"],
+ ["889 Pinehurst Dr","Dayton, OH","C. B███████","Individual",91,2,["vac1y","tax","abs"],"active"],
+ ["12 Hollybrook Ln","Columbus, OH","N. R██████","Individual",73,20,["vac"],"active"],
+ ["530 Ironwood Ave","Canton, OH","The K████ Family Trust","Trust",80,8,["abs","pre"],"active"],
+ ["341 Cedarcrest","Cleveland, OH","V. T█████","Individual",77,16,["code","vac"],"active"],
+ ["68 Marsh Point Rd","Toledo, OH","B██████ Ventures LLC","LLC",85,5,["vac8","lien"],"active"],
+ ["1122 Quarry Rd","Akron, OH","L. H███████","Individual",71,34,["tax"],"active"],
+ ["255 Fairlead St","Dayton, OH","Estate of P. D██","Estate",87,3,["prob","vac8"],"active"],
+ ["94 Sundale Ave","Columbus, OH","A. G█████","Individual",69,45,["abs"],"active"],
+ ["703 Blackwell Dr","Canton, OH","M. S███████","Individual",75,11,["vac","code"],"active"],
+ ["18 Trellis Way","Cleveland, OH","R██████ Capital LLC","LLC",89,1,["vac1y","pre","abs"],"active"]
+];
+function money(n){return "$"+Math.round(n).toLocaleString();}
+function scoreBands(score){
+  // deterministic breakdown summing ~ to score across 4 factors
+  var v=Math.min(100,Math.round(score*0.30+8));
+  var o=Math.min(100,Math.round(score*0.26+10));
+  var f=Math.min(100,Math.round(score*0.24+6));
+  var m=Math.min(100,Math.round(score*0.20+14));
+  return [["Vacancy signals",v],["Owner situation",o],["Financial distress",f],["Market & comps",m]];
+}
+function comps(seedN,est){
+  var out=[];for(var i=0;i<3;i++){var d=((seedN*7+i*13)%9)-4;out.push({
+    addr:(120+seedN*3+i*40)+" "+["Marlow","Ashby","Crestview"][i]+" St",
+    sold:money(est*(1+d/100)), when:(2+((seedN+i)%9))+" mo ago", sqft:(900+((seedN*40+i*130)%1400))});}
+  return out;
+}
+var DEEP_DISCOUNT=2.50; // [ASSUMPTION] deep-searched listings priced $2.50 below comparable submitted-listing user payout
+var LEADS=LEAD_SEED.map(function(s,i){
+  var score=s[4], est=42000+ (score*1000) + ((i*3137)%22000);
+  var tags=s[6].map(function(k){return SIG[k];});
+  var source=(i%3===1)?"deepsearch":"submitted";           // ~1/3 deep-search, ~2/3 community-submitted
+  var userPayout=7+Math.round(score/20);                    // [ASSUMPTION] amount paid to a user for a comparable submitted listing
+  var price=source==="deepsearch"?(userPayout-DEEP_DISCOUNT):userPayout;
+  return {id:"L"+(1000+i), addr:s[0], city:s[1], owner:s[2], ownerType:s[3], score:score,
+    age:s[5], status:s[7], tags:tags, source:source, userPayout:userPayout, price:price,
+    beds:2+((i*3)%4), baths:1+((i*2)%3), sqft:980+((i*271)%1600), est:est,
+    ownYears:3+((i*5)%22), absentee:s[6].indexOf("abs")>-1,
+    breakdown:scoreBands(score), comps:comps(i,est), pulled:false, saved:false,
+    lat:41+((i*7)%9)/10, lng:-83-((i*5)%6)/10};
+});
+// Spotter submissions
+var SUBMISSIONS=[
+ {addr:"1420 Maple Ave, Dayton, OH",status:"qualified",score:88,earn:7.4,when:"2h ago",reason:"Vacant, tax-delinquent, absentee owner."},
+ {addr:"88 Birchwood Ln, Akron, OH",status:"qualified",score:81,earn:6.1,when:"yesterday",reason:"Out-of-state owner, utilities off."},
+ {addr:"5 Harbor St, Cleveland, OH",status:"rejected",score:34,earn:0,when:"yesterday",reason:"Owner-occupied and sold within 6 months — not a distress lead."},
+ {addr:"310 Kingsley Rd, Columbus, OH",status:"rejected",score:41,earn:0,when:"2 days ago",reason:"Already listed on the MLS — not off-market."},
+ {addr:"640 Ranger Dr, Toledo, OH",status:"pending",score:0,earn:0,when:"just now",reason:"Deep search in progress."},
+ {addr:"27 Vale St, Canton, OH",status:"qualified",score:79,earn:5.8,when:"3 days ago",reason:"Long-vacant, code violations on file."}
+];
+// Capture samples (incl. an ERROR path)
+var SAMPLES=[
+ {addr:"1420 Maple Ave, Dayton, OH",owner:"R. W████████",outcome:"ok",score:88,tags:[SIG.vac8,SIG.tax],reason:"Vacant, tax-delinquent, absentee owner — strong distress signals."},
+ {addr:"88 Birchwood Ln, Akron, OH",owner:"M. & J. A██████",outcome:"ok",score:81,tags:[SIG.abs,SIG.vac],reason:"Out-of-state owner, utilities off — good outreach candidate."},
+ {addr:"5 Harbor St, Cleveland, OH",owner:"—",outcome:"rej",score:34,tags:[],reason:"Owner-occupied and sold within 6 months. Not a distress lead."},
+ {addr:"310 Kingsley Rd, Columbus, OH",owner:"—",outcome:"rej",score:41,tags:[],reason:"Already listed on the MLS — not off-market."},
+ {addr:"12 Foundry Rd, Toledo, OH",owner:"K██████ Holdings LLC",outcome:"error",score:77,tags:[SIG.vac,SIG.lien],reason:"Vacant with a tax lien — qualified on retry.",errStage:1}
+];
+// Automation / activity feed (SIMULATED — not live)
+var ACTIVITY=[
+ {type:"refresh",ico:"blue",t:"Daily deep-research completed",m:"Scanned sources · 14 new properties added, 6 auto-rejected",time:"6:00 AM"},
+ {type:"sold",ico:"green",t:"Lead pulled by a buyer",m:"889 Pinehurst Dr · spotter earned their share",time:"Yesterday"},
+ {type:"clean",ico:"amber",t:"Weekly cleanup ran",m:"De-duped and re-checked status · 9 sold/dead leads removed",time:"Mon"},
+ {type:"reject",ico:"red",t:"Submission rejected",m:"5 Harbor St · owner-occupied, recently sold",time:"Mon"},
+ {type:"refresh",ico:"blue",t:"Daily deep-research completed",m:"Scanned sources · 11 new properties added, 9 auto-rejected",time:"Sun"}
+];
+var ACT_ICON={refresh:"sync",sold:"dollar",clean:"broom",reject:"x",submit:"camera"};
+var NOTIFS=[
+ {ico:"green",t:"You earned on a sale",m:"889 Pinehurst Dr was pulled by a buyer.",time:"2h"},
+ {ico:"red",t:"A submission didn't make the cut",m:"5 Harbor St — owner-occupied, recently sold.",time:"1d"},
+ {ico:"blue",t:"Daily refresh added 14 leads",m:"The database was updated this morning.",time:"1d"}
+];
+var PLANS=[
+ {name:"Starter",price:99,tagline:"Solo investors",feats:["1 metro","150 lead pulls / mo","Daily refresh","Email support"]},
+ {name:"Pro",price:149,tagline:"Active wholesalers",feats:["3 metros","500 lead pulls / mo","Aging + signals filters","Priority support"],popular:true},
+ {name:"Team",price:199,tagline:"Small teams",feats:["All metros","Unlimited pulls","3 seats","API export (planned)"]}
+];
+
+/* ---------------- helpers ---------------- */
+var $=function(s,r){return (r||document).querySelector(s);};
+var el=function(id){return document.getElementById(id);};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function ageClass(a){return a<7?'fresh':a<21?'mid':'old';}
+function scoreColor(s){return s>=80?'var(--green)':s>=70?'var(--blue)':'var(--red)';}
+function tagsHTML(tags){return (tags&&tags.length)?tags.map(function(t){return '<span class="tag '+t[0]+'">'+esc(t[1])+'</span>';}).join(''):'<span class="sub">—</span>';}
+function prefersReduced(){return window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;}
+
+/* ---------------- inline icons ---------------- */
+var IC={
+ camera:'<path d="M149 65l-10 31H64C29 96 0 125 0 160v256c0 35 29 64 64 64h384c35 0 64-29 64-64V160c0-35-29-64-64-64h-75l-10-31c-7-20-25-33-46-33H195c-20 0-39 13-46 33zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/>',
+ search:'<path d="M416 208c0 46-15 88-40 123l127 127c12 12 12 33 0 45s-33 12-45 0L331 376c-34 25-77 40-123 40C93 416 0 323 0 208S93 0 208 0s208 93 208 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>',
+ gauge:'<path d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm320-96a32 32 0 1 0-64 0 32 32 0 1 0 64 0zM144 208a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm-16 144a32 32 0 1 0 64 0 32 32 0 1 0-64 0zm240-32a32 32 0 1 0 0 64 32 32 0 1 0 0-64zM256 288a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/>',
+ database:'<path d="M448 80v48c0 44-100 80-224 80S0 172 0 128V80C0 36 100 0 224 0S448 36 448 80zM393 215c21-7 40-17 55-29V288c0 44-100 80-224 80S0 332 0 288V186c15 12 34 21 55 29 45 16 105 25 169 25s124-9 169-25zM0 346c15 12 34 22 55 29 45 16 105 25 169 25s124-9 169-25c21-7 40-17 55-29V432c0 44-100 80-224 80S0 476 0 432V346z"/>',
+ dollar:'<path d="M160 0c18 0 32 14 32 32v35c17 3 33 8 47 12 17 5 27 23 22 40s-23 27-40 22c-22-6-45-11-64-11-17 0-32 3-42 9-9 5-13 11-13 21 0 6 2 10 12 16 12 7 30 12 53 19l1 0c20 6 45 13 65 26 22 15 40 37 40 71 0 35-19 59-45 72-14 7-29 11-45 13v34c0 18-14 32-32 32s-32-14-32-32v-36c-22-5-42-13-59-20-16-7-24-26-16-42s26-24 42-16c5 2 9 4 13 6 18 7 33 13 50 14 18 1 33-2 43-8 8-5 12-11 12-19 0-7-3-12-13-18-12-7-31-13-54-20l-2-1c-19-6-44-12-63-25-22-14-41-36-41-70 0-35 20-58 45-71 13-7 28-11 43-13V32c0-18 14-32 32-32z"/>',
+ users:'<path d="M144 160A80 80 0 1 0 144 0a80 80 0 1 0 0 160zm368 0A80 80 0 1 0 512 0a80 80 0 1 0 0 160zM0 298c0 24 19 43 43 43H245c1-38 18-72 45-95-15-8-32-13-51-13H126C56 234 0 290 0 360zm320-6h-1c25 22 41 54 43 91h206c24 0 43-19 43-43 0-70-56-126-126-126h-93c-27 0-51 11-72 78z"/>',
+ sync:'<path d="M105 224H24c-13 0-24-11-24-24V56C0 46 6 37 15 33s20-2 27 5l43 43C129 37 189 8 256 8c130 0 239 98 253 227 1 14-8 27-22 28s-27-9-28-22C447 149 361 72 256 72c-49 0-93 20-125 51l43 43c7 7 9 18 5 27s-13 15-23 15zm302 64h81c13 0 24 11 24 24v144c0 10-6 19-15 23s-20 2-27-5l-43-43c-44 44-104 73-171 73-130 0-239-98-253-227-1-14 8-27 22-28s27 9 28 22c11 92 97 169 202 169 49 0 93-20 125-51l-43-43c-7-7-9-18-5-27s13-15 23-15z"/>',
+ broom:'<path d="M566 22c-13-13-33-13-46 0L332 210l-46-46-45 45c-18-18-47-18-65 0L45 316c-25 25-30 63-13 94L4 438c-6 6-4 15 3 19s16 2 21-4l28-28c31 17 69 12 94-13l107-107c18-18 18-47 0-65l45-45-46-46L566 68c13-13 13-33 0-46z"/>',
+ x:'<path d="M342 137c10-10 10-26 0-36s-26-10-36 0l-114 115L78 101c-10-10-26-10-36 0s-10 26 0 36l114 115L42 367c-10 10-10 26 0 36s26 10 36 0l114-115 114 115c10 10 26 10 36 0s10-26 0-36L228 252 342 137z"/>',
+ check:'<path d="M438 105c9 9 9 25 0 34L182 395c-9 9-25 9-34 0L9 256c-9-9-9-25 0-34s25-9 34 0l122 122L404 105c9-9 25-9 34 0z"/>',
+ filter:'<path d="M4 55C10 41 24 32 40 32H472c16 0 30 9 36 23s5 30-5 42L320 321V448c0 12-7 23-18 29s-24 4-33-3l-64-48c-8-6-13-16-13-26V321L9 97C-1 85-3 69 4 55z"/>',
+ building:'<path d="M64 0C46 0 32 14 32 32V480c0 18 14 32 32 32h96V416c0-18 14-32 32-32s32 14 32 32v96h96c18 0 32-14 32-32V32c0-18-14-32-32-32H64zm24 96c0-9 7-16 16-16h32c9 0 16 7 16 16v32c0 9-7 16-16 16H104c-9 0-16-7-16-16V96zm112 0c0-9 7-16 16-16h32c9 0 16 7 16 16v32c0 9-7 16-16 16h-32c-9 0-16-7-16-16V96zM104 176h32c9 0 16 7 16 16v32c0 9-7 16-16 16H104c-9 0-16-7-16-16V192c0-9 7-16 16-16zm96 16c0-9 7-16 16-16h32c9 0 16 7 16 16v32c0 9-7 16-16 16h-32c-9 0-16-7-16-16V192z"/>',
+ shield:'<path d="M256 0c5 0 9 1 13 3l179 76c21 9 37 30 37 55 0 122-51 246-208 313-4 2-9 3-13 3s-9-1-13-3C93 380 42 256 42 134c0-25 16-46 37-55L258 3c4-2 8-3 12-3z"/>',
+ clock:'<path d="M256 0a256 256 0 1 1 0 512 256 256 0 1 1 0-512zm-24 120v136c0 8 4 15 11 20l96 64c11 7 26 4 33-7s4-26-7-33l-85-57V120c0-13-11-24-24-24s-24 11-24 24z"/>',
+ map:'<path d="M302 448 192 400 0 480V64L192 0 384 64 576 0V416L384 480 302 448zM192 0V0zm192 64V64z"/>',
+ tag:'<path d="M0 80V229c0 17 7 33 19 45L211 466c25 25 65 25 90 0L455 312c25-25 25-65 0-90L264 19c-12-12-28-19-45-19H80C36 0 0 36 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>',
+ chart:'<path d="M64 64c0-18-14-32-32-32S0 46 0 64V400c0 44 36 80 80 80H480c18 0 32-14 32-32s-14-32-32-32H80c-9 0-16-7-16-16V64zm406 74c12-12 12-33 0-45s-33-12-45 0l-93 93-66-66c-12-12-33-12-45 0l-112 112c-12 12-12 33 0 45s33 12 45 0l90-90 66 66c12 12 33 12 45 0l115-115z"/>',
+ lock:'<path d="M144 144v48H304V144a80 80 0 1 0-160 0zM80 192V144a144 144 0 1 1 288 0v48h16c35 0 64 29 64 64V448c0 35-29 64-64 64H64c-35 0-64-29-64-64V256c0-35 29-64 64-64H80z"/>',
+ rocket:'<path d="M156 384L69 297c-23-23-30-57-19-87 41-107 133-179 246-186 6 0 12 0 18 1 1 6 1 12 1 18-7 113-79 205-186 246-30 11-64 4-87-19l0 0-13 13 0 0zM120 480c-7 22-32 44-64 44 0-32 22-57 44-64l20 20zM416 152a40 40 0 1 0-80 0 40 40 0 1 0 80 0z"/>',
+ handshake:'<path d="M323 20l-83 83 43 43c22 22 22 57 0 79s-57 22-79 0l-53-53c-6-6-6-16 0-22l77-77H155c-11 0-22 4-30 12l-72 72H0v192h37l71 71c17 17 44 17 61 0 8 12 21 19 36 19 8 24 32 40 58 33 15 21 43 27 65 14l24 14c15 9 34 4 43-11l16-27h44V208l-72-72c-8-8-19-13-30-13h-30z"/>',
+ grid:'<path d="M0 64C0 46 14 32 32 32H192c18 0 32 14 32 32V224c0 18-14 32-32 32H32c-18 0-32-14-32-32V64zM0 320c0-18 14-32 32-32H192c18 0 32 14 32 32V448c0 18-14 32-32 32H32c-18 0-32-14-32-32V320zM288 64c0-18 14-32 32-32H480c18 0 32 14 32 32V224c0 18-14 32-32 32H320c-18 0-32-14-32-32V64zm0 256c0-18 14-32 32-32H480c18 0 32 14 32 32V448c0 18-14 32-32 32H320c-18 0-32-14-32-32V320z"/>',
+ list:'<path d="M40 48C26 48 16 59 16 72v48c0 13 11 24 24 24H88c13 0 24-11 24-24V72c0-13-11-24-24-24H40zM192 64c-18 0-32 14-32 32s14 32 32 32H480c18 0 32-14 32-32s-14-32-32-32H192zm0 160c-18 0-32 14-32 32s14 32 32 32H480c18 0 32-14 32-32s-14-32-32-32H192zm0 160c-18 0-32 14-32 32s14 32 32 32H480c18 0 32-14 32-32s-14-32-32-32H192zM16 232v48c0 13 11 24 24 24H88c13 0 24-11 24-24V232c0-13-11-24-24-24H40c-13 0-24 11-24 24zM40 368c-13 0-24 11-24 24v48c0 13 11 24 24 24H88c13 0 24-11 24-24V392c0-13-11-24-24-24H40z"/>'
+};
+function icon(name,cls){return '<svg viewBox="0 0 '+(name==='users'||name==='handshake'?'640':name==='map'?'576':'512')+' 512" aria-hidden="true"'+(cls?' class="'+cls+'"':'')+'>'+IC[name]+'</svg>';}
+
+/* ---------------- SVG charts ---------------- */
+function ringSVG(score,size,color){
+  var R=size/2-8,C=2*Math.PI*R,off=C*(1-score/100),id='r'+Math.random().toString(36).slice(2,7);
+  var draw=prefersReduced()?('stroke-dashoffset:'+off):('animation:'+id+' 1s .1s cubic-bezier(.2,.7,.2,1) forwards');
+  return '<div class="ringwrap" style="width:'+size+'px;height:'+size+'px">'
+   +'<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'
+   +'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+R+'" fill="none" stroke="#E6ECF6" stroke-width="8"/>'
+   +'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+R+'" fill="none" stroke="'+color+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'" transform="rotate(-90 '+size/2+' '+size/2+')" style="'+draw+'"/>'
+   +'<style>@keyframes '+id+'{to{stroke-dashoffset:'+off+'}}</style></svg>'
+   +'<div class="lbl"><b style="color:'+color+';font-size:'+(size*0.28)+'px">'+score+'</b><span>SCORE</span></div></div>';
+}
+function barsSVG(data,max){ // data: [[label,val],...]
+  max=max||Math.max.apply(null,data.map(function(d){return d[1];}))||1;
+  return '<div class="bars" role="img" aria-label="Score distribution bar chart">'
+   +data.map(function(d){var h=8+d[1]/max*100;
+     return '<div style="flex:1;position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:100%">'
+       +'<div style="position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:11px;font-weight:600;color:var(--txt2)">'+d[1]+'</div>'
+       +'<div class="growbar" style="--h:'+h+'%;height:'+h+'%;background:var(--blue);border-radius:4px 4px 2px 2px"></div>'
+       +'<div style="position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:10.5px;color:var(--txt3)">'+esc(d[0])+'</div></div>';}).join('')
+   +'</div>';
+}
+function donutSVG(segs,size){ // segs:[[label,val,color]]
+  size=size||150;var R=size/2-14,C=2*Math.PI*R,total=segs.reduce(function(a,s){return a+s[1];},0)||1,acc=0;
+  var arcs=segs.map(function(s){var frac=s[1]/total,dash=frac*C,off=-acc*C;acc+=frac;
+    return '<circle cx="'+size/2+'" cy="'+size/2+'" r="'+R+'" fill="none" stroke="'+s[2]+'" stroke-width="16" stroke-dasharray="'+dash+' '+(C-dash)+'" stroke-dashoffset="'+off+'" transform="rotate(-90 '+size/2+' '+size/2+')"/>';}).join('');
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" role="img" aria-label="Signal composition donut chart">'+arcs
+    +'<text x="50%" y="47%" text-anchor="middle" font-size="24" font-weight="600" fill="#111827">'+total+'</text>'
+    +'<text x="50%" y="60%" text-anchor="middle" font-size="10" fill="#8A909C">LEADS</text></svg>';
+}
+function lineSVG(vals,w,h){
+  w=w||300;h=h||70;var pad=10,max=Math.max.apply(null,vals),min=Math.min.apply(null,vals),rng=(max-min)||1;
+  var X=function(i){return pad+i/(vals.length-1)*(w-2*pad);},Y=function(v){return pad+(1-(v-min)/rng)*(h-2*pad);};
+  var pts=vals.map(function(v,i){return [X(i),Y(v)];});
+  var d=pts.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ');
+  var area=d+' L'+X(vals.length-1).toFixed(1)+' '+(h-pad)+' L'+X(0).toFixed(1)+' '+(h-pad)+' Z';
+  var grid=[0.25,0.5,0.75].map(function(f){var y=(pad+f*(h-2*pad)).toFixed(1);return '<line x1="'+pad+'" y1="'+y+'" x2="'+(w-pad)+'" y2="'+y+'" stroke="#EEF0F3" stroke-width="1"/>';}).join('');
+  var dots=pts.map(function(p,i){return i===pts.length-1?'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.2" fill="#2563EB"/>':'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2" fill="#fff" stroke="#2563EB" stroke-width="1.4"/>';}).join('');
+  return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Trend line chart" style="width:100%">'
+    +'<defs><linearGradient id="lgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563EB" stop-opacity=".16"/><stop offset="1" stop-color="#2563EB" stop-opacity="0"/></linearGradient></defs>'
+    +grid+'<path d="'+area+'" fill="url(#lgr)"/><path d="'+d+'" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg>';
+}
+function sparkline(vals,color){
+  color=color||"#2563EB";var w=100,h=28,pad=3,max=Math.max.apply(null,vals),min=Math.min.apply(null,vals),rng=(max-min)||1;
+  var pts=vals.map(function(v,i){return [i/(vals.length-1)*w,pad+(1-(v-min)/rng)*(h-2*pad)];});
+  var d=pts.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ');
+  var area=d+' L'+w+' '+h+' L0 '+h+' Z',id='sp'+Math.random().toString(36).slice(2,6);
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true">'
+    +'<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+color+'" stop-opacity=".16"/><stop offset="1" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs>'
+    +'<path d="'+area+'" fill="url(#'+id+')"/><path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+function mapSVG(lat,lng){
+  var seed=Math.abs(Math.round((lat+lng)*97))%1000;
+  function blk(x,y,wd,ht){return '<rect x="'+x+'" y="'+y+'" width="'+wd+'" height="'+ht+'" rx="2" fill="#E4E7DF"/>';}
+  var blocks=blk(28,26,60,40)+blk(120,20,80,46)+blk(232,28,52,38)+blk(312,22,52,44)
+    +blk(30,104,70,52)+blk(140,110,64,44)+blk(240,112,58,46)+blk(316,108,50,50);
+  var roadsH=[86,168].map(function(y){return '<line x1="0" y1="'+y+'" x2="380" y2="'+y+'" stroke="#fff" stroke-width="11"/><line x1="0" y1="'+y+'" x2="380" y2="'+y+'" stroke="#fff" stroke-width="11"/>';}).join('');
+  var roadsV=[108,224,300].map(function(x){return '<line x1="'+x+'" y1="0" x2="'+x+'" y2="200" stroke="#fff" stroke-width="9"/>';}).join('');
+  var casingH=[86,168].map(function(y){return '<line x1="0" y1="'+y+'" x2="380" y2="'+y+'" stroke="#DCE0DA" stroke-width="13"/>';}).join('');
+  var casingV=[108,224,300].map(function(x){return '<line x1="'+x+'" y1="0" x2="'+x+'" y2="200" stroke="#DCE0DA" stroke-width="11"/>';}).join('');
+  return '<svg viewBox="0 0 380 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    +'<rect width="380" height="200" fill="#EEF0EA"/>'
+    +'<rect x="150" y="120" width="60" height="42" fill="#DCE9F7" stroke="#B7CDEC" stroke-width="1.5"/>' // highlighted parcel
+    +casingH+casingV+roadsH+roadsV+blocks
+    +'<circle cx="180" cy="141" r="24" fill="#2563EB" opacity=".12"/>'
+    +'<path d="M180 120c-10 0-19 9-19 19 0 14 19 30 19 30s19-16 19-30c0-10-9-19-19-19z" fill="#2563EB"/><circle cx="180" cy="139" r="7" fill="#fff"/>'
+    +'<g transform="translate(346,168)"><circle r="11" fill="#fff" stroke="#CBD0D8"/><path d="M0 -8 L4 3 L0 0 L-4 3 Z" fill="#4B5563"/><text y="-13" text-anchor="middle" font-size="8" fill="#8A909C" font-weight="700">N</text></g>'
+    +'<g transform="translate(16,182)"><rect width="46" height="3" fill="#6B7280"/><rect width="1.5" height="7" y="-2" fill="#6B7280"/><rect width="1.5" height="7" x="44.5" y="-2" fill="#6B7280"/><text x="23" y="-4" text-anchor="middle" font-size="8" fill="#8A909C">200 ft</text></g>'
+    +'</svg>';
+}
+function houseSVG(seed,o){
+  o=o||{};
+  var pals=[{s1:"#DBE2EA",s2:"#C7D0DA",w:"#E4E0D8",r:"#6E5A4C"},
+    {s1:"#E1E6EC",s2:"#CDD5DE",w:"#DAD3C8",r:"#7A5A4A"},
+    {s1:"#D6DCE4",s2:"#C0C9D4",w:"#D9DEE6",r:"#4E5866"},
+    {s1:"#DDE2DF",s2:"#C9D2CD",w:"#E1DCD2",r:"#5C6B5A"},
+    {s1:"#DFDEE6",s2:"#CCC9D8",w:"#DED7CD",r:"#5A4E63"}];
+  var p=pals[seed%pals.length], lit=!o.vac, weeds=o.vac||o.abs, boarded=o.vac, notice=o.pre;
+  var win=function(x,brd){return brd
+    ? '<rect x="'+x+'" y="116" width="36" height="34" fill="#8A7B63"/><rect x="'+x+'" y="116" width="36" height="34" fill="none" stroke="#6B5E49" stroke-width="1"/><line x1="'+x+'" y1="133" x2="'+(x+36)+'" y2="133" stroke="#6B5E49" stroke-width="3"/><line x1="'+(x+8)+'" y1="116" x2="'+(x+8)+'" y2="150" stroke="#6B5E49" stroke-width="2"/><line x1="'+(x+26)+'" y1="116" x2="'+(x+26)+'" y2="150" stroke="#6B5E49" stroke-width="2"/>'
+    : '<rect x="'+x+'" y="116" width="36" height="34" fill="'+(lit?"#C7D8E8":"#3a4656")+'"/><rect x="'+(x+2)+'" y="118" width="32" height="30" fill="'+(lit?"#DCE8F3":"#4b5a6d")+'" opacity=".9"/><line x1="'+x+'" y1="133" x2="'+(x+36)+'" y2="133" stroke="#2b3542" stroke-width="1.5"/><line x1="'+(x+18)+'" y1="116" x2="'+(x+18)+'" y2="150" stroke="#2b3542" stroke-width="1.5"/>';};
+  return '<svg viewBox="0 0 380 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    +'<defs><linearGradient id="sk'+seed+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p.s1+'"/><stop offset="1" stop-color="'+p.s2+'"/></linearGradient>'
+    +'<radialGradient id="vg'+seed+'" cx="50%" cy="42%" r="72%"><stop offset="68%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#0B1B34" stop-opacity=".14"/></radialGradient></defs>'
+    +'<rect width="380" height="200" fill="url(#sk'+seed+')"/>'
+    +'<circle cx="318" cy="40" r="22" fill="#fff" opacity=".5"/>'
+    +'<rect y="150" width="380" height="50" fill="#C4CBBE"/>' // lawn
+    +'<rect x="150" y="150" width="60" height="50" fill="#CBCFC4"/>' // path
+    +'<rect x="250" y="150" width="70" height="50" fill="#C9CCC3"/>' // driveway
+    // weeds / overgrowth
+    +(weeds?'<g fill="#8FA06B" opacity=".9"><path d="M36 172 q4 -20 9 -3 q3 -16 8 -1 q6 -13 8 2 z"/><path d="M96 176 q4 -16 9 -2 q4 -12 7 1 z"/><path d="M330 176 q4 -18 9 -2 q4 -12 7 1 z"/></g>':'<path d="M40 176 q5 -12 10 -1 q4 -9 7 1 z" fill="#9DAE7C"/>')
+    // house body + roof + chimney
+    +'<rect x="96" y="98" width="188" height="66" fill="'+p.w+'"/><rect x="96" y="98" width="188" height="66" fill="#000" opacity=".04"/>'
+    +'<rect x="240" y="60" width="16" height="40" fill="'+p.r+'"/>'
+    +(lit?'<ellipse cx="248" cy="52" rx="7" ry="10" fill="#fff" opacity=".35"/>':'')
+    +'<polygon points="82,102 190,46 298,102" fill="'+p.r+'"/><polygon points="82,102 190,46 190,54 94,102" fill="#fff" opacity=".1"/>'
+    // door
+    +'<rect x="176" y="122" width="30" height="42" fill="#43372c"/><circle cx="200" cy="144" r="2" fill="#c9a24b"/>'
+    // windows (left plain, right boarded if vacant)
+    +win(118,false)+win(226,boarded)
+    // foreclosure/notice sign on lawn
+    +(notice?'<g transform="translate(120,158)"><rect x="-1" y="0" width="2" height="20" fill="#7A6A55"/><rect x="-14" y="-14" width="30" height="18" fill="#fff" stroke="#C13A3A" stroke-width="1.5"/><line x1="-10" y1="-9" x2="12" y2="-9" stroke="#C13A3A" stroke-width="2"/><line x1="-10" y1="-4" x2="8" y2="-4" stroke="#C13A3A" stroke-width="2"/></g>':'')
+    +'<rect width="380" height="200" fill="url(#vg'+seed+')"/></svg>';
+}
+function thumbSVG(seed,o){o=o||{};
+  var sky=["#DBE2EA","#E1E6EC","#D6DCE4","#DDE2DF","#DFDEE6"][seed%5],
+      wall=["#E4E0D8","#DAD3C8","#D9DEE6","#E1DCD2","#DED7CD"][seed%5],
+      roof=["#6E5A4C","#7A5A4A","#4E5866","#5C6B5A","#5A4E63"][seed%5];
+  var lit=!o.vac,boarded=o.vac;
+  return '<svg viewBox="0 0 56 40" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'
+    +'<rect width="56" height="40" fill="'+sky+'"/><rect y="30" width="56" height="10" fill="#C4CBBE"/>'
+    +'<rect x="14" y="18" width="28" height="14" fill="'+wall+'"/>'
+    +'<polygon points="11,19 28,8 45,19" fill="'+roof+'"/>'
+    +'<rect x="26" y="23" width="6" height="9" fill="#43372c"/>'
+    +'<rect x="17" y="21" width="7" height="7" fill="'+(boarded?"#8A7B63":(lit?"#C7D8E8":"#3a4656"))+'"/>'
+    +'<rect x="34" y="21" width="7" height="7" fill="'+(lit?"#C7D8E8":"#3a4656")+'"/>'
+    +(o.pre?'<rect x="4" y="26" width="6" height="6" fill="#fff" stroke="#C13A3A" stroke-width="1"/>':'')
+    +'</svg>';
+}
+/* ================= state ================= */
+var state={capIdx:0, filter:"all", q:"", source:"all", sort:{key:"score",dir:-1}, notifOpen:false, acctOpen:false, detailTab:0, curLead:null, _note:"", _payThen:null};
+var auth={signedIn:false, name:"", email:"", initials:""};
+var instant=false;
+var STAR='<svg viewBox="0 0 576 512" aria-hidden="true"><path d="M288 0c12 0 23 7 28 18l63 130 141 21c12 2 22 10 26 22s0 25-8 33L436 375l24 143c2 12-3 24-13 31s-23 8-34 3L288 485 163 552c-11 6-24 5-34-3s-15-19-13-31l24-143L37 224c-9-8-12-21-8-33s14-20 26-22l141-21L260 18c5-11 16-18 28-18z"/></svg>';
+
+/* ================= shell nav ================= */
+var NAV=[
+ {label:null,items:[["#/","grid","Overview",null],["#/account","users","Account",null]]},
+ {label:"Spotter",items:[["#/spotter","gauge","Dashboard",null],["#/spotter/capture","camera","New capture",null],["#/spotter/submissions","list","Submissions",SUBMISSIONS.length],["#/spotter/earnings","dollar","Earnings",null]]},
+ {label:"Buyer",items:[["#/buyer","grid","Dashboard",null],["#/buyer/leads","building","Leads",LEADS.length],["#/buyer/automation","sync","Automation",null],["#/buyer/account","tag","Plan",null]]}
+];
+function activeHref(){
+  var h="#"+(location.hash||"#/").replace(/^#/,"");
+  var all=[];NAV.forEach(function(g){g.items.forEach(function(i){all.push(i[0]);});});
+  var best="#/";all.forEach(function(hr){ if(h===hr||(hr!=="#/"&&h.indexOf(hr)===0)){ if(hr.length>best.length)best=hr; } });
+  return best;
+}
+function renderSidebar(active){
+  el("sideNav").innerHTML=NAV.map(function(g){
+    return (g.label?'<div class="nav-group">'+g.label+'</div>':'')
+     +g.items.map(function(i){var on=i[0]===active;
+       return '<a class="nav-item" href="'+i[0]+'"'+(on?' aria-current="page"':'')+'>'+icon(i[1])+'<span>'+esc(i[2])+'</span>'+(i[3]!=null?'<span class="cnt">'+i[3]+'</span>':'')+'</a>';}).join('');
+  }).join('');
+}
+function setCrumb(arr){
+  el("crumb").innerHTML=arr.map(function(c,i){
+    var label=(c&&c.push)?c[0]:c, href=(c&&c.push)?c[1]:null, last=i===arr.length-1;
+    var seg=(!last&&href)?'<a href="'+href+'" style="color:inherit">'+esc(label)+'</a>':(last?'<b>'+esc(label)+'</b>':esc(label));
+    return (i?'<span class="sep">/</span> ':'')+seg;
+  }).join(' ');
+}
+function openDrawer(){ el("sidebar").classList.add("open"); el("scrim").classList.add("show"); el("hamb").setAttribute("aria-label","Close navigation"); }
+function closeDrawer(){ el("sidebar").classList.remove("open"); el("scrim").classList.remove("show"); var h=el("hamb"); if(h)h.setAttribute("aria-label","Open navigation"); }
+
+/* ================= shared fragments ================= */
+function pagehead(title,sub,actions){
+  return '<div class="pagehead"><div><h1>'+esc(title)+'</h1>'+(sub?'<div class="lede">'+sub+'</div>':'')+'</div>'
+    +(actions?'<div class="ph-actions">'+actions+'</div>':'')+'</div>';
+}
+function statCard(v,label,iconName,foot,spark){
+  return '<div class="stat card"><div class="st"><span class="l">'+label+'</span><span class="ic">'+icon(iconName||"chart")+'</span></div>'
+    +'<div class="v" data-count="'+v+'">0</div>'+(foot?'<div class="foot">'+foot+'</div>':'')+(spark?sparkline(spark):'')+'</div>';
+}
+function statMoney(disp,label,iconName,foot,spark){
+  return '<div class="stat card"><div class="st"><span class="l">'+label+'</span><span class="ic">'+icon(iconName||"dollar")+'</span></div>'
+    +'<div class="v">'+disp+'</div>'+(foot?'<div class="foot">'+foot+'</div>':'')+(spark?sparkline(spark):'')+'</div>';
+}
+function freshnessPill(){return '<span class="freshpill"><span class="d"></span>Updated 2h ago · daily refresh</span>';}
+function complianceFoot(){
+  return '<p class="appfoot"><strong>Demo &amp; compliance:</strong> Every property, owner, score, and search result here is <strong>synthetic</strong> — not real property, owner, or vendor data, and not live production functionality. '
+    +'In production, owner/contact enrichment would come from <strong>licensed third-party providers</strong> under FCRA / GLBA / TCPA-aware processes; spotter payments are structured as non-contingent data purchases (RESPA-aware). '
+    +'All figures are illustrative and pending validation.</p>';
+}
+function hasTag(l,code){return l.tags.some(function(t){return t[0]===code;});}
+function fmtPrice(p){return "$"+Number(p).toFixed(2);}
+function sourceLabel(src){return src==="deepsearch"?"VacancyIQ deep-search":"Community-submitted";}
+function sourceBadge(src){return '<span class="srcbadge '+(src==="deepsearch"?"deep":"comm")+'">'+icon(src==="deepsearch"?"search":"users")+esc(src==="deepsearch"?"Deep-search":"Community")+'</span>';}
+// Generic provider glyphs (not official logos)
+var GOOGLE_G='<svg viewBox="0 0 48 48" width="16" height="16" aria-hidden="true"><path fill="#4285F4" d="M45 24c0-1.6-.1-3.1-.4-4.6H24v9h11.8c-.5 2.7-2 5-4.3 6.6v5.5h7C42.6 36.7 45 30.9 45 24z"/><path fill="#34A853" d="M24 46c5.8 0 10.6-1.9 14.2-5.2l-7-5.5c-1.9 1.3-4.4 2.1-7.2 2.1-5.5 0-10.2-3.7-11.9-8.7H4.9v5.7C8.5 41.6 15.7 46 24 46z"/><path fill="#FBBC05" d="M12.1 28.7c-.4-1.3-.7-2.7-.7-4.7s.3-3.4.7-4.7v-5.7H4.9C3.7 16.5 3 20.1 3 24s.7 7.5 1.9 10.4l7.2-5.7z"/><path fill="#EA4335" d="M24 10.4c3.1 0 5.9 1.1 8.1 3.2l6.1-6.1C34.6 4.1 29.8 2 24 2 15.7 2 8.5 6.4 4.9 13.6l7.2 5.7c1.7-5 6.4-8.9 11.9-8.9z"/></svg>';
+var APPLE_MARK='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M17 12.5c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.9-1.5-.15-2.8.85-3.5.85-.7 0-1.8-.83-3-.81-1.55.02-2.98.9-3.77 2.29-1.6 2.79-.41 6.92 1.15 9.19.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.64zM14.9 5.6c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.67 1.37-.58.68-1.09 1.77-.95 2.81 1.02.08 2.05-.52 2.68-1.28z"/></svg>';
+
+function emptyState(title,msg){return '<div class="empty">'+icon("search")+'<h4>'+esc(title)+'</h4><p>'+esc(msg)+'</p></div>';}
+function skeletonCards(){var o='';for(var i=0;i<4;i++)o+='<div class="sk sk-card"></div>';return '<div class="view"><div class="sk" style="height:30px;width:220px;margin-bottom:20px"></div><div class="grid g4" style="margin-bottom:14px">'+o+'</div><div class="sk" style="height:220px"></div></div>';}
+function skeletonTable(){var r='';for(var i=0;i<8;i++)r+='<div class="sk sk-row"></div>';return '<div class="view"><div class="sk" style="height:34px;width:200px;margin-bottom:22px"></div><div class="sk" style="height:44px;margin-bottom:16px"></div>'+r+'</div>';}
+function feedItem(a){return '<div class="fitem"><div class="fico '+a.ico+'">'+icon(ACT_ICON[a.type]||"sync")+'</div><div style="flex:1"><div class="ft">'+esc(a.t)+'</div><div class="fm">'+esc(a.m)+'</div></div><time>'+esc(a.time)+'</time></div>';}
+
+/* ================= OVERVIEW ================= */
+function overviewView(){
+  var cities=[]; LEADS.forEach(function(l){ if(cities.indexOf(l.city)<0)cities.push(l.city); });
+  var fresh=LEADS.filter(function(l){return l.age<7;}).length;
+  var avg=Math.round(LEADS.reduce(function(a,l){return a+l.score;},0)/LEADS.length);
+  return '<section class="view">'
+   +pagehead("Overview","A working prototype of the VacancyIQ verified marketplace for vacant &amp; distressed property leads. All data is synthetic.",
+       freshnessPill()+'<button class="btn ghost" onclick="VIQ.go(\'#/spotter/capture\')">'+icon("camera")+'Try the Spotter flow</button><button class="btn" onclick="VIQ.go(\'#/buyer\')">Open Buyer dashboard</button>')
+   +'<div class="grid g4" style="margin-bottom:14px">'
+     +statCard(LEADS.length,"Verified leads","building",null,[13,15,14,17,18,19,21,22,23,24])+statCard(fresh,"Fresh (< 7 days)","clock",null,[4,6,5,7,6,8,7,9,8,fresh])
+     +statCard(avg,"Avg. quality score","gauge",null,[78,80,79,81,80,82,81,83,82,avg])+statCard(cities.length,"Markets covered","map",null,[2,3,3,4,4,5,5,6,6,cities.length])+'</div>'
+   +'<div class="ecards" style="margin-bottom:14px">'
+     +'<button class="ecard" onclick="VIQ.go(\'#/spotter\')"><div class="ei">'+icon("camera")+'</div><h3>Spotter experience</h3><p>Capture a property, watch the deep search run, and see it qualify — or get an honest rejection.</p></button>'
+     +'<button class="ecard" onclick="VIQ.go(\'#/buyer\')"><div class="ei">'+icon("building")+'</div><h3>Buyer experience</h3><p>Browse the verified, aging, owner-enriched database, filter for what you want, and pull a lead.</p></button></div>'
+   +'<div class="card pad" style="margin-bottom:14px"><div class="card-h"><h3>Recent activity</h3><a class="link" href="#/buyer/automation">View log →</a></div><div class="feed">'+ACTIVITY.slice(0,4).map(feedItem).join('')+'</div></div>'
+   +'<div class="notice info"><span class="ic">'+icon("shield")+'</span><div><b>This is a working prototype with synthetic data.</b> It is not connected to live property records, skip-trace vendors, or payment systems. Owner contacts are masked and shown only to illustrate the flow.</div></div>'
+   +complianceFoot()+'</section>';
+}
+function ringOrn(){return '';}
+
+/* ================= SPOTTER ================= */
+function spotterHome(){
+  var done=SUBMISSIONS.filter(function(s){return s.status!=="pending";});
+  var qn=SUBMISSIONS.filter(function(s){return s.status==="qualified";}).length;
+  var earn=SUBMISSIONS.reduce(function(a,s){return a+s.earn;},0);
+  var rate=Math.round(qn/Math.max(1,done.length)*100);
+  return '<section class="view">'
+   +pagehead("Spotter dashboard","Photograph vacant or distressed properties and earn a share when a buyer pulls your qualified lead.",'<button class="btn" onclick="VIQ.go(\'#/spotter/capture\')">'+icon("camera")+'New capture</button>')
+   +'<div class="grid g4" style="margin-bottom:16px">'
+     +statCard(SUBMISSIONS.length,"Submissions","list")+statCard(qn,"Qualified","check")
+     +statCard(rate,"Qualify rate %","gauge")+statMoney("$"+earn.toFixed(0),"Earned (illustrative)","dollar")+'</div>'
+   +'<div class="card pad" style="margin-bottom:16px"><div class="card-h"><h3>Recent submissions</h3><a class="link" href="#/spotter/submissions">View all →</a></div>'+submissionList(SUBMISSIONS.slice(0,5))+'</div>'
+   +complianceFoot()+'</section>';
+}
+function submissionList(items){
+  if(!items.length)return emptyState("No submissions yet","Capture your first property to get started.");
+  return '<div class="feed">'+items.map(function(s){
+    var b=s.status==="qualified"?'<span class="badge q">'+icon("check")+'Qualified</span>':s.status==="rejected"?'<span class="badge r">'+icon("x")+'Rejected</span>':'<span class="badge p"><span class="spin" style="width:10px;height:10px"></span>Pending</span>';
+    return '<div class="fitem"><div style="flex:1"><div class="ft">'+esc(s.addr)+'</div><div class="fm">'+esc(s.reason)+'</div></div>'
+      +'<div style="text-align:right">'+b+(s.earn?'<div class="fm" style="color:var(--green);font-weight:700;margin-top:4px">+$'+s.earn.toFixed(2)+'</div>':'<div class="fm" style="margin-top:4px">'+esc(s.when)+'</div>')+'</div></div>';}).join('')+'</div>';
+}
+function captureView(){
+  return '<section class="view">'
+   +pagehead("New capture","Pick a sample property to see the full deep-search, scoring, and qualify / reject flow. One sample also demonstrates a vendor error and retry.")
+   +'<div class="row"><div style="flex:1;min-width:320px;max-width:430px"><div class="card pad" id="captureCard">'+captureForm()+'</div></div>'
+   +'<div style="flex:1;min-width:280px">'+captureExplain()+'</div></div>'
+   +complianceFoot()+'</section>';
+}
+function captureForm(){
+  return '<div style="font-size:11px;color:var(--txt3);font-weight:800;letter-spacing:.3px;margin-bottom:10px">SPOTTER CAPTURE · <span style="color:var(--green)">● GPS 39.75, -84.19</span></div>'
+   +'<button class="photobtn" onclick="VIQ.cyclePhoto()" aria-label="Change sample property photo" style="border:none;width:100%;padding:0;border-radius:12px;overflow:hidden;position:relative;box-shadow:var(--sh)">'
+     +houseSVG(state.capIdx,{vac:true})+'<div style="position:absolute;bottom:10px;left:10px;right:10px;display:flex;justify-content:space-between"><span style="background:rgba(226,61,61,.92);color:#fff;font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:5px">● LIKELY VACANT</span><span style="background:rgba(11,27,52,.6);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:5px">tap to change</span></div></button>'
+   +'<div style="margin-top:14px"><label class="fld" for="addrSel">Property address</label>'
+     +'<select id="addrSel" onchange="VIQ.pickSample(this.value)">'+SAMPLES.map(function(s,i){return '<option value="'+i+'"'+(i===state.capIdx?' selected':'')+'>'+esc(s.addr)+'</option>';}).join('')+'</select></div>'
+   +'<div style="margin-top:12px"><label class="fld" for="noteInp">Notes (optional)</label><input id="noteInp" placeholder="e.g. boarded windows, overgrown yard"></div>'
+   +'<button class="btn block" style="margin-top:16px" id="runBtn" onclick="VIQ.runSearch()">'+icon("search")+'Run deep search</button>';
+}
+function captureExplain(){
+  var steps=[["camera","Capture","Photo + address of a vacant or distressed property."],
+    ["search","Deep search","Owner, contact, liens, status, and valuation are pulled for that address."],
+    ["gauge","Score & filter","Scored against buyer criteria; weak properties are rejected automatically."],
+    ["database","Reject or enrich","Rejected → you're notified. Qualified → added to the aging buyer database."]];
+  return '<div class="card pad"><div class="card-h"><h3>How the agent works</h3></div>'
+   +steps.map(function(p,i){return '<div data-step="'+(i+1)+'" style="display:flex;gap:13px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line2)">'
+    +'<div class="ei" style="width:30px;height:30px;border-radius:6px;background:var(--bluetint);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+icon(p[0])+'</div>'
+    +'<div><h4 style="font-size:14px">'+esc(p[1])+'</h4><p style="font-size:12.5px;color:var(--txt2)">'+esc(p[2])+'</p></div></div>';}).join('')
+   +'<style>.card [data-step]:last-child{border-bottom:none}</style></div>';
+}
+function submissionsView(){
+  return '<section class="view">'+pagehead("My submissions","Every property you\'ve submitted, with its status and your share when a buyer pulls it.",'<button class="btn" onclick="VIQ.go(\'#/spotter/capture\')">'+icon("camera")+'New capture</button>')
+   +'<div class="card pad">'+submissionList(SUBMISSIONS)+'</div>'+complianceFoot()+'</section>';
+}
+function earningsView(){
+  var trend=[2,0,6,4,7,3,8,6,9,7,11,9], earn=SUBMISSIONS.reduce(function(a,s){return a+s.earn;},0), paid=SUBMISSIONS.filter(function(s){return s.earn>0;}).length;
+  return '<section class="view">'+pagehead("Earnings","Illustrative earnings from qualified leads that buyers pulled.")
+   +'<div class="grid g3" style="margin-bottom:16px">'
+     +statMoney("$"+earn.toFixed(2),"Total earned","dollar")+statCard(paid,"Paid submissions","check")+statMoney("$"+(earn/Math.max(1,paid)).toFixed(2),"Avg. per lead","chart")+'</div>'
+   +'<div class="card pad" style="margin-bottom:16px"><div class="card-h"><h3>Earnings trend</h3><span class="subtle" style="margin-left:auto">illustrative</span></div>'+lineSVG(trend,600,90)+'</div>'
+   +'<div class="notice warn"><span class="ic">'+icon("dollar")+'</span><div><b>How spotters get paid.</b> Payments are a flat, non-contingent fee for a data submission — <b>not</b> a commission tied to a closed transaction. This structure is designed to stay clear of RESPA / state referral-fee rules and <b>requires legal review before launch</b>.</div></div>'
+   +complianceFoot()+'</section>';
+}
+
+/* ================= BUYER ================= */
+function buyerDashboard(){
+  var total=LEADS.length,avg=Math.round(LEADS.reduce(function(a,l){return a+l.score;},0)/total);
+  var fresh=LEADS.filter(function(l){return l.age<7;}).length,high=LEADS.filter(function(l){return l.score>=80;}).length;
+  var buckets=[["<70",0],["70-79",0],["80-89",0],["90+",0]];
+  LEADS.forEach(function(l){var i=l.score<70?0:l.score<80?1:l.score<90?2:3;buckets[i][1]++;});
+  var donutSegs=[["Vacant",LEADS.filter(function(l){return hasTag(l,"vac");}).length,"#2563EB"],
+    ["Tax",LEADS.filter(function(l){return hasTag(l,"tax");}).length,"#B4791C"],
+    ["Absentee",LEADS.filter(function(l){return hasTag(l,"abs");}).length,"#6D5FB8"],
+    ["Distress",LEADS.filter(function(l){return hasTag(l,"pre")||hasTag(l,"prob")||hasTag(l,"code");}).length,"#0E7C4A"]];
+  var trend=[6,8,7,10,9,12,11,14,13,15,14,17];
+  return '<section class="view">'
+   +pagehead("Buyer dashboard","Your verified, self-refreshing, owner-enriched lead database. Anything qualified in the Spotter flow appears here.",freshnessPill()+'<button class="btn" onclick="VIQ.go(\'#/buyer/leads\')">'+icon("building")+'Browse leads</button>')
+   +'<div class="grid g4" style="margin-bottom:16px">'
+     +statCard(total,"Verified leads","building",null,[13,15,14,17,18,19,21,22,23,total])
+     +statCard(avg,"Avg. quality score","gauge",null,[78,80,79,81,80,82,81,83,82,avg])
+     +statCard(fresh,"Fresh (< 7 days)","clock",null,[5,7,6,8,7,9,8,10,9,fresh])
+     +statCard(high,"High score (≥ 80)","chart",null,[8,9,9,11,10,12,11,13,12,high])+'</div>'
+   +(function(){var fr=LEADS.filter(function(l){return l.age<7;}).length,md=LEADS.filter(function(l){return l.age>=7&&l.age<30;}).length,od=LEADS.filter(function(l){return l.age>=30;}).length,tt=LEADS.length||1;
+     return '<div class="card pad" style="margin-bottom:16px"><div class="card-h"><h3>Inventory freshness</h3><span class="subtle" style="margin-left:auto">'+LEADS.length+' leads · auto-aged daily</span></div>'
+       +'<div class="stack"><span style="width:'+(fr/tt*100).toFixed(1)+'%;background:var(--green)"></span><span style="width:'+(md/tt*100).toFixed(1)+'%;background:var(--amber)"></span><span style="width:'+(od/tt*100).toFixed(1)+'%;background:var(--red)"></span></div>'
+       +'<div class="legend"><span><i style="background:var(--green)"></i>Fresh &lt; 7d · '+fr+'</span><span><i style="background:var(--amber)"></i>7–29 days · '+md+'</span><span><i style="background:var(--red)"></i>30 days+ · '+od+'</span></div></div>';})()
+   +'<div class="grid g2" style="margin-bottom:16px">'
+     +'<div class="card pad"><div class="card-h"><h3>Score distribution</h3></div>'+barsSVG(buckets)+'</div>'
+     +'<div class="card pad"><div class="card-h"><h3>Signal composition</h3></div><div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">'+donutSVG(donutSegs)
+        +'<div style="flex:1;min-width:140px">'+donutSegs.map(function(s){return '<div style="display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0"><span style="width:11px;height:11px;border-radius:3px;background:'+s[2]+'"></span>'+esc(s[0])+'<b style="margin-left:auto">'+s[1]+'</b></div>';}).join('')+'</div></div></div></div>'
+   +'<div class="grid g2">'
+     +'<div class="card pad"><div class="card-h"><h3>Automation activity</h3><a class="link" href="#/buyer/automation">View all →</a></div><div class="feed">'+ACTIVITY.slice(0,4).map(feedItem).join('')+'</div></div>'
+     +'<div class="card pad"><div class="card-h"><h3>Freshest leads</h3><a class="link" href="#/buyer/leads">All leads →</a></div>'
+        +LEADS.slice().sort(function(a,b){return a.age-b.age;}).slice(0,4).map(function(l){var seed=parseInt(l.id.slice(1),10);return '<a href="#/buyer/leads/'+l.id+'" class="fitem list-link" style="padding-left:6px;padding-right:6px"><span class="thumb sm" style="margin-right:2px">'+thumbSVG(seed,{vac:hasTag(l,"vac"),pre:hasTag(l,"pre"),abs:hasTag(l,"abs")})+'</span><div style="flex:1;min-width:0"><div class="ft">'+esc(l.addr)+'</div><div class="fm">'+esc(l.city)+'</div></div><div style="text-align:right"><div class="scnum" style="color:'+scoreColor(l.score)+'">'+l.score+'</div><div class="age '+ageClass(l.age)+'" style="margin-top:3px">'+(l.age===0?'today':l.age+'d')+'</div></div></a>';}).join('')+'</div></div>'
+   +complianceFoot()+'</section>';
+}
+function buyerSubToolbar(){
+  return '<div class="card pad" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">'
+    +'<div style="position:relative;flex:1;min-width:200px;max-width:320px"><input id="leadSearch" placeholder="Search address, city, or owner…" value="'+esc(state.q)+'" oninput="VIQ.setQuery(this.value)" aria-label="Search leads"></div>'
+    +filterChip("all","All")+filterChip("fresh","Fresh · <7d")+filterChip("high","Score ≥ 80")+filterChip("abs","Absentee")+filterChip("tax","Tax/lien")+filterChip("saved","★ Saved")
+    +'<span style="width:1px;height:22px;background:var(--line);margin:0 2px"></span>'
+    +'<span class="subtle" style="font-weight:600">Source</span>'+sourceChip("all","All")+sourceChip("submitted","Community")+sourceChip("deepsearch","Deep-search")
+    +'<div class="tbmeta" id="leadMeta">'+leadMetaHTML(filteredLeads().length)+'</div></div>';
+}
+function leadMetaHTML(n){
+  var active=state.filter!=="all"||!!state.q||state.source!=="all";
+  return '<span class="subtle">Showing '+n+' of '+LEADS.length+'</span>'+(active?'<button class="linkbtn" onclick="VIQ.clearFilters()">Clear</button>':'');
+}
+function updateLeadMeta(n){var m=el("leadMeta"); if(m)m.innerHTML=leadMetaHTML(n);}
+function filterChip(key,label){return '<button class="chip" data-f="'+key+'" aria-pressed="'+(state.filter===key)+'" onclick="VIQ.setFilter(\''+key+'\')">'+esc(label)+'</button>';}
+function sourceChip(key,label){return '<button class="chip" data-s="'+key+'" aria-pressed="'+(state.source===key)+'" onclick="VIQ.setSource(\''+key+'\')">'+esc(label)+'</button>';}
+function filteredLeads(){
+  var q=state.q.toLowerCase();
+  var out=LEADS.filter(function(l){
+    if(state.filter==="fresh"&&l.age>=7)return false;
+    if(state.filter==="high"&&l.score<80)return false;
+    if(state.filter==="abs"&&!hasTag(l,"abs"))return false;
+    if(state.filter==="tax"&&!hasTag(l,"tax"))return false;
+    if(state.filter==="saved"&&!l.saved)return false;
+    if(state.source!=="all"&&l.source!==state.source)return false;
+    if(q&&!(l.addr.toLowerCase().indexOf(q)>-1||l.city.toLowerCase().indexOf(q)>-1||l.owner.toLowerCase().indexOf(q)>-1))return false;
+    return true;});
+  var k=state.sort.key,d=state.sort.dir;
+  out.sort(function(a,b){var av=a[k],bv=b[k];return av<bv?-d:av>bv?d:0;});
+  return out;
+}
+function sortTh(key,label){
+  var arr=state.sort.key===key?(state.sort.dir>0?' ▲':' ▼'):'';
+  return '<th class="sortable num" onclick="VIQ.setSort(\''+key+'\')" aria-sort="'+(state.sort.key===key?(state.sort.dir>0?'ascending':'descending'):'none')+'">'+esc(label)+'<span class="arr">'+arr+'</span></th>';
+}
+function leadsView(){
+  return '<section class="view">'+pagehead("Leads","Search, filter, and sort the verified database. Owner contacts are masked until a lead is pulled.",freshnessPill())
+   +buyerSubToolbar()+'<div id="leadsTable" aria-live="polite">'+leadsTable()+'</div>'+complianceFoot()+'</section>';
+}
+function leadsTable(){
+  var rows=filteredLeads();
+  updateLeadMeta(rows.length);
+  if(!rows.length){
+    var msg=state.filter==="saved"?emptyState("No saved leads yet","Tap the star on any lead to save it to this list."):emptyState("No leads match","Try clearing a filter or your search. Or qualify one in the Spotter flow.");
+    return '<div class="card">'+msg+'</div>';
+  }
+  return '<div class="card tablewrap"><table class="resp-table"><thead><tr>'
+    +'<th>Property</th><th>Owner</th><th>Signals</th>'+sortTh("est","Est. value")+sortTh("score","Score")+sortTh("age","Days")+'<th>Action</th></tr></thead><tbody>'
+    +rows.map(function(l){var seed=parseInt(l.id.slice(1),10);
+      return '<tr onclick="VIQ.go(\'#/buyer/leads/'+l.id+'\')">'
+       +'<td data-l="Property"><div class="leadcell"><span class="thumb sm">'+thumbSVG(seed,{vac:hasTag(l,"vac"),pre:hasTag(l,"pre"),abs:hasTag(l,"abs")})+'</span><div style="min-width:0"><div class="addr">'+esc(l.addr)+'</div><div class="subtle" style="display:flex;align-items:center;gap:6px">'+esc(l.city)+' '+sourceBadge(l.source)+'</div></div></div></td>'
+       +'<td data-l="Owner"><span class="subtle" style="display:inline-flex;align-items:center;gap:5px">'+icon("lock")+'Locked</span></td>'
+       +'<td data-l="Signals">'+tagsHTML(l.tags.slice(0,2))+(l.tags.length>2?'<span class="tagmore">+'+(l.tags.length-2)+'</span>':'')+'</td>'
+       +'<td data-l="Est. value" class="num">'+money(l.est)+'</td>'
+       +'<td data-l="Score" class="num"><span class="scnum" style="color:'+scoreColor(l.score)+'">'+l.score+'</span></td>'
+       +'<td data-l="Days" class="num"><span class="age '+ageClass(l.age)+'">'+(l.age===0?'today':l.age+'d')+'</span></td>'
+       +'<td data-l="Action" class="actcell"><div style="display:inline-flex;gap:8px;align-items:center"><button class="bm sm" aria-label="'+(l.saved?"Remove from saved":"Save lead")+'" aria-pressed="'+(l.saved?"true":"false")+'" onclick="event.stopPropagation();VIQ.toggleSave(\''+l.id+'\')">'+STAR+'</button><button class="btn sm" onclick="event.stopPropagation();VIQ.go(\'#/buyer/leads/'+l.id+'\')">View · '+fmtPrice(l.price)+'</button></div></td></tr>';}).join('')
+    +'</tbody></table></div>';
+}
+function leadDetail(id){
+  var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return notFoundView();
+  state.curLead=id;
+  var tabs=["Score & signals","Owner","Comparables","Location"];
+  var bm='<button class="bm" aria-label="'+(l.saved?"Remove from saved":"Save lead")+'" aria-pressed="'+(l.saved?"true":"false")+'" onclick="VIQ.toggleSave(\''+l.id+'\')">'+STAR+'</button>';
+  return '<section class="view">'
+   +'<a class="backlink" href="#/buyer/leads">← Back to leads</a>'
+   +'<div class="pagehead"><div><h1>'+esc(l.addr)+'</h1><div class="lede">'+esc(l.city)+' · <span class="age '+ageClass(l.age)+'">'+(l.age===0?'listed today':l.age+' days on list')+'</span></div></div>'
+     +'<div class="ph-actions" style="align-items:center;gap:12px">'+bm+ringSVG(l.score,84,scoreColor(l.score))+'</div></div>'
+   +'<div class="tabs" role="tablist" aria-label="Lead details" onkeydown="VIQ.tabKey(event)">'
+     +tabs.map(function(t,i){return '<button class="tab" role="tab" id="dtab'+i+'" aria-selected="'+(state.detailTab===i)+'" tabindex="'+(state.detailTab===i?0:-1)+'" onclick="VIQ.setTab('+i+')">'+esc(t)+'</button>';}).join('')+'</div>'
+   +'<div id="detailPanel" class="tabpanel" role="tabpanel" aria-labelledby="dtab'+state.detailTab+'">'+detailPanel(l,state.detailTab)+'</div>'
+   +complianceFoot()+'</section>';
+}
+function detailPanel(l,t){
+  if(t===1) return '<div class="card pad"><div class="card-h"><h3>Owner enrichment</h3></div>'+ownerBlock(l)+'</div>';
+  if(t===2) return '<div class="card pad"><div class="card-h"><h3>Comparable sales (synthetic)</h3></div>'+l.comps.map(function(c){return '<div class="kv"><span>'+esc(c.addr)+' · '+c.sqft+' sqft</span><b>'+esc(c.sold)+' · '+esc(c.when)+'</b></div>';}).join('')+'</div>';
+  if(t===3) return '<div class="card" style="padding:0;overflow:hidden"><div class="mapph">'+mapSVG(l.lat,l.lng)+'<span class="mapnote">Approximate location · illustrative, not a live map</span></div></div>';
+  return '<div class="detail-grid"><div>'
+    +'<div class="card" style="padding:0;overflow:hidden;margin-bottom:16px">'+houseSVG(parseInt(l.id.slice(1),10),{vac:hasTag(l,"vac"),abs:hasTag(l,"abs"),pre:hasTag(l,"pre"),tax:hasTag(l,"tax")})+'</div>'
+    +'<div class="card pad"><div class="card-h"><h3>Score breakdown</h3></div><div class="breakdown">'+l.breakdown.map(function(b){return '<div class="bd"><span>'+esc(b[0])+'</span><div class="track"><div class="tf" style="width:'+b[1]+'%"></div></div><b>'+b[1]+'</b></div>';}).join('')+'</div></div></div>'
+    +'<div><div class="card pad"><div class="card-h"><h3>Property</h3></div>'
+      +'<div class="kv"><span>Signals</span><b>'+tagsHTML(l.tags)+'</b></div>'
+      +'<div class="kv"><span>Est. value</span><b>'+money(l.est)+'</b></div>'
+      +'<div class="kv"><span>Beds / baths</span><b>'+l.beds+' / '+l.baths+'</b></div>'
+      +'<div class="kv"><span>Approx. sqft</span><b>'+l.sqft.toLocaleString()+'</b></div>'
+      +'<div class="kv"><span>Owner type</span><b>'+esc(l.ownerType)+'</b></div></div></div></div>';
+}
+function setTab(i){ state.detailTab=i; var l=LEADS.filter(function(x){return x.id===state.curLead;})[0]; var p=el("detailPanel"); if(p&&l){p.innerHTML=detailPanel(l,i);p.setAttribute("aria-labelledby","dtab"+i);}
+  [].forEach.call(document.querySelectorAll(".tab"),function(t,idx){t.setAttribute("aria-selected",idx===i);t.setAttribute("tabindex",idx===i?0:-1);}); }
+function tabKey(e){ var tabs=[].slice.call(document.querySelectorAll(".tab")); var idx=tabs.indexOf(document.activeElement); if(idx<0)return;
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); var n=(idx+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length; tabs[n].focus(); setTab(n); } }
+function toggleSave(id){
+  var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return; l.saved=!l.saved;
+  toast(l.saved?"Saved to your list.":"Removed from your list.","ok");
+  var seg=currentSegs();
+  if(seg[1]==="leads"&&seg[2]){ [].forEach.call(document.querySelectorAll('.bm'),function(b){ if((b.getAttribute("onclick")||"").indexOf("'"+id+"'")>-1){b.setAttribute("aria-pressed",l.saved?"true":"false");b.setAttribute("aria-label",l.saved?"Remove from saved":"Save lead");} }); }
+  else { var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+}
+function ownerBlock(l){
+  if(l.pulled){
+    return '<div class="kv"><span>Owner</span><b>'+esc(l.owner.replace(/█/g,"a"))+'</b></div>'
+     +'<div class="kv"><span>Mailing (masked)</span><b>PO Box ██, '+esc(l.city)+'</b></div>'
+     +'<div class="kv"><span>Phone (masked)</span><b>(***) ***-'+String(1000+l.score*7%9000).slice(-4)+'</b></div>'
+     +'<div class="kv"><span>Ownership length</span><b>'+l.ownYears+' yrs'+(l.absentee?' · absentee':'')+'</b></div>'
+     +'<div class="kv"><span>Purchased via</span><b>Apple Pay · '+fmtPrice(l.price)+' (simulated)</b></div>'
+     +'<div class="notice info" style="margin-top:12px"><span class="ic">'+icon("shield")+'</span><div><b>Compliance boundary.</b> Contact data (synthetic here) comes from licensed vendors for real-estate lead-gen only — <b>no FCRA-covered use</b>, and you must <b>DNC / TCPA scrub before any outreach</b>.</div></div>';
+  }
+  return '<div class="kv"><span>Source</span><b>'+sourceBadge(l.source)+'</b></div>'
+   +'<div class="kv"><span>Owner</span><b class="locked">'+esc(l.owner.replace(/█/g,"X"))+'</b></div>'
+   +'<div class="kv"><span>Mailing address</span><b class="locked">1234 Private St</b></div>'
+   +'<div class="kv"><span>Phone</span><b class="locked">(555) 555-5555</b></div>'
+   +'<div class="kv"><span>Price</span><b>'+fmtPrice(l.price)+(l.source==="deepsearch"?' · '+fmtPrice(DEEP_DISCOUNT)+' below submitted':'')+'</b></div>'
+   +'<button class="btn block" style="margin-top:14px" onclick="VIQ.buyListing(\''+l.id+'\')">'+icon("lock")+'Buy listing &amp; unlock owner · '+fmtPrice(l.price)+'</button>';
+}
+function automationView(){
+  var autos=[
+    {ico:"blue",icon:"sync",name:"Daily deep-research",desc:"Scans sources each morning and adds fresh vacant / distressed properties; auto-rejects weak ones.",sched:"Every day · 6:00 AM",next:"Tomorrow 6:00 AM",last:"14 added, 6 rejected"},
+    {ico:"amber",icon:"broom",name:"Weekly cleanup",desc:"De-dupes, re-checks status, and drops sold or dead leads so buyers only ever see live inventory.",sched:"Every Monday · 4:00 AM",next:"Mon 4:00 AM",last:"9 removed"},
+    {ico:"green",icon:"shield",name:"Owner re-enrichment",desc:"Refreshes owner/contact data for aging leads from licensed vendors, within compliance limits.",sched:"Every 14 days",next:"In 6 days",last:"31 refreshed"}];
+  return '<section class="view">'+pagehead("Automation & data health","The engine that keeps the list fresh, deduped, and enriched — the core of the product.")
+   +'<div class="notice warn" style="margin-bottom:18px"><span class="ic">'+icon("shield")+'</span><div><b>Simulated automation — not live production functionality.</b> These schedules and results are illustrative. No live vendor calls, scraping, or data purchases occur in this demo.</div></div>'
+   +'<div class="grid g3" style="margin-bottom:16px">'+autos.map(function(a){return '<div class="card pad"><div class="card-h"><div class="fico '+a.ico+'" style="width:38px;height:38px;border-radius:11px">'+icon(a.icon)+'</div><h3 style="font-size:15px">'+esc(a.name)+'</h3></div>'
+     +'<p style="font-size:12.5px;color:var(--txt2);margin-bottom:10px">'+esc(a.desc)+'</p>'
+     +'<div class="kv" style="padding:6px 0"><span>Schedule</span><b>'+esc(a.sched)+'</b></div><div class="kv" style="padding:6px 0"><span>Next run</span><b>'+esc(a.next)+'</b></div><div class="kv" style="padding:6px 0;border:none"><span>Last result</span><b style="color:var(--green)">'+esc(a.last)+'</b></div></div>';}).join('')+'</div>'
+   +'<div class="card pad"><div class="card-h"><h3>Activity log (simulated)</h3></div><div class="feed">'+ACTIVITY.map(feedItem).join('')+'</div></div>'
+   +complianceFoot()+'</section>';
+}
+function accountView(){
+  return '<section class="view">'+pagehead("Plan","Subscription access to the verified database. Prices are illustrative and deliberately below the market leader\'s ceiling — pending real willingness-to-pay validation.")
+   +'<div class="grid g3" style="margin-bottom:16px">'+PLANS.map(function(p){return '<div class="card pad" style="position:relative;'+(p.popular?'border-color:var(--blue);box-shadow:0 0 0 2px rgba(30,116,255,.22),var(--sh2)':'')+'">'
+     +(p.popular?'<span class="badge q" style="position:absolute;top:-11px;left:20px;background:var(--blue);color:#fff">MOST POPULAR</span>':'')
+     +'<h3 style="font-size:17px">'+esc(p.name)+'</h3><p style="font-size:12.5px;color:var(--txt3);margin-bottom:12px">'+esc(p.tagline)+'</p>'
+     +'<div style="font-size:32px;font-weight:800;letter-spacing:-1.5px;color:var(--ink)">$'+p.price+'<span style="font-size:14px;color:var(--txt3);font-weight:600">/mo</span></div>'
+     +'<div style="margin:14px 0">'+p.feats.map(function(f){return '<div style="display:flex;gap:9px;align-items:center;font-size:13px;padding:5px 0"><span style="color:var(--green);display:flex">'+icon("check")+'</span>'+esc(f)+'</div>';}).join('')+'</div>'
+     +'<button class="btn block'+(p.popular?'':' ghost')+'" onclick="VIQ.toast(\'This is a demo — no billing is connected.\',\'info\')">Choose '+esc(p.name)+'</button></div>';}).join('')+'</div>'
+   +'<div class="notice info"><span class="ic">'+icon("tag")+'</span><div><b>Pricing is illustrative [ASSUMPTION].</b> The category leader (DealMachine) tops out at <b>$249/mo</b> [VERIFIED, 2026]. VacancyIQ launches below that ceiling; any premium must be earned with demonstrably fresher, cleaner data and validated in the pilot. No billing is connected in this demo.</div></div>'
+   +complianceFoot()+'</section>';
+}
+function notFoundView(){
+  return '<section class="view" style="text-align:center;padding:70px 20px"><h1 style="font-size:26px;color:var(--ink)">Page not found</h1>'
+   +'<p class="lede" style="margin:8px auto 18px;color:var(--txt2)">That screen doesn\'t exist in the demo.</p>'
+   +'<button class="btn" style="margin:0 auto" onclick="VIQ.go(\'#/\')">Back to overview</button></section>';
+}
+
+/* ================= deep search ================= */
+function runSearch(retry){
+  var s=SAMPLES[state.capIdx]; var card=el("captureCard"); if(!card)return;
+  if(!retry){ var ne=el("noteInp"); state._note=ne?ne.value.trim():""; }
+  var stages=[["Matching parcel & owner record",["Parcel APN matched","Owner of record located"]],
+    ["Checking liens, taxes & status",["Tax status pulled","Liens & code violations checked"]],
+    ["Pulling valuation & comps",["AVM estimate retrieved","3 comparables found"]],
+    ["Scoring against buyer criteria",["Distress signals weighted","Qualify threshold applied"]]];
+  card.innerHTML='<div style="font-size:12px;color:var(--txt3);font-weight:700;margin-bottom:6px">DEEP SEARCH · <b style="color:var(--txt)">'+esc(s.addr)+'</b></div>'
+    +'<div class="progress"><div class="fill" id="dsFill"></div></div>'
+    +'<div class="pipe" id="dsPipe" aria-live="polite">'+stages.map(function(st,i){return '<div class="pl" id="pl'+i+'"><div class="top"><div class="d"><span class="spin" style="display:none"></span><span class="ck" style="display:none">'+icon("check")+'</span></div><span class="name">'+esc(st[0])+'</span></div><div class="subs" id="sub'+i+'"></div></div>';}).join('')+'</div>';
+  if(instant){ if(s.outcome==="error"&&!retry){showError(s);}else{showResult(s,retry);} return; }
+  var i=0;
+  function advance(){
+    if(i>0){var prev=el("pl"+(i-1));if(prev){prev.classList.remove("on");prev.classList.add("done");var sp=prev.querySelector(".spin"),ck=prev.querySelector(".ck");if(sp)sp.style.display="none";if(ck)ck.style.display="inline-flex";}}
+    if(s.outcome==="error"&&!retry&&i===s.errStage){ showError(s); return; }
+    if(i>=stages.length){ showResult(s,retry); return; }
+    var cur=el("pl"+i); cur.classList.add("on"); var sp=cur.querySelector(".spin"); if(sp)sp.style.display="block";
+    el("sub"+i).innerHTML=stages[i][1].map(function(x){return '<span>• '+esc(x)+'</span>';}).join('');
+    var f=el("dsFill"); if(f)f.style.width=((i+1)/stages.length*100)+"%";
+    i++; setTimeout(advance,760);
+  }
+  advance();
+}
+function showError(s){
+  var card=el("captureCard"); if(!card)return;
+  var plErr=el("pl"+s.errStage); if(plErr){plErr.classList.remove("on");plErr.classList.add("err");var sp=plErr.querySelector(".spin");if(sp)sp.style.display="none";var d=plErr.querySelector(".d");if(d)d.innerHTML="!";}
+  card.insertAdjacentHTML("beforeend",'<div class="notice warn" role="alert" style="margin-top:14px"><span class="ic">!</span><div><b>Data vendor timed out (simulated).</b> The enrichment step couldn\'t complete. In production this retries automatically and falls back to a second provider.</div></div>'
+    +'<button class="btn block" style="margin-top:12px" id="retryBtn" onclick="VIQ.runSearch(true)">'+icon("sync")+'Retry deep search</button>');
+}
+function showResult(s,retry){
+  var card=el("captureCard"); if(!card)return;
+  if(s.outcome==="rej"){
+    card.innerHTML='<div class="result rej">'+ringSVG(s.score,88,"var(--red)")+'<h3>Didn\'t make the cut</h3><p>'+esc(s.reason)+'</p></div>'
+      +'<p class="subtle" style="text-align:center;margin:12px 0">Score '+s.score+'/100 — below the qualify threshold (70). This lead never reaches a buyer, so the list stays clean.</p>'
+      +'<button class="btn ghost block" onclick="VIQ.resetCapture()">← Try another property</button>';
+    announce("Result: rejected. "+s.reason);
+  }else{
+    var note=retry?" (recovered after retry)":"";
+    card.innerHTML='<div class="result ok">'+ringSVG(s.score,88,"var(--green)")+'<h3>Qualified &amp; added</h3><p>'+esc(s.reason)+note+'</p></div>'
+      +'<div class="card pad" style="margin-top:14px;box-shadow:none;background:var(--panel2)">'
+        +'<div class="kv"><span>Owner (masked)</span><b>'+esc(s.owner)+'</b></div>'
+        +(state._note?'<div class="kv"><span>Your note</span><b>'+esc(state._note)+'</b></div>':'')
+        +'<div class="kv"><span>Status</span><b style="color:var(--green)">Added to buyer database</b></div>'
+        +'<div class="kv"><span>Listing type</span><b>'+sourceBadge("submitted")+' Community-submitted</b></div>'
+        +'<div class="kv" style="border:none"><span>You&rsquo;re paid when a buyer purchases</span><b style="color:var(--blue)">$8 – $12 <span class="subtle" style="font-weight:500">(illustrative)</span></b></div></div>'
+        +'<p style="font-size:11.5px;color:var(--txt3);margin-top:8px">[ASSUMPTION] Payout is a non-contingent data-submission fee (RESPA-aware), not tied to a closed transaction; amounts pending validation and legal review.</p>'
+      +'<button class="btn block" style="margin-top:14px" onclick="VIQ.go(\'#/buyer/leads\')">See it in the buyer database →</button>'
+      +'<button class="btn ghost block" style="margin-top:10px" onclick="VIQ.resetCapture()">← Add another</button>';
+    announce("Result: qualified, score "+s.score+". Added to the buyer database.");
+    toast("Lead qualified — added to the database.","ok");
+  }
+}
+
+/* ================= notif / modal / toast ================= */
+var NOTIF_TO=["#/spotter/earnings","#/spotter/submissions","#/buyer/automation"];
+function renderNotif(){
+  return '<div class="notif-panel" role="dialog" aria-label="Notifications"><h4>Notifications</h4>'
+   +NOTIFS.map(function(n,i){return '<button class="fitem list-link" style="padding:10px;width:100%;text-align:left;border:none;background:none;cursor:pointer" onclick="VIQ.notifGo('+i+')"><div class="fico '+n.ico+'" style="width:30px;height:30px">'+icon(n.ico==="green"?"dollar":n.ico==="red"?"x":"sync")+'</div><div style="flex:1"><div class="ft" style="font-size:13px">'+esc(n.t)+'</div><div class="fm">'+esc(n.m)+'</div></div><time>'+esc(n.time)+'</time></button>';}).join('')
+   +'<div style="padding:9px 10px 5px;border-top:1px solid var(--line2);margin-top:4px"><a href="#/buyer/automation" onclick="VIQ.closeNotif()" style="font-size:12.5px;color:var(--blue);font-weight:700">View full activity log →</a></div></div>';
+}
+function notifGo(i){ closeNotif(); go(NOTIF_TO[i]||"#/"); }
+function toggleNotif(e){ if(e)e.stopPropagation(); state.notifOpen=!state.notifOpen; el("notifPanel").innerHTML=state.notifOpen?renderNotif():""; el("notifBtn").setAttribute("aria-expanded",state.notifOpen); if(state.notifOpen){var b=el("notifBadge");if(b)b.style.display="none";} }
+function closeNotif(){ state.notifOpen=false; var p=el("notifPanel"); if(p)p.innerHTML=""; var b=el("notifBtn"); if(b)b.setAttribute("aria-expanded","false"); }
+var lastFocused=null;
+function openModal(html){
+  lastFocused=document.activeElement;
+  el("modalRoot").innerHTML='<div class="backdrop" id="backdrop"><div class="modal" role="dialog" aria-modal="true" aria-label="Dialog"><button class="iconbtn close" aria-label="Close dialog" onclick="VIQ.closeModal()">'+icon("x")+'</button>'+html+'</div></div>';
+  el("backdrop").addEventListener("mousedown",function(ev){if(ev.target.id==="backdrop")closeModal();});
+  var f=el("modalRoot").querySelector("button,a,input,select,textarea"); if(f)f.focus();
+  document.addEventListener("keydown",escTrap);
+}
+function escTrap(e){ if(e.key==="Escape")closeModal(); if(e.key==="Tab"){var f=el("modalRoot").querySelectorAll("button,a[href],input,select,textarea");if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}} }
+function closeModal(){ el("modalRoot").innerHTML=""; document.removeEventListener("keydown",escTrap); if(lastFocused&&lastFocused.focus)lastFocused.focus(); }
+function confirmPull(id){ openPay(id); }
+function pullLead(id){ completePurchase(id); }
+function openAbout(){
+  openModal('<h3>About this demo</h3><p style="color:var(--txt2);font-size:13.5px;line-height:1.6;margin-bottom:12px">VacancyIQ is a three-sided marketplace: spotters find vacant / distressed properties, an agentic engine verifies and enriches them, and investors and realtors buy the clean, aging list.</p>'
+   +'<div class="notice warn" style="margin-bottom:12px"><span class="ic">'+icon("shield")+'</span><div><b>Everything here is synthetic and illustrative.</b> No real property, owner, or vendor data; no live automation, scraping, skip-tracing, or billing. Owner contacts are masked.</div></div>'
+   +'<p style="font-size:12.5px;color:var(--txt3);line-height:1.6"><b>Compliance boundaries preserved:</b> production enrichment would use licensed vendors under FCRA / GLBA / TCPA; spotter pay is a non-contingent data purchase (RESPA-aware) pending legal review; pricing is illustrative, below the $249/mo market ceiling, pending validation.</p>');
+}
+function toast(msg,type){
+  var d=document.createElement("div"); d.className="toast "+(type||"info");
+  d.innerHTML='<span class="tc">'+icon(type==="ok"?"check":"shield")+'</span><span>'+esc(msg)+'</span>';
+  el("toasts").appendChild(d);
+  setTimeout(function(){ if(d.parentNode){d.style.transition="opacity .3s,transform .3s";d.style.opacity="0";d.style.transform="translateY(10px)";setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},300);} },3200);
+}
+
+function renderAcctMenu(){
+  var head=auth.signedIn
+    ? '<div class="mh"><span class="av">'+esc(auth.initials)+'</span><span><b>'+esc(auth.name)+'</b><span>'+esc(auth.email)+' · Google (simulated)</span></span></div>'
+    : '<div class="mh"><span class="av">?</span><span><b>Not signed in</b><span>Browsing as guest</span></span></div>';
+  var authItem=auth.signedIn
+    ? '<button role="menuitem" onclick="VIQ.closeAcct();VIQ.signOut()">'+icon("lock")+'Sign out</button>'
+    : '<button role="menuitem" onclick="VIQ.closeAcct();VIQ.signIn()">'+icon("users")+'Sign in with Google (simulated)</button>';
+  return '<div class="menu" role="menu" aria-label="Account menu">'
+   +head
+   +'<a role="menuitem" href="#/account" onclick="VIQ.closeAcct()">'+icon("users")+'Account &amp; profile</a>'
+   +authItem
+   +'<div class="div"></div>'
+   +'<button role="menuitem" onclick="VIQ.closeAcct();VIQ.openAbout()">'+icon("shield")+'About this demo</button>'
+   +'<button role="menuitem" onclick="VIQ.closeAcct();VIQ.openCompliance()">'+icon("lock")+'Compliance &amp; disclaimers</button>'
+   +'<button role="menuitem" onclick="VIQ.resetDemo()">'+icon("sync")+'Reset demo data</button>'
+   +'<div class="div"></div><div class="lab">Switch view</div>'
+   +'<a role="menuitem" href="#/" onclick="VIQ.closeAcct()">'+icon("grid")+'Overview</a>'
+   +'<a role="menuitem" href="#/spotter" onclick="VIQ.closeAcct()">'+icon("camera")+'Spotter app</a>'
+   +'<a role="menuitem" href="#/buyer" onclick="VIQ.closeAcct()">'+icon("building")+'Buyer app</a></div>';
+}
+function toggleAcct(e){ if(e)e.stopPropagation(); if(state.notifOpen)closeNotif(); state.acctOpen=!state.acctOpen; el("acctMenu").innerHTML=state.acctOpen?renderAcctMenu():""; el("acctBtn").setAttribute("aria-expanded",state.acctOpen); }
+function closeAcct(){ state.acctOpen=false; var m=el("acctMenu"); if(m)m.innerHTML=""; var b=el("acctBtn"); if(b)b.setAttribute("aria-expanded","false"); }
+function resetDemo(){ LEADS.forEach(function(l){l.pulled=false;l.saved=false;}); state.filter="all";state.q="";state.source="all";state.sort={key:"score",dir:-1};state.capIdx=0;state.detailTab=0;state._note=""; closeAcct(); toast("Demo data reset.","ok"); go("#/"); render(); }
+function openCompliance(){
+  openModal('<h3>Compliance &amp; disclaimers</h3>'
+   +'<div class="notice warn" style="margin-bottom:14px"><span class="ic">'+icon("shield")+'</span><div><b>All data is synthetic.</b> No real property, owner, or vendor data; no live automation, scraping, skip-tracing, or billing in this demo.</div></div>'
+   +'<div style="font-size:13px;color:var(--txt2);line-height:1.7">'
+   +'<p style="margin-bottom:9px"><b>Owner &amp; contact enrichment.</b> In production this comes from licensed vendors for real-estate lead-gen only — <b>no FCRA-covered use</b> (credit, tenant, employment), and DNC / TCPA scrub is required before any outreach.</p>'
+   +'<p style="margin-bottom:9px"><b>Spotter payments.</b> A flat, non-contingent fee for a data submission (RESPA-aware) — <b>not</b> a commission on a closed transaction. Requires legal review before launch.</p>'
+   +'<p><b>Pricing.</b> Illustrative [ASSUMPTION]; below the $249/mo market ceiling [VERIFIED, 2026]; pending willingness-to-pay validation.</p></div>');
+}
+
+/* ================= auth (simulated Google sign-in) ================= */
+function setUser(){ auth.signedIn=true; auth.name="Demo User"; auth.email="demo.user@gmail.com"; auth.initials="DU"; }
+function signIn(){ setUser(); toast("Signed in with Google (simulated).","ok"); render(); }
+function signOut(){ auth.signedIn=false; auth.name=""; auth.email=""; auth.initials=""; closeAcct(); toast("Signed out.","info"); render(); }
+function openSignIn(thenFn){
+  state._payThen=thenFn||null;
+  openModal('<h3>Sign in to continue</h3>'
+    +'<p style="color:var(--txt2);font-size:13.5px;margin-bottom:16px">Sign in to purchase listings and submit properties. This is a <b>simulated</b> sign-in — no real Google authentication, and nothing leaves this page.</p>'
+    +'<button class="gbtn" onclick="VIQ._afterSignIn()">'+GOOGLE_G+'Continue with Google</button>'
+    +'<p style="font-size:11.5px;color:var(--txt3);margin-top:12px">Simulated Google sign-in. [ASSUMPTION: OAuth, consent, and account data pending integration and legal review.]</p>');
+}
+function _afterSignIn(){ var then=state._payThen; state._payThen=null; setUser(); closeModal(); toast("Signed in with Google (simulated).","ok"); if(typeof then==="function"){then();}else{render();} }
+function pricingExplainer(){
+  return '<div class="card pad"><div class="card-h"><h3>How listing pricing works</h3><span class="subtle" style="margin-left:auto">illustrative</span></div>'
+    +'<div class="payrow"><span>'+sourceBadge("submitted")+' Community-submitted</span><b>Priced at the amount paid to the submitting user</b></div>'
+    +'<div class="payrow"><span>'+sourceBadge("deepsearch")+' VacancyIQ deep-search</span><b>'+fmtPrice(DEEP_DISCOUNT)+' less than a comparable submitted listing</b></div>'
+    +'<p style="font-size:11.5px;color:var(--txt3);margin-top:10px">[ASSUMPTION] Per-listing prices, user payouts, and margins are illustrative and pending willingness-to-pay validation and legal review. Subscription pricing stays below the market leader\'s $249/mo ceiling [VERIFIED, 2026].</p></div>';
+}
+function accountProfileView(){
+  var head=pagehead("Account", auth.signedIn?"You're signed in (simulated). Manage your session, plan, and disclosures.":"Browse freely — sign in to buy listings or submit properties.");
+  var body;
+  if(!auth.signedIn){
+    body='<div class="signin-wrap"><div class="signin-card">'
+      +'<div class="logo">'+icon("building")+'</div>'
+      +'<h2 style="font-size:18px;margin-bottom:4px">Welcome to VacancyIQ</h2>'
+      +'<p style="color:var(--txt2);font-size:13.5px;margin-bottom:16px">The verified marketplace for vacant &amp; distressed property leads. Sign in to purchase or submit.</p>'
+      +'<button class="gbtn" onclick="VIQ.signIn()">'+GOOGLE_G+'Continue with Google</button>'
+      +'<a class="btn ghost block" href="#/buyer/leads" style="margin-top:10px">Browse without signing in</a>'
+      +'<p style="font-size:11.5px;color:var(--txt3);margin-top:14px">Simulated sign-in — no real authentication. [ASSUMPTION: OAuth, consent &amp; account data pending integration and legal review.]</p>'
+      +'</div></div>';
+  } else {
+    body='<div class="card pad" style="margin-bottom:16px;display:flex;align-items:center;gap:12px">'
+      +'<span class="av" style="width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">'+esc(auth.initials)+'</span>'
+      +'<div style="flex:1;min-width:0"><div style="font-weight:700">'+esc(auth.name)+'</div><div class="subtle">'+esc(auth.email)+' · Google (simulated)</div></div>'
+      +'<button class="btn ghost sm" onclick="VIQ.signOut()">Sign out</button></div>'
+      +'<div class="grid g3" style="margin-bottom:16px">'
+        +'<a class="ecard" href="#/buyer/leads"><div class="ei">'+icon("building")+'</div><h3>Browse listings</h3><p>Verified, aging, owner-enriched.</p></a>'
+        +'<a class="ecard" href="#/spotter/capture"><div class="ei">'+icon("camera")+'</div><h3>Submit a property</h3><p>Earn when a buyer purchases it.</p></a>'
+        +'<a class="ecard" href="#/buyer/account"><div class="ei">'+icon("tag")+'</div><h3>Plans &amp; pricing</h3><p>Subscription &amp; per-listing.</p></a>'
+      +'</div>';
+  }
+  return '<section class="view">'+head+body+pricingExplainer()
+    +'<div class="card pad" style="margin-top:16px"><div class="card-h"><h3>Payments &amp; data</h3></div>'
+    +'<div class="notice info"><span class="ic">'+icon("shield")+'</span><div><b>Simulated integrations.</b> Google sign-in and Apple Pay are demonstrations only — no real authentication, no charge, and nothing leaves this page. [ASSUMPTION: payment processing, KYC, refunds, and data-access agreements pending; legal review required.]</div></div></div>'
+    +complianceFoot()+'</section>';
+}
+/* ================= purchase (simulated Apple Pay) ================= */
+function buyListing(id){ if(!auth.signedIn){ openSignIn(function(){ openPay(id); }); } else { openPay(id); } }
+function openPay(id){
+  var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return;
+  openModal('<h3>Purchase listing</h3>'
+    +'<div class="card pad" style="box-shadow:none;background:var(--panel2);margin-bottom:14px;padding:12px"><div style="display:flex;gap:10px;align-items:center">'
+      +'<span class="thumb sm">'+thumbSVG(parseInt(l.id.slice(1),10),{vac:hasTag(l,"vac"),pre:hasTag(l,"pre"),abs:hasTag(l,"abs")})+'</span>'
+      +'<div style="flex:1;min-width:0"><div class="addr">'+esc(l.addr)+'</div><div class="subtle">'+esc(l.city)+' · '+sourceLabel(l.source)+'</div></div></div></div>'
+    +'<div class="payrow"><span>Source</span><b>'+sourceBadge(l.source)+'</b></div>'
+    +(l.source==="deepsearch"
+        ?'<div class="payrow"><span>Deep-search pricing</span><b>'+fmtPrice(DEEP_DISCOUNT)+' below a comparable submitted listing</b></div>'
+        :'<div class="payrow"><span>Submitting user is paid</span><b>'+fmtPrice(l.userPayout)+'</b></div>')
+    +'<div class="payrow"><span>Total</span><b>'+fmtPrice(l.price)+'</b></div>'
+    +'<div class="notice info" style="margin:14px 0"><span class="ic">'+icon("shield")+'</span><div><b>Before you buy.</b> Owner/contact data is licensed for real-estate lead-gen only — <b>not for any FCRA-covered purpose</b>, and you must <b>scrub against DNC / honor TCPA</b> before contacting anyone.</div></div>'
+    +'<button class="apay" onclick="VIQ.completePurchase(\''+id+'\')">'+APPLE_MARK+'Pay '+fmtPrice(l.price)+'</button>'
+    +'<p style="font-size:11.5px;color:var(--txt3);text-align:center;margin-top:10px">Simulated Apple Pay — no real charge. [ASSUMPTION: payment processing, taxes, and refunds pending integration and legal review.]</p>');
+}
+function completePurchase(id){ var l=LEADS.filter(function(x){return x.id===id;})[0]; if(!l)return; l.pulled=true; closeModal(); toast("Purchased (simulated) — owner contact unlocked.","ok"); render(); }
+
+/* ================= router ================= */
+function currentSegs(){ return (location.hash||"#/").replace(/^#/,"").split("/").filter(Boolean); }
+function resolve(segs){
+  var r=segs[0];
+  if(!r) return {view:overviewView,crumb:["Overview"],title:"Overview"};
+  if(r==="spotter"){
+    if(!segs[1]) return {view:spotterHome,crumb:[["Spotter","#/spotter"],"Dashboard"],title:"Spotter dashboard",skeleton:skeletonCards()};
+    if(segs[1]==="capture") return {view:captureView,crumb:[["Spotter","#/spotter"],"New capture"],title:"New capture"};
+    if(segs[1]==="submissions") return {view:submissionsView,crumb:[["Spotter","#/spotter"],"Submissions"],title:"My submissions"};
+    if(segs[1]==="earnings") return {view:earningsView,crumb:[["Spotter","#/spotter"],"Earnings"],title:"Earnings"};
+  }
+  if(r==="buyer"){
+    if(!segs[1]) return {view:buyerDashboard,crumb:[["Buyer","#/buyer"],"Dashboard"],title:"Buyer dashboard",skeleton:skeletonCards()};
+    if(segs[1]==="leads"&&segs[2]){var l=LEADS.filter(function(x){return x.id===segs[2];})[0];return {view:function(){return leadDetail(segs[2]);},crumb:[["Buyer","#/buyer"],["Leads","#/buyer/leads"],l?l.addr:"Lead"],title:"Lead detail",skeleton:skeletonDetail()};}
+    if(segs[1]==="leads") return {view:leadsView,crumb:[["Buyer","#/buyer"],"Leads"],title:"Leads",skeleton:skeletonTable()};
+    if(segs[1]==="automation") return {view:automationView,crumb:[["Buyer","#/buyer"],"Automation"],title:"Automation"};
+    if(segs[1]==="account") return {view:accountView,crumb:[["Buyer","#/buyer"],"Plan"],title:"Plan"};
+  }
+  if(r==="account") return {view:accountProfileView,crumb:["Account"],title:"Account"};
+  return {view:notFoundView,crumb:["Not found"],title:"Not found"};
+}
+var APPTABS=[["#/","grid","Home"],["#/buyer/leads","building","Browse"],["#/spotter/capture","camera","Submit"],["#/account","users","Account"]];
+function buildTabs(){
+  var h="#"+(location.hash||"#/").replace(/^#/,"");
+  el("apptabs").innerHTML=APPTABS.map(function(t){
+    var on=t[0]==="#/"?(h==="#/"||h==="#"):t[0]==="#/buyer/leads"?/^#\/buyer/.test(h):t[0]==="#/spotter/capture"?/^#\/spotter/.test(h):t[0]==="#/account"?/^#\/account/.test(h):h.indexOf(t[0])===0;
+    return '<a href="'+t[0]+'"'+(on?' aria-current="page"':'')+'>'+icon(t[1])+'<span>'+esc(t[2])+'</span></a>';
+  }).join('');
+}
+function announce(msg){ var a=el("routeAnnounce"); if(a)a.textContent=msg; }
+function countUp(node){ var to=parseInt(node.getAttribute("data-count"),10)||0; if(instant||prefersReduced()){node.textContent=to;return;} var n=0,step=Math.max(1,Math.ceil(to/22)); (function go(){n=Math.min(to,n+step);node.textContent=n;if(n<to)requestAnimationFrame(go);})(); }
+function afterCommon(title){ var main=el("main"); [].forEach.call(main.querySelectorAll("[data-count]"),countUp); announce(title+" loaded"); }
+function skeletonDetail(){ return '<div class="view"><div class="sk" style="height:28px;width:260px;margin-bottom:16px"></div><div class="sk" style="height:34px;margin-bottom:16px"></div><div class="grid g2"><div class="sk" style="height:240px"></div><div class="sk" style="height:240px"></div></div></div>'; }
+function render(){
+  closeNotif(); closeDrawer(); closeAcct();
+  var segs=currentSegs(), role=segs[0]||"home";
+  var def=resolve(segs);
+  renderSidebar(activeHref()); setCrumb(def.crumb); buildTabs();
+  var main=el("main");
+  function paint(){ main.innerHTML=def.view(); afterCommon(def.title); }
+  if(def.skeleton && !instant){ main.innerHTML=def.skeleton; try{window.scrollTo(0,0);}catch(e){} setTimeout(paint,430); }
+  else { paint(); try{window.scrollTo(0,0);}catch(e){} }
+}
+
+/* ================= actions ================= */
+function go(hash){ if(location.hash===hash){render();} else {location.hash=hash;} }
+function cyclePhoto(){ state.capIdx=(state.capIdx+1)%SAMPLES.length; var c=el("captureCard"); if(c)c.innerHTML=captureForm(); }
+function pickSample(v){ state.capIdx=parseInt(v,10)||0; var c=el("captureCard"); if(c)c.innerHTML=captureForm(); }
+function resetCapture(){ var c=el("captureCard"); if(c)c.innerHTML=captureForm(); }
+function setQuery(v){ state.q=v; var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+function setFilter(f){ state.filter=(state.filter===f&&f!=="all")?"all":f;
+  [].forEach.call(document.querySelectorAll(".chip[data-f]"),function(c){c.setAttribute("aria-pressed",c.getAttribute("data-f")===state.filter);});
+  var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+function setSource(s){ state.source=s;
+  [].forEach.call(document.querySelectorAll(".chip[data-s]"),function(c){c.setAttribute("aria-pressed",c.getAttribute("data-s")===state.source);});
+  var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+function setSort(k){ if(state.sort.key===k)state.sort.dir*=-1; else {state.sort.key=k;state.sort.dir=(k==="age")?1:-1;} var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+function clearFilters(){ state.filter="all"; state.q=""; state.source="all"; var s=el("leadSearch"); if(s)s.value="";
+  [].forEach.call(document.querySelectorAll(".chip[data-f]"),function(c){c.setAttribute("aria-pressed",c.getAttribute("data-f")==="all");});
+  [].forEach.call(document.querySelectorAll(".chip[data-s]"),function(c){c.setAttribute("aria-pressed",c.getAttribute("data-s")==="all");});
+  var t=el("leadsTable"); if(t)t.innerHTML=leadsTable(); }
+function topSearch(e){ if(e.key==="Enter"){ state.q=e.target.value; if(currentSegs().join("/")!=="buyer/leads"){go("#/buyer/leads");} else {var i=el("leadSearch"); if(i)i.value=state.q; var t=el("leadsTable"); if(t)t.innerHTML=leadsTable();} } }
+document.addEventListener("click",function(e){
+  if(state.notifOpen){var p=el("notifPanel"),b=el("notifBtn"); if(p&&!p.contains(e.target)&&b&&!b.contains(e.target))closeNotif();}
+  if(state.acctOpen){var m=el("acctMenu"),a=el("acctBtn"); if(m&&!m.contains(e.target)&&a&&!a.contains(e.target))closeAcct();}
+});
+window.addEventListener("hashchange",render);
+
+window.VIQ={
+  go:go, render:render, cyclePhoto:cyclePhoto, pickSample:pickSample, resetCapture:resetCapture,
+  runSearch:runSearch, setQuery:setQuery, setFilter:setFilter, setSource:setSource, setSort:setSort, topSearch:topSearch,
+  confirmPull:confirmPull, pullLead:pullLead, buyListing:buyListing, openPay:openPay, completePurchase:completePurchase,
+  signIn:signIn, signOut:signOut, openSignIn:openSignIn, _afterSignIn:_afterSignIn,
+  toggleNotif:toggleNotif, closeNotif:closeNotif, notifGo:notifGo,
+  openAbout:openAbout, openCompliance:openCompliance, closeModal:closeModal, toast:toast,
+  openDrawer:openDrawer, closeDrawer:closeDrawer, toggleAcct:toggleAcct, closeAcct:closeAcct, resetDemo:resetDemo,
+  setTab:setTab, tabKey:tabKey, toggleSave:toggleSave, clearFilters:clearFilters,
+  _state:state, _auth:auth, _leads:LEADS, _samples:SAMPLES,
+  setInstant:function(v){instant=v;}, get instant(){return instant;}
+};
+render();
+})();
+</script>
+</body>
+</html>
