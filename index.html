@@ -205,6 +205,133 @@ h1,h2,h3,h4{color:var(--ink);font-weight:700;letter-spacing:-0.03em}
 .iconbtn svg{width:16px;height:16px;fill:currentColor}
 .dot-badge{position:absolute;top:3px;right:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--panel)}
 .hamb{display:none}
+
+/* desktop topbar additions */
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding-right: 12px;
+  border-right: 1px solid var(--line);
+  user-select: none;
+}
+.topbar-brand .mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--blue-chrome);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(79,70,229,0.2);
+}
+.topbar-brand .mark svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+.topbar-brand .wm {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+}
+.mode-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+  box-shadow: var(--sh);
+}
+.mode-toggle-btn:hover {
+  background: rgba(79, 70, 229, 0.05);
+  transform: translateY(-0.5px);
+}
+.mode-toggle-btn.spotter-mode {
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--green);
+}
+.mode-toggle-btn.spotter-mode:hover {
+  background: rgba(16, 185, 129, 0.05);
+}
+.mode-toggle-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+.top-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.top-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt2);
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.top-nav-item:hover {
+  background: rgba(241, 245, 249, 0.85);
+  color: var(--ink);
+  transform: translateY(-0.5px);
+}
+.top-nav-item.active {
+  background: rgba(79, 70, 229, 0.06);
+  color: var(--blue);
+  border-color: rgba(79, 70, 229, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+}
+.top-nav-item svg {
+  width: 13.5px;
+  height: 13.5px;
+  fill: currentColor;
+}
+.top-nav-item .cnt {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--blue);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 6px;
+  margin-left: 2px;
+}
+
+@media(min-width:961px) {
+  .sidebar {
+    display: none !important;
+  }
+  .shell {
+    flex-direction: column;
+  }
+  .hamb {
+    display: none !important;
+  }
+}
+
+@media(max-width:960px) {
+  .topbar-brand, .mode-toggle-btn, .top-nav-links {
+    display: none !important;
+  }
+}
+
 main.page{padding:24px 24px 48px;max-width:1200px;width:100%;margin:0 auto;flex:1}
 .view{animation:enter .24s cubic-bezier(0.16,1,0.3,1)}
 @keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -835,7 +962,7 @@ th.sortable[aria-sort="ascending"],th.sortable[aria-sort="descending"]{color:var
     </div>
     <nav class="side-nav" id="sideNav" aria-label="Main navigation"></nav>
     <div class="side-foot">
-      <button class="acct" onclick="VIQ.openAbout()" aria-label="About this demo workspace">
+      <button class="acct" onclick="VIQ.openAbout()" aria-label="Workspace details">
         <span class="av">DW</span><span><span class="an">Demo workspace</span><span class="ap">Pro plan · sandbox</span></span>
       </button>
       <div class="demobadge"><span class="d"></span>DEMO · SIMULATED DATA</div>
@@ -845,7 +972,12 @@ th.sortable[aria-sort="ascending"],th.sortable[aria-sort="descending"]{color:var
   <div class="content">
     <header class="topbar" role="banner">
       <button class="iconbtn hamb" id="hamb" aria-label="Open navigation" onclick="VIQ.openDrawer()"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M0 96C0 78 14 64 32 64H416c18 0 32 14 32 32s-14 32-32 32H32C14 128 0 114 0 96zM0 256c0-18 14-32 32-32H416c18 0 32 14 32 32s-14 32-32 32H32c-18 0-32-14-32-32zM448 416c0 18-14 32-32 32H32c-18 0-32-14-32-32s14-32 32-32H416c18 0 32 14 32 32z"/></svg></button>
-      <div class="crumb" id="crumb" aria-live="polite"></div>
+      <div class="topbar-brand" onclick="VIQ.go('#/')">
+        <span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+        <span class="wm">Vacancy<b style="color:var(--blue)">IQ</b></span>
+      </div>
+      <button class="mode-toggle-btn" id="modeToggleBtn" onclick="VIQ.toggleMode()"></button>
+      <nav class="top-nav-links" id="topNavLinks" aria-label="Horizontal navigation"></nav>
       <div class="top-actions">
         <div class="topsearch"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M416 208c0 46-15 88-40 123l127 127c12 12 12 33 0 45s-33 12-45 0L331 376c-34 25-77 40-123 40C93 416 0 323 0 208S93 0 208 0s208 93 208 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
           <input id="topSearch" placeholder="Search leads…" aria-label="Search leads" onkeydown="VIQ.topSearch(event)"></div>
@@ -858,6 +990,7 @@ th.sortable[aria-sort="ascending"],th.sortable[aria-sort="descending"]{color:var
         <div id="acctMenu"></div>
       </div>
     </header>
+    <div style="max-width:1200px; width:100%; margin:14px auto 0; padding:0 24px"><div class="crumb" id="crumb" aria-live="polite"></div></div>
     <main class="page" id="main" role="main" tabindex="-1"><noscript><div style="max-width:620px;margin:48px auto;padding:22px;border:1px solid #E5E7EB;border-radius:8px;color:#1F2937"><h1 style="font-size:18px;margin:0 0 8px">This demo needs JavaScript to run</h1><p style="margin:0 0 10px;color:#5B6472;font-size:14px">The VacancyIQ demo draws its interface with JavaScript, so it appears blank when scripts aren&rsquo;t allowed to run (for example, inside an in-app file preview).</p><p style="margin:0;color:#5B6472;font-size:14px"><b>To view it:</b> download this file and open it directly in a web browser (Chrome, Safari, Edge, or Firefox), or host it &mdash; e.g. drag it onto <b>app.netlify.com/drop</b> &mdash; and open the link.</p></div></noscript></main>
   </div>
 </div>
@@ -1145,11 +1278,48 @@ function activeHref(){
   return best;
 }
 function renderSidebar(active){
-  el("sideNav").innerHTML=NAV.map(function(g){
+  // 1. Render mobile sidebar nav-group / items
+  var mobileNavHTML = NAV.map(function(g){
     return (g.label?'<div class="nav-group">'+g.label+'</div>':'')
      +g.items.map(function(i){var on=i[0]===active;
        return '<a class="nav-item" href="'+i[0]+'"'+(on?' aria-current="page"':'')+'>'+icon(i[1])+'<span>'+esc(i[2])+'</span>'+(i[3]!=null?'<span class="cnt">'+i[3]+'</span>':'')+'</a>';}).join('');
   }).join('');
+  var sideNavEl = el("sideNav");
+  if (sideNavEl) sideNavEl.innerHTML = mobileNavHTML;
+
+  // 2. Render desktop topbar navigation links
+  var isSpotter = active.indexOf('#/spotter') === 0;
+  
+  var modeToggleBtn = el("modeToggleBtn");
+  if (modeToggleBtn) {
+    if (isSpotter) {
+      modeToggleBtn.innerHTML = icon('building') + '<span>Buyer Portal</span>';
+      modeToggleBtn.className = 'mode-toggle-btn spotter-mode';
+      modeToggleBtn.setAttribute('title', 'Switch to Buyer Portal');
+    } else {
+      modeToggleBtn.innerHTML = icon('camera') + '<span>Spotter Portal</span>';
+      modeToggleBtn.className = 'mode-toggle-btn buyer-mode';
+      modeToggleBtn.setAttribute('title', 'Switch to Spotter Portal');
+    }
+  }
+
+  var activeGroupLabel = isSpotter ? "Spotter" : "Buyer";
+  var activeGroup = NAV.find(function(g){ return g.label === activeGroupLabel; });
+  var topNavHTML = '';
+  
+  // Primary Overview Link
+  topNavHTML += '<a class="top-nav-item' + (active === '#/' ? ' active' : '') + '" href="#/"' + (active === '#/' ? ' aria-current="page"' : '') + '>' + icon('grid') + '<span>Overview</span></a>';
+
+  if (activeGroup) {
+    topNavHTML += activeGroup.items.map(function(i){
+      var on = i[0] === active;
+      // Skip the default Dashboard links in top nav because the logo/brand acts as a dashboard anchor or we keep it for symmetry
+      return '<a class="top-nav-item' + (on ? ' active' : '') + '" href="' + i[0] + '"' + (on ? ' aria-current="page"' : '') + '>' + icon(i[1]) + '<span>' + esc(i[2]) + '</span>' + (i[3] != null ? '<span class="cnt">' + i[3] + '</span>' : '') + '</a>';
+    }).join('');
+  }
+  
+  var topNavLinksEl = el("topNavLinks");
+  if (topNavLinksEl) topNavLinksEl.innerHTML = topNavHTML;
 }
 function setCrumb(arr){
   el("crumb").innerHTML=arr.map(function(c,i){
@@ -1285,27 +1455,47 @@ function buyerDashboard(){
     ["Tax",LEADS.filter(function(l){return hasTag(l,"tax");}).length,"#B4791C"],
     ["Absentee",LEADS.filter(function(l){return hasTag(l,"abs");}).length,"#6D5FB8"],
     ["Distress",LEADS.filter(function(l){return hasTag(l,"pre")||hasTag(l,"prob")||hasTag(l,"code");}).length,"#0E7C4A"]];
-  var trend=[6,8,7,10,9,12,11,14,13,15,14,17];
+  
+  var commandHeader = '<div class="pagehead card pad" style="margin-bottom:20px;background:linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%) !important;border:1px solid rgba(79, 70, 229, 0.15) !important;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;width:100%;border-bottom:1px solid rgba(79, 70, 229, 0.15) !important">'
+    +'<div class="glass-bg-glow glow-1" style="opacity:0.25;top:-10%;right:10%;width:300px;height:300px" aria-hidden="true"></div>'
+    +'<div style="position:relative;z-index:2">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+        +'<span class="badge p" style="background:rgba(79,70,229,0.12);color:var(--blue);border-color:rgba(79,70,229,0.2)">' + icon('gauge') + 'CONTROL CENTER</span>'
+        +freshnessPill()
+      +'</div>'
+      +'<h1 style="font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-0.03em;margin:0">Buyer dashboard</h1>'
+      +'<div class="lede" style="color:var(--txt2);font-size:13.5px;margin:6px 0 0 0;max-width:68ch">Your verified, self-refreshing, owner-enriched lead database. Anything qualified in the Spotter flow appears here.</div>'
+    +'</div>'
+    +'<div class="ph-actions" style="display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:2">'
+      +'<button class="btn sm" onclick="VIQ.go(\'#/buyer/leads\')">'+icon("building")+'Browse leads</button>'
+      +'<button class="btn sm ghost" onclick="VIQ.go(\'#/buyer/discovery\')">'+icon("search")+'AI Discovery</button>'
+      +'<button class="btn sm ghost" onclick="VIQ.go(\'#/buyer/outreach\')">'+icon("rocket")+'Outreach</button>'
+    +'</div>'
+  +'</div>';
+
   return '<section class="view">'
-   +pagehead("Buyer dashboard","Your verified, self-refreshing, owner-enriched lead database. Anything qualified in the Spotter flow appears here.",freshnessPill()+'<button class="btn" onclick="VIQ.go(\'#/buyer/leads\')">'+icon("building")+'Browse leads</button>')
-   +'<div class="grid g4" style="margin-bottom:16px">'
-     +statCard(total,"Verified leads","building",null,[13,15,14,17,18,19,21,22,23,total])
-     +statCard(avg,"Avg. quality score","gauge",null,[78,80,79,81,80,82,81,83,82,avg])
-     +statCard(fresh,"Fresh (< 7 days)","clock",null,[5,7,6,8,7,9,8,10,9,fresh])
-     +statCard(high,"High score (≥ 80)","chart",null,[8,9,9,11,10,12,11,13,12,high])+'</div>'
-   +(function(){var fr=LEADS.filter(function(l){return l.age<7;}).length,md=LEADS.filter(function(l){return l.age>=7&&l.age<30;}).length,od=LEADS.filter(function(l){return l.age>=30;}).length,tt=LEADS.length||1;
-     return '<div class="card pad" style="margin-bottom:16px"><div class="card-h"><h3>Inventory freshness</h3><span class="subtle" style="margin-left:auto">'+LEADS.length+' leads · auto-aged daily</span></div>'
-       +'<div class="stack"><span style="width:'+(fr/tt*100).toFixed(1)+'%;background:var(--green)"></span><span style="width:'+(md/tt*100).toFixed(1)+'%;background:var(--amber)"></span><span style="width:'+(od/tt*100).toFixed(1)+'%;background:var(--red)"></span></div>'
-       +'<div class="legend"><span><i style="background:var(--green)"></i>Fresh &lt; 7d · '+fr+'</span><span><i style="background:var(--amber)"></i>7–29 days · '+md+'</span><span><i style="background:var(--red)"></i>30 days+ · '+od+'</span></div></div>';})()
-   +'<div class="grid g2" style="margin-bottom:16px">'
-     +'<div class="card pad"><div class="card-h"><h3>Score distribution</h3></div>'+barsSVG(buckets)+'</div>'
-     +'<div class="card pad"><div class="card-h"><h3>Signal composition</h3></div><div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">'+donutSVG(donutSegs)
-        +'<div style="flex:1;min-width:140px">'+donutSegs.map(function(s){return '<div style="display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0"><span style="width:11px;height:11px;border-radius:3px;background:'+s[2]+'"></span>'+esc(s[0])+'<b style="margin-left:auto">'+s[1]+'</b></div>';}).join('')+'</div></div></div></div>'
-   +'<div class="grid g2">'
-     +'<div class="card pad"><div class="card-h"><h3>Automation activity</h3><a class="link" href="#/buyer/automation">View all →</a></div><div class="feed">'+ACTIVITY.slice(0,4).map(feedItem).join('')+'</div></div>'
-     +'<div class="card pad"><div class="card-h"><h3>Freshest leads</h3><a class="link" href="#/buyer/leads">All leads →</a></div>'
-        +LEADS.slice().sort(function(a,b){return a.age-b.age;}).slice(0,4).map(function(l){var seed=parseInt(l.id.slice(1),10);return '<a href="#/buyer/leads/'+l.id+'" class="fitem list-link" style="padding-left:6px;padding-right:6px"><span class="thumb sm" style="margin-right:2px">'+thumbSVG(seed,{vac:hasTag(l,"vac"),pre:hasTag(l,"pre"),abs:hasTag(l,"abs")})+'</span><div style="flex:1;min-width:0"><div class="ft">'+esc(l.addr)+'</div><div class="fm">'+esc(l.city)+'</div></div><div style="text-align:right"><div class="scnum" style="color:'+scoreColor(l.score)+'">'+l.score+'</div><div class="age '+ageClass(l.age)+'" style="margin-top:3px">'+(l.age===0?'today':l.age+'d')+'</div></div></a>';}).join('')+'</div></div>'
-   +complianceFoot()+'</section>';
+    +commandHeader
+    +'<div class="grid g4" style="margin-bottom:16px">'
+      +statCard(total,"Verified leads","building",null,[13,15,14,17,18,19,21,22,23,total])
+      +statCard(avg,"Avg. quality score","gauge",null,[78,80,79,81,80,82,81,83,82,avg])
+      +statCard(fresh,"Fresh (< 7 days)","clock",null,[5,7,6,8,7,9,8,10,9,fresh])
+      +statCard(high,"High score (≥ 80)","chart",null,[8,9,9,11,10,12,11,13,12,high])+'</div>'
+    +'<div class="grid g2" style="margin-bottom:16px">'
+      +'<div style="display:flex;flex-direction:column;gap:16px">'
+        +'<div class="card pad" style="flex:1"><div class="card-h"><h3>Signal composition</h3></div><div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">'+donutSVG(donutSegs)
+           +'<div style="flex:1;min-width:140px">'+donutSegs.map(function(s){return '<div style="display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0"><span style="width:11px;height:11px;border-radius:3px;background:'+s[2]+'"></span>'+esc(s[0])+'<b style="margin-left:auto">'+s[1]+'</b></div>';}).join('')+'</div></div></div>'
+        +(function(){var fr=LEADS.filter(function(l){return l.age<7;}).length,md=LEADS.filter(function(l){return l.age>=7&&l.age<30;}).length,od=LEADS.filter(function(l){return l.age>=30;}).length,tt=LEADS.length||1;
+          return '<div class="card pad"><div class="card-h"><h3>Inventory freshness</h3><span class="subtle" style="margin-left:auto">'+LEADS.length+' leads · auto-aged daily</span></div>'
+            +'<div class="stack"><span style="width:'+(fr/tt*100).toFixed(1)+'%;background:var(--green)"></span><span style="width:'+(md/tt*100).toFixed(1)+'%;background:var(--amber)"></span><span style="width:'+(od/tt*100).toFixed(1)+'%;background:var(--red)"></span></div>'
+            +'<div class="legend"><span><i style="background:var(--green)"></i>Fresh &lt; 7d · '+fr+'</span><span><i style="background:var(--amber)"></i>7–29 days · '+md+'</span><span><i style="background:var(--red)"></i>30 days+ · '+od+'</span></div></div>';})()
+      +'</div>'
+      +'<div class="card pad"><div class="card-h"><h3>Score distribution</h3></div>'+barsSVG(buckets)+'</div>'
+    +'</div>'
+    +'<div class="grid g2">'
+      +'<div class="card pad"><div class="card-h"><h3>Automation activity</h3><a class="link" href="#/buyer/automation">View all →</a></div><div class="feed">'+ACTIVITY.slice(0,4).map(feedItem).join('')+'</div></div>'
+      +'<div class="card pad"><div class="card-h"><h3>Freshest leads</h3><a class="link" href="#/buyer/leads">All leads →</a></div>'
+         +LEADS.slice().sort(function(a,b){return a.age-b.age;}).slice(0,4).map(function(l){var seed=parseInt(l.id.slice(1),10);return '<a href="#/buyer/leads/'+l.id+'" class="fitem list-link" style="padding-left:6px;padding-right:6px"><span class="thumb sm" style="margin-right:2px">'+thumbSVG(seed,{vac:hasTag(l,"vac"),pre:hasTag(l,"pre"),abs:hasTag(l,"abs")})+'</span><div style="flex:1;min-width:0"><div class="ft">'+esc(l.addr)+'</div><div class="fm">'+esc(l.city)+'</div></div><div style="text-align:right"><div class="scnum" style="color:'+scoreColor(l.score)+'">'+l.score+'</div><div class="age '+ageClass(l.age)+'" style="margin-top:3px">'+(l.age===0?'today':l.age+'d')+'</div></div></a>';}).join('')+'</div></div>'
+    +complianceFoot()+'</section>';
 }
 function buyerSubToolbar(){
   return '<div class="card pad" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">'
@@ -2402,7 +2592,17 @@ window.addEventListener("hashchange",render);
 function _selectOutreachPropFn(id){_outreachPropId=id;_outreachContact=null;_currentDraft=null;_currentDraftId=null;_currentOffer=null;_currentOfferId=null;var oc=el('outreachContent');if(oc)oc.innerHTML=outreachContent();}
 function _saveBuyerProfileFn(){saveBuyerProfile();}
 
+function toggleMode() {
+  var h = location.hash || "#/";
+  if (h.indexOf('#/spotter') === 0) {
+    go('#/buyer');
+  } else {
+    go('#/spotter');
+  }
+}
+
 window.VIQ={
+  toggleMode:toggleMode,
   go:go, render:render, cyclePhoto:cyclePhoto, pickSample:pickSample, resetCapture:resetCapture,
   runSearch:runSearch, setQuery:setQuery, setFilter:setFilter, setSource:setSource, setSort:setSort, topSearch:topSearch,
   confirmPull:confirmPull, pullLead:pullLead, buyListing:buyListing, openPay:openPay, completePurchase:completePurchase,
